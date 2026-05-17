@@ -249,13 +249,13 @@ async function api(path, body, method) {
 }
 
 function demoApi(path, body) {
-  if (path === '/api/auth/login') {
+  if (path === '/api/login') {
     if ((body.email||'').toLowerCase() === 'demo@volt.energy.ch')
       return { user: DEMO_USER, token: 'demo-tok' };
     return { error: 'Email ou mot de passe incorrect.' };
   }
-  if (path === '/api/auth/register') return { user: Object.assign({}, DEMO_USER, { name:(body.firstName+' '+body.lastName).trim(), email:body.email, subscribed:false }), token:'demo-tok2' };
-  if (path === '/api/pay/intent') return { ok:true, demo:true };
+  if (path === '/api/register') return { user: Object.assign({}, DEMO_USER, { name:(body.firstName+' '+body.lastName).trim(), email:body.email, subscribed:false }), token:'demo-tok2' };
+  if (path === '/api/pay-intent') return { ok:true, demo:true };
   if (path === '/api/history') return { history:[] };
   return { ok:true };
 }
@@ -446,7 +446,7 @@ async function doLogin() {
   if (!email || !pwd) { toast('Remplis tous les champs.', false); return; }
   const btn = document.getElementById('btn-login');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await api('/api/auth/login', { email, password: pwd });
+  const res = await api('/api/login', { email, password: pwd });
   if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; } return; }
   S.user = res.user; S.token = res.token; saveSess();
   S.screen = 'home'; render();
@@ -463,7 +463,7 @@ async function doRegister() {
   if (pwd.length < 8) { toast('Mot de passe minimum 8 caractères.', false); return; }
   const btn = document.getElementById('btn-register');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await api('/api/auth/register', { firstName:fn, lastName:ln, email, phone, password:pwd });
+  const res = await api('/api/register', { firstName:fn, lastName:ln, email, phone, password:pwd });
   if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Créer mon compte ⚡'; btn.disabled=false; } return; }
   S.user = res.user; S.token = res.token; saveSess();
   S.screen = 'pay'; render();
@@ -681,7 +681,7 @@ async function doPay() {
   if (!btn) return;
   btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true;
   const plan = PLANS.find(p=>p.id===S.plan);
-  const res = await api('/api/pay/intent', { plan_id: plan.id });
+  const res = await api('/api/pay-intent', { plan_id: plan.id });
   if (DEMO || res.demo) {
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
@@ -702,7 +702,7 @@ async function doPay() {
       btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
     }
     if (paymentIntent.status === 'succeeded') {
-      await api('/api/pay/confirm', { pi: paymentIntent.id, plan_id: S.plan });
+      await api('/api/pay-confirm', { pi: paymentIntent.id, plan_id: S.plan });
       S.user.subscribed = true; S.user.plan = S.plan; saveSess();
       toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
       S.screen = 'home'; render();
@@ -841,7 +841,7 @@ window.saveProfile = async function() {
   S.user.email = email;
   S.user.phone = phone;
   S.user.initials = initials(S.user.name);
-  await api('/api/user/update', { firstName:fn, lastName:ln, email, phone });
+  await api('/api/user-update', { firstName:fn, lastName:ln, email, phone });
   saveSess(); closeModal(); toast('Profil mis à jour ✓');
   document.getElementById('app').innerHTML = renderAcc() + renderNav();
   bindAcc();
