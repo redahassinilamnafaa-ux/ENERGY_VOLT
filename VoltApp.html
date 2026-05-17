@@ -174,7 +174,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 // ═══════════════════════════════════════════
 const CFG = {
   API: 'https://volt-backend-final.vercel.app',
-  pk_test_...,
+  STRIPE_KEY: '', // Chargée depuis l'API au démarrage
   DEMO_CODE: 'volt-admin-2025',
   CD_SECS: 900,
 };
@@ -909,6 +909,12 @@ if ('serviceWorker' in navigator) {
 // ═══════════════════════════════════════════
 //  BOOT
 // ═══════════════════════════════════════════
+// Charger la config Stripe depuis le backend
+fetch(CFG.API + '/api/config')
+  .then(r => r.json())
+  .then(d => { if (d.stripe_key) CFG.STRIPE_KEY = d.stripe_key; })
+  .catch(() => {});
+
 loadSess();
 if (DEMO && !S.user) { S.user = DEMO_USER; S.token = 'demo'; S.screen = 'home'; }
 render();
