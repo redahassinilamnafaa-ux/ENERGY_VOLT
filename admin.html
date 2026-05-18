@@ -130,8 +130,7 @@ tr:hover td{background:var(--bg)}
 // ═══════════════════════════════════════════
 const ADMIN_EMAIL = 'admin@volt.energy.ch';
 const ADMIN_PWD   = 'VoltAdmin2025!';
-// Commission VOLT : 20% — fitness reçoit 80%
-const COMMISSION  = 0.20;
+
 
 // ── State ─────────────────────────────────────────────────
 let S = {
@@ -165,16 +164,16 @@ let S = {
   ],
   // Virements mensuels par fitness
   virements: [
-    { id:'v1', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mai 2025',  brut:178.20, commission:35.64, net:142.56, status:'pending',  date_paid:null },
-    { id:'v2', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mai 2025',  brut:118.80, commission:23.76, net:95.04,  status:'pending',  date_paid:null },
-    { id:'v3', gym_id:'3', gym_name:'CrossFit Berne',       month:'Mai 2025',  brut:79.20,  commission:15.84, net:63.36,  status:'pending',  date_paid:null },
-    { id:'v4', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Mai 2025',  brut:39.60,  commission:7.92,  net:31.68,  status:'pending',  date_paid:null },
-    { id:'v5', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Avr. 2025', brut:162.00, commission:32.40, net:129.60, status:'paid',     date_paid:'01 mai 2025' },
-    { id:'v6', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Avr. 2025', brut:108.90, commission:21.78, net:87.12,  status:'paid',     date_paid:'01 mai 2025' },
-    { id:'v7', gym_id:'3', gym_name:'CrossFit Berne',       month:'Avr. 2025', brut:69.30,  commission:13.86, net:55.44,  status:'paid',     date_paid:'01 mai 2025' },
-    { id:'v8', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Avr. 2025', brut:29.70,  commission:5.94,  net:23.76,  status:'not_paid', date_paid:null },
-    { id:'v9', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mar. 2025', brut:148.50, commission:29.70, net:118.80, status:'paid',     date_paid:'01 avr. 2025' },
-    { id:'v10',gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mar. 2025', brut:99.00,  commission:19.80, net:79.20,  status:'paid',     date_paid:'01 avr. 2025' },
+    { id:'v1', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mai 2025',  brut:178.20, commission:0, net:178.20, status:'pending',  date_paid:null },
+    { id:'v2', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mai 2025',  brut:118.80, commission:0, net:118.80, status:'pending',  date_paid:null },
+    { id:'v3', gym_id:'3', gym_name:'CrossFit Berne',       month:'Mai 2025',  brut:79.20,  commission:0, net:79.20,  status:'pending',  date_paid:null },
+    { id:'v4', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Mai 2025',  brut:39.60,  commission:0, net:39.60,  status:'pending',  date_paid:null },
+    { id:'v5', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Avr. 2025', brut:162.00, commission:0, net:162.00, status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v6', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Avr. 2025', brut:108.90, commission:0, net:108.90, status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v7', gym_id:'3', gym_name:'CrossFit Berne',       month:'Avr. 2025', brut:69.30,  commission:0, net:69.30,  status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v8', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Avr. 2025', brut:29.70,  commission:0, net:29.70,  status:'not_paid', date_paid:null },
+    { id:'v9', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mar. 2025', brut:148.50, commission:0, net:148.50, status:'paid',     date_paid:'01 avr. 2025' },
+    { id:'v10',gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mar. 2025', brut:99.00,  commission:0, net:99.00,  status:'paid',     date_paid:'01 avr. 2025' },
   ],
 };
 
@@ -264,17 +263,51 @@ function renderLogin() {
   document.getElementById('l-pwd').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 }
 
-function doLogin() {
+async function doLogin() {
   const email = document.getElementById('l-email').value.trim();
   const pwd   = document.getElementById('l-pwd').value;
-  if (email === ADMIN_EMAIL && pwd === ADMIN_PWD) {
-    S.logged = true;
-    renderApp();
-  } else {
+  if (email !== ADMIN_EMAIL || pwd !== ADMIN_PWD) {
     const err = document.getElementById('l-err');
     err.textContent = 'Email ou mot de passe incorrect.';
     err.style.display = 'block';
+    return;
   }
+  const btn = document.querySelector('.login-box .btn-blue');
+  if (btn) { btn.textContent = 'Chargement...'; btn.disabled = true; }
+
+  S.logged = true;
+
+  // Charger les vraies données depuis le backend
+  try {
+    const [stats, clientsRes, paymentsRes, gymsRes, virementsRes] = await Promise.all([
+      adminApi('/api/admin-stats'),
+      adminApi('/api/admin-clients'),
+      adminApi('/api/admin-payments'),
+      adminApi('/api/admin-gyms'),
+      adminApi('/api/admin-virements'),
+    ]);
+
+    // Mettre à jour avec les vraies données si disponibles
+    if (!stats.error && stats.subscribers !== undefined) {
+      S._realStats = stats;
+    }
+    if (!clientsRes.error && clientsRes.clients?.length > 0) {
+      S.clients = clientsRes.clients;
+    }
+    if (!paymentsRes.error && paymentsRes.payments?.length > 0) {
+      S.payments = paymentsRes.payments;
+    }
+    if (!gymsRes.error && gymsRes.gyms?.length > 0) {
+      S.gyms = gymsRes.gyms;
+    }
+    if (!virementsRes.error && virementsRes.virements?.length > 0) {
+      S.virements = virementsRes.virements;
+    }
+  } catch(e) {
+    console.log('Backend indisponible, données demo utilisées');
+  }
+
+  renderApp();
 }
 
 function doLogout() {
@@ -316,10 +349,11 @@ function renderApp() {
 
 // ── DASHBOARD ─────────────────────────────────────────────
 function pageDashboard() {
-  const totalRev   = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
-  const monthRev   = 386.10;
-  const activeClients = S.clients.filter(c=>c.subscribed).length;
-  const pendingV   = S.virements.filter(v=>v.status==='pending').length;
+  const rs          = S._realStats || {};
+  const totalRev    = rs.rev_total   || S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
+  const monthRev    = rs.rev_month   || 386.10;
+  const activeClients = rs.subscribers || S.clients.filter(c=>c.subscribed).length;
+  const pendingV    = S.virements.filter(v=>v.status==='pending').length;
   const totalPendingNet = S.virements.filter(v=>v.status==='pending').reduce((s,v)=>s+v.net,0);
 
   const months = ['Jan','Fév','Mar','Avr','Mai'];
@@ -419,14 +453,42 @@ function statusSelect(v) {
 }
 
 function pageVirements() {
-  const months = [...new Set(S.virements.map(v=>v.month))];
-  const pending = S.virements.filter(v=>v.status==='pending');
+  const filterMonth = S.vFilter_month || '';
+  const filterGym   = S.vFilter_gym   || '';
+  const months      = [...new Set(S.virements.map(v=>v.month))];
+  const gymNames    = [...new Set(S.virements.map(v=>v.gym_name))];
+
+  let filtered = S.virements;
+  if (filterMonth) filtered = filtered.filter(v => v.month    === filterMonth);
+  if (filterGym)   filtered = filtered.filter(v => v.gym_name === filterGym);
+
+  const pending      = filtered.filter(v=>v.status==='pending');
   const totalPending = pending.reduce((s,v)=>s+v.net,0);
 
   return `
   <div class="topbar">
-    <div><div class="page-title">Virements</div><div class="page-sub">Reversements 80% du chiffre d'affaires aux fitness</div></div>
+    <div><div class="page-title">Virements</div><div class="page-sub">Reversements aux fitness partenaires</div></div>
     <button class="btn btn-ghost btn-sm" onclick="goTo('compta')">📋 Récap compta →</button>
+  </div>
+
+  <!-- Filtres -->
+  <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center">
+    <div style="display:flex;align-items:center;gap:8px">
+      <label style="font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Mois</label>
+      <select class="status-select" style="padding:9px 16px;font-size:14px;border-radius:50px" onchange="S.vFilter_month=this.value;goTo('virements')">
+        <option value="">Tous les mois</option>
+        ${months.map(m=>\`<option value="\${m}" \${filterMonth===m?'selected':''}>\${m}</option>\`).join('')}
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <label style="font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Fitness</label>
+      <select class="status-select" style="padding:9px 16px;font-size:14px;border-radius:50px" onchange="S.vFilter_gym=this.value;goTo('virements')">
+        <option value="">Tous les fitness</option>
+        ${gymNames.map(g=>\`<option value="\${g}" \${filterGym===g?'selected':''}>\${g}</option>\`).join('')}
+      </select>
+    </div>
+    ${filterMonth||filterGym ? \`<button class="btn btn-ghost btn-sm" onclick="S.vFilter_month='';S.vFilter_gym='';goTo('virements')">✕ Effacer filtres</button>\` : ''}
+    <div style="margin-left:auto;font-size:13px;font-weight:600;color:var(--ink3)">\${filtered.length} résultat(s)</div>
   </div>
 
   ${pending.length > 0 ? `
@@ -450,31 +512,25 @@ function pageVirements() {
           <tr>
             <th>Fitness</th>
             <th>Mois</th>
-            <th>CA brut</th>
-            <th>Commission VOLT (20%)</th>
-            <th>Net à reverser (80%)</th>
+            <th>Montant à reverser</th>
             <th>Date paiement</th>
             <th>Statut</th>
           </tr>
         </thead>
         <tbody>
-          ${S.virements.map(v => `
+          \${filtered.map(v => \`
           <tr>
-            <td><strong>${v.gym_name}</strong></td>
-            <td style="color:var(--ink3)">${v.month}</td>
-            <td>${fmtChf(v.brut)}</td>
-            <td style="color:var(--blue)">${fmtChf(v.commission)}</td>
-            <td><strong>${fmtChf(v.net)}</strong></td>
-            <td style="color:var(--ink3);font-size:13px">${v.date_paid || '—'}</td>
-            <td>${statusSelect(v)}</td>
-          </tr>`).join('')}
+            <td><strong>\${v.gym_name}</strong></td>
+            <td style="color:var(--ink3)">\${v.month}</td>
+            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:20px">\${fmtChf(v.net)}</strong></td>
+            <td style="color:var(--ink3);font-size:13px">\${v.date_paid || '—'}</td>
+            <td>\${statusSelect(v)}</td>
+          </tr>\`).join('')}
         </tbody>
         <tfoot>
           <tr style="background:var(--bg)">
             <td colspan="2"><strong>TOTAL</strong></td>
-            <td><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.brut,0))}</strong></td>
-            <td style="color:var(--blue)"><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.commission,0))}</strong></td>
-            <td><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.net,0))}</strong></td>
+            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:20px">\${fmtChf(filtered.reduce((s,v)=>s+v.net,0))}</strong></td>
             <td colspan="2"></td>
           </tr>
         </tfoot>
@@ -503,17 +559,17 @@ function pageCompta() {
   <!-- Résumé global -->
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
     <div class="kpi">
-      <div class="kpi-val blue">${fmtChf(S.virements.reduce((s,v)=>s+v.brut,0))}</div>
-      <div class="kpi-label">CA total généré</div>
+      <div class="kpi-val blue">${fmtChf(S.virements.reduce((s,v)=>s+v.net,0))}</div>
+      <div class="kpi-label">Total à reverser</div>
     </div>
     <div class="kpi">
-      <div class="kpi-val green">${fmtChf(S.virements.reduce((s,v)=>s+v.commission,0))}</div>
-      <div class="kpi-label">Commission VOLT (20%)</div>
-      <div class="kpi-sub">Ton revenu net</div>
+      <div class="kpi-val green">${fmtChf(S.virements.filter(v=>v.status==='paid').reduce((s,v)=>s+v.net,0))}</div>
+      <div class="kpi-label">Total reversé</div>
+      <div class="kpi-sub">Virements effectués</div>
     </div>
     <div class="kpi">
-      <div class="kpi-val">${fmtChf(S.virements.filter(v=>v.status==='paid').reduce((s,v)=>s+v.net,0))}</div>
-      <div class="kpi-label">Total reversé aux fitness</div>
+      <div class="kpi-val orange">${fmtChf(S.virements.filter(v=>v.status==='pending').reduce((s,v)=>s+v.net,0))}</div>
+      <div class="kpi-label">Reste à payer</div>
     </div>
   </div>
 
@@ -664,29 +720,39 @@ function showEditGym(id) {
   </div>`);
 }
 
-function addGym() {
+async function addGym() {
   const name    = document.getElementById('g-name').value.trim();
   const filiale = document.getElementById('g-filiale').value.trim();
   const email   = document.getElementById('g-email').value.trim();
   const pwd     = document.getElementById('g-pwd').value.trim();
+  const address = document.getElementById('g-ville')?.value.trim() || '';
   if (!name || !filiale || !email || !pwd) { toast('Remplis tous les champs.', false); return; }
-  const id = Date.now().toString();
-  S.gyms.push({ id, name, filiale, email, pwd, members:0, scans:0, revenue:0, active:true });
+
+  // Créer dans le vrai backend
+  const res = await adminApi('/api/admin-gyms', { name, address, filiale, email, password: pwd }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+
+  S.gyms.push({ id: res.gym?.id || Date.now().toString(), name, filiale, email, members:0, scans:0, revenue:0, active:true });
   closeModal();
   toast(`✅ ${name} ajouté ! Email: ${email} / MDP: ${pwd}`);
   goTo('gyms');
 }
 
-function editGym(id) {
+async function editGym(id) {
   const g = S.gyms.find(x=>x.id===id);
   if (!g) return;
-  g.name    = document.getElementById('eg-name').value.trim() || g.name;
-  g.filiale = document.getElementById('eg-filiale').value.trim() || g.filiale;
-  g.email   = document.getElementById('eg-email').value.trim() || g.email;
-  const pwd = document.getElementById('eg-pwd').value.trim();
+  const name    = document.getElementById('eg-name').value.trim()    || g.name;
+  const filiale = document.getElementById('eg-filiale').value.trim() || g.filiale;
+  const email   = document.getElementById('eg-email').value.trim()   || g.email;
+  const pwd     = document.getElementById('eg-pwd').value.trim();
+
+  const res = await adminApi('/api/admin-gyms', { id, name, filiale, email, password: pwd||undefined }, 'PUT');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+
+  g.name = name; g.filiale = filiale; g.email = email;
   if (pwd) g.pwd = pwd;
   closeModal();
-  toast(`✅ ${g.name} mis à jour !`);
+  toast(`✅ ${name} mis à jour !`);
   goTo('gyms');
 }
 
