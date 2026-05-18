@@ -712,37 +712,63 @@ async function doPay() {
   if (!btn) return;
   btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true;
   const plan = PLANS.find(p=>p.id===S.plan);
-  const res = await api('/api/pay-intent', { plan_id: plan.id });
-  if (DEMO || res.demo) {
+
+  // Mode démo
+  if (DEMO) {
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
     S.screen = 'home'; render(); return;
   }
+
+  // 1. Créer le SetupIntent (enregistre la carte)
+  const res = await api('/api/pay-intent', { plan_id: plan.id });
   if (res.error) {
-    const e = document.getElementById('pay-err');
-    if (e) { e.textContent = res.error; e.style.display = 'block'; }
+    showPayErr(res.error);
     btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
   }
+
   try {
-    const { paymentIntent, error } = await stripeInst.confirmCardPayment(res.client_secret, {
-      payment_method: { card: stripeCard, billing_details: { email: S.user.email } }
+    // 2. Confirmer l'enregistrement de la carte
+    const { setupIntent, error } = await stripeInst.confirmCardSetup(res.client_secret, {
+      payment_method: {
+        card: stripeCard,
+        billing_details: { email: S.user.email, name: S.user.name }
+      }
     });
+
     if (error) {
-      const e = document.getElementById('pay-err');
-      if (e) { e.textContent = error.message; e.style.display = 'block'; }
+      showPayErr(error.message);
       btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
     }
-    if (paymentIntent.status === 'succeeded') {
-      await api('/api/pay-confirm', { pi: paymentIntent.id, plan_id: S.plan });
-      S.user.subscribed = true; S.user.plan = S.plan; saveSess();
-      toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
-      S.screen = 'home'; render();
+
+    // 3. Créer l'abonnement avec la carte enregistrée
+    const confirm = await api('/api/pay-confirm', {
+      setup_intent_id:   setupIntent.id,
+      payment_method_id: setupIntent.payment_method,
+      plan_id:           S.plan,
+      customer_id:       res.customer_id,
+      price_id:          res.price_id,
+    });
+
+    if (confirm.error) {
+      showPayErr(confirm.error);
+      btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
     }
+
+    S.user.subscribed = true; S.user.plan = S.plan; saveSess();
+    toast('✅ Abonnement activé ! Renouvellement automatique.');
+    notif('✅','Abonnement activé ! Ton QR est prêt.');
+    S.screen = 'home'; render();
+
   } catch(e) {
-    const err = document.getElementById('pay-err');
-    if (err) { err.textContent = 'Erreur lors du paiement. Réessaie.'; err.style.display = 'block'; }
+    showPayErr('Erreur lors du paiement. Réessaie.');
     btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false;
   }
+}
+
+function showPayErr(msg) {
+  const el = document.getElementById('pay-err');
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
 }
 
 async function doTwint() {
