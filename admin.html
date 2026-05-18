@@ -488,7 +488,7 @@ function pageVirements() {
       </select>
     </div>
     ${filterMonth||filterGym ? '<button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Effacer filtres</button>' : ''}
-    <div style="margin-left:auto;font-size:13px;font-weight:600;color:var(--ink3)">\${filtered.length} résultat(s)</div>
+    <div style="margin-left:auto;font-size:13px;font-weight:600;color:var(--ink3)">${filtered.length} résultat(s)</div>
   </div>
 
   ${pending.length > 0 ? `
@@ -518,19 +518,20 @@ function pageVirements() {
           </tr>
         </thead>
         <tbody>
-          \${filtered.map(v => \`
-          <tr>
-            <td><strong>\${v.gym_name}</strong></td>
-            <td style="color:var(--ink3)">\${v.month}</td>
-            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:20px">\${fmtChf(v.net)}</strong></td>
-            <td style="color:var(--ink3);font-size:13px">\${v.date_paid || '—'}</td>
-            <td>\${statusSelect(v)}</td>
-          </tr>\`).join('')}
+          ${filtered.map(v =>
+            '<tr>' +
+            '<td><strong>' + v.gym_name + '</strong></td>' +
+            '<td style="color:var(--ink3)">' + v.month + '</td>' +
+            '<td><strong style="font-family:\'Barlow Condensed\',sans-serif;font-size:20px">' + fmtChf(v.net) + '</strong></td>' +
+            '<td style="color:var(--ink3);font-size:13px">' + (v.date_paid || '—') + '</td>' +
+            '<td>' + statusSelect(v) + '</td>' +
+            '</tr>'
+          ).join('')}
         </tbody>
         <tfoot>
           <tr style="background:var(--bg)">
             <td colspan="2"><strong>TOTAL</strong></td>
-            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:20px">\${fmtChf(filtered.reduce((s,v)=>s+v.net,0))}</strong></td>
+            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:20px">${fmtChf(filtered.reduce((s,v)=>s+v.net,0))}</strong></td>
             <td colspan="2"></td>
           </tr>
         </tfoot>
