@@ -280,11 +280,11 @@ async function doLogin() {
   // Charger les vraies données depuis le backend
   try {
     const [stats, clientsRes, paymentsRes, gymsRes, virementsRes] = await Promise.all([
-      adminApi('/api/admin-stats'),
-      adminApi('/api/admin-clients'),
-      adminApi('/api/admin-payments'),
-      adminApi('/api/admin-gyms'),
-      adminApi('/api/admin-virements'),
+      adminApi('/api/admin?action=stats'),
+      adminApi('/api/admin?action=clients'),
+      adminApi('/api/admin?action=payments'),
+      adminApi('/api/admin?action=gyms'),
+      adminApi('/api/admin?action=virements'),
     ]);
 
     // Mettre à jour avec les vraies données si disponibles
@@ -736,7 +736,7 @@ async function addGym() {
   if (!name || !filiale || !email || !pwd) { toast('Remplis tous les champs.', false); return; }
 
   // Créer dans le vrai backend
-  const res = await adminApi('/api/admin-gyms', { name, address, filiale, email, password: pwd }, 'POST');
+  const res = await adminApi('/api/admin?action=gyms', { name, address, filiale, email, password: pwd }, 'POST');
   if (res.error) { toast('Erreur: ' + res.error, false); return; }
 
   S.gyms.push({ id: res.gym?.id || Date.now().toString(), name, filiale, email, members:0, scans:0, revenue:0, active:true });
@@ -753,7 +753,7 @@ async function editGym(id) {
   const email   = document.getElementById('eg-email').value.trim()   || g.email;
   const pwd     = document.getElementById('eg-pwd').value.trim();
 
-  const res = await adminApi('/api/admin-gyms', { id, name, filiale, email, password: pwd||undefined }, 'PUT');
+  const res = await adminApi('/api/admin?action=gyms', { id, name, filiale, email, password: pwd||undefined }, 'PUT');
   if (res.error) { toast('Erreur: ' + res.error, false); return; }
 
   g.name = name; g.filiale = filiale; g.email = email;
