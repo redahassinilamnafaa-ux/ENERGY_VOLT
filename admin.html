@@ -19,7 +19,6 @@
 }
 body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
 .bc{font-family:'Barlow Condensed',sans-serif}
-::selection{background:var(--blue);color:#fff}
 
 /* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink);position:relative;overflow:hidden}
@@ -45,7 +44,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-h
 .nav-item.active .nl{color:#fff}
 .sidebar-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.07)}
 .main{margin-left:240px;flex:1;padding:32px;min-height:100vh}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
 .page-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:var(--ink);letter-spacing:-1px}
 .page-sub{font-size:14px;font-weight:500;color:var(--ink3);margin-top:2px}
 
@@ -57,28 +56,32 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-h
 .kpi-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:38px;color:var(--ink);line-height:1;letter-spacing:-1px}
 .kpi-val.blue{color:var(--blue)}
 .kpi-val.green{color:var(--green)}
+.kpi-val.orange{color:var(--orange)}
 .kpi-label{font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
 .kpi-sub{font-size:12px;font-weight:500;color:var(--ink4);margin-top:3px}
 
 /* TABLE */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
-th{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap}
-td{font-size:14px;font-weight:500;color:var(--ink);padding:14px 16px;border-bottom:1px solid var(--border2)}
+th{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap;background:var(--bg)}
+td{font-size:14px;font-weight:500;color:var(--ink);padding:14px 16px;border-bottom:1px solid var(--border2);vertical-align:middle}
 tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg)}
 
 /* BADGES */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:50px;font-size:11px;font-weight:700}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:50px;font-size:11px;font-weight:700;white-space:nowrap}
 .badge-green{background:rgba(0,196,122,.1);color:var(--green)}
 .badge-red{background:rgba(255,59,92,.1);color:var(--red)}
 .badge-blue{background:var(--soft);color:var(--blue)}
 .badge-orange{background:rgba(255,149,0,.1);color:var(--orange)}
+.badge-gray{background:var(--bg2);color:var(--ink3)}
 
 /* INPUTS */
 .inp{background:var(--bg2);border:1.5px solid transparent;border-radius:10px;padding:12px 14px;font-size:15px;font-weight:500;color:var(--ink);outline:none;width:100%;font-family:'Barlow',sans-serif;transition:all .2s}
 .inp:focus{border-color:var(--blue);background:#fff}
+.inp::placeholder{color:var(--ink4)}
 .lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 /* BUTTONS */
 .btn{padding:12px 24px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
@@ -86,47 +89,35 @@ tr:hover td{background:var(--bg)}
 .btn-blue:hover{background:var(--blue2);transform:translateY(-1px)}
 .btn-dark{background:var(--ink);color:#fff}
 .btn-ghost{background:var(--bg2);color:var(--ink)}
-.btn-sm{padding:7px 16px;font-size:14px}
+.btn-sm{padding:7px 16px;font-size:14px;border-radius:50px}
 .btn-success{background:rgba(0,196,122,.1);color:var(--green);border:1px solid rgba(0,196,122,.2)}
 .btn-success:hover{background:var(--green);color:#fff}
 .btn-danger{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.15)}
 .btn-danger:hover{background:var(--red);color:#fff}
-
-/* VIREMENT */
-.virement-row{display:flex;align-items:center;gap:12px;padding:16px;background:#fff;border-radius:14px;border:1px solid var(--border2);margin-bottom:8px;transition:all .2s}
-.virement-row:hover{border-color:var(--blue);box-shadow:0 4px 16px var(--glow)}
-
-/* TOGGLE */
-.toggle{width:40px;height:24px;border-radius:12px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;border:none}
-.toggle-k{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.btn-orange{background:rgba(255,149,0,.1);color:var(--orange);border:1px solid rgba(255,149,0,.2)}
+.btn-orange:hover{background:var(--orange);color:#fff}
 
 /* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.5);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s}
-.modal{background:#fff;border-radius:24px;width:100%;max-width:480px;padding:32px;animation:slideUp .3s ease;max-height:90vh;overflow-y:auto}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal{background:#fff;border-radius:24px;width:100%;max-width:520px;padding:32px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:24px}
 
 /* TOAST */
-#toast{position:fixed;top:20px;right:20px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:all .3s;opacity:0;transform:translateY(-10px);pointer-events:none}
+#toast{position:fixed;top:20px;right:20px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:all .3s;opacity:0;transform:translateY(-10px);pointer-events:none;max-width:300px}
 #toast.show{opacity:1;transform:translateY(0)}
 
-/* CHART BAR */
-.chart-bar{display:flex;align-items:flex-end;gap:8px;height:80px;margin-top:12px}
-.bar{flex:1;background:var(--blue);border-radius:4px 4px 0 0;transition:all .3s;cursor:pointer;position:relative}
-.bar:hover{background:var(--blue2)}
-.bar-label{font-size:10px;font-weight:600;color:var(--ink3);text-align:center;margin-top:6px}
+/* RÉCAP COMPTA */
+.compta-month{background:#fff;border:1px solid var(--border2);border-radius:16px;padding:20px;margin-bottom:12px;transition:all .2s}
+.compta-month:hover{border-color:var(--blue);box-shadow:0 4px 16px var(--glow)}
+.compta-header{display:flex;align-items:center;gap:12px;cursor:pointer}
+.compta-body{margin-top:16px;padding-top:16px;border-top:1px solid var(--border2);display:none}
+.compta-body.open{display:block}
 
-/* RESPONSIVE */
-@media(max-width:1024px){
-  .kpi-grid{grid-template-columns:repeat(2,1fr)}
-  .sidebar{width:200px}
-  .main{margin-left:200px;padding:24px}
-}
-@media(max-width:768px){
-  .sidebar{transform:translateX(-100%)}
-  .main{margin-left:0;padding:16px}
-  .kpi-grid{grid-template-columns:1fr 1fr}
-}
+/* STATUS SELECT */
+.status-select{padding:6px 12px;border-radius:50px;border:1.5px solid var(--border2);font-size:12px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .2s;background:#fff;outline:none}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
@@ -134,24 +125,60 @@ tr:hover td{background:var(--bg)}
 <div id="toast"></div>
 
 <script>
-const API = 'https://volt-backend-final.vercel.app';
+// ═══════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════
 const ADMIN_EMAIL = 'admin@volt.energy.ch';
 const ADMIN_PWD   = 'VoltAdmin2025!';
+// Commission VOLT : 20% — fitness reçoit 80%
+const COMMISSION  = 0.20;
 
 // ── State ─────────────────────────────────────────────────
-let state = {
+let S = {
   logged: false,
-  page: 'dashboard',
-  data: {
-    kpis: null,
-    gyms: [],
-    clients: [],
-    payments: [],
-    virements: [],
-  }
+  page:   'dashboard',
+  gyms: [
+    { id:'1', name:'FitnessPlus Lausanne', filiale:'FitnessPlus', email:'lausanne@fitnessplus.ch', pwd:'fitness123', members:18, scans:156, revenue:178.20, active:true },
+    { id:'2', name:'FitnessPlus Genève',   filiale:'FitnessPlus', email:'geneve@fitnessplus.ch',   pwd:'fitness123', members:12, scans:98,  revenue:118.80, active:true },
+    { id:'3', name:'CrossFit Berne',       filiale:'CrossFit',    email:'berne@crossfit.ch',        pwd:'fitness123', members:8,  scans:74,  revenue:79.20,  active:true },
+    { id:'4', name:'Iron Gym Zurich',      filiale:'IronGym',     email:'zurich@irongym.ch',        pwd:'fitness123', members:4,  scans:59,  revenue:39.60,  active:false },
+  ],
+  clients: [
+    { id:'1', name:'Alexandre M.', email:'alex@email.ch',   gym:'FitnessPlus Lausanne', plan:'Trimestriel', subscribed:true,  scans:22, revenue:24.90, joined:'12 mar. 2025' },
+    { id:'2', name:'Sophie D.',    email:'sophie@email.ch', gym:'FitnessPlus Lausanne', plan:'Mensuel',     subscribed:true,  scans:18, revenue:9.90,  joined:'03 avr. 2025' },
+    { id:'3', name:'Marc F.',      email:'marc@email.ch',   gym:'FitnessPlus Genève',   plan:'Annuel',      subscribed:true,  scans:31, revenue:89.90, joined:'20 jan. 2025' },
+    { id:'4', name:'Laura K.',     email:'laura@email.ch',  gym:'CrossFit Berne',       plan:'Mensuel',     subscribed:true,  scans:14, revenue:9.90,  joined:'01 mai 2025' },
+    { id:'5', name:'Pierre G.',    email:'pierre@email.ch', gym:'FitnessPlus Lausanne', plan:'Trimestriel', subscribed:true,  scans:19, revenue:24.90, joined:'28 fév. 2025' },
+    { id:'6', name:'Claire M.',    email:'claire@email.ch', gym:'FitnessPlus Genève',   plan:'Mensuel',     subscribed:false, scans:6,  revenue:9.90,  joined:'10 avr. 2025' },
+    { id:'7', name:'Thomas F.',    email:'thomas@email.ch', gym:'Iron Gym Zurich',      plan:'Mensuel',     subscribed:true,  scans:9,  revenue:9.90,  joined:'22 avr. 2025' },
+    { id:'8', name:'Emma R.',      email:'emma@email.ch',   gym:'CrossFit Berne',       plan:'Trimestriel', subscribed:true,  scans:26, revenue:24.90, joined:'15 fév. 2025' },
+  ],
+  payments: [
+    { id:'1', client:'Alexandre M.', plan:'Trimestriel', amount:24.90, method:'Stripe', date:'12 mar. 2025', status:'success' },
+    { id:'2', client:'Marc F.',      plan:'Annuel',      amount:89.90, method:'Stripe', date:'20 jan. 2025', status:'success' },
+    { id:'3', client:'Sophie D.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'03 avr. 2025', status:'success' },
+    { id:'4', client:'Emma R.',      plan:'Trimestriel', amount:24.90, method:'Stripe', date:'15 fév. 2025', status:'success' },
+    { id:'5', client:'Pierre G.',    plan:'Trimestriel', amount:24.90, method:'Stripe', date:'28 fév. 2025', status:'success' },
+    { id:'6', client:'Laura K.',     plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'01 mai 2025', status:'success' },
+    { id:'7', client:'Thomas F.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'22 avr. 2025', status:'success' },
+    { id:'8', client:'Claire M.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'10 avr. 2025', status:'failed'  },
+  ],
+  // Virements mensuels par fitness
+  virements: [
+    { id:'v1', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mai 2025',  brut:178.20, commission:35.64, net:142.56, status:'pending',  date_paid:null },
+    { id:'v2', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mai 2025',  brut:118.80, commission:23.76, net:95.04,  status:'pending',  date_paid:null },
+    { id:'v3', gym_id:'3', gym_name:'CrossFit Berne',       month:'Mai 2025',  brut:79.20,  commission:15.84, net:63.36,  status:'pending',  date_paid:null },
+    { id:'v4', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Mai 2025',  brut:39.60,  commission:7.92,  net:31.68,  status:'pending',  date_paid:null },
+    { id:'v5', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Avr. 2025', brut:162.00, commission:32.40, net:129.60, status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v6', gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Avr. 2025', brut:108.90, commission:21.78, net:87.12,  status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v7', gym_id:'3', gym_name:'CrossFit Berne',       month:'Avr. 2025', brut:69.30,  commission:13.86, net:55.44,  status:'paid',     date_paid:'01 mai 2025' },
+    { id:'v8', gym_id:'4', gym_name:'Iron Gym Zurich',      month:'Avr. 2025', brut:29.70,  commission:5.94,  net:23.76,  status:'not_paid', date_paid:null },
+    { id:'v9', gym_id:'1', gym_name:'FitnessPlus Lausanne', month:'Mar. 2025', brut:148.50, commission:29.70, net:118.80, status:'paid',     date_paid:'01 avr. 2025' },
+    { id:'v10',gym_id:'2', gym_name:'FitnessPlus Genève',   month:'Mar. 2025', brut:99.00,  commission:19.80, net:79.20,  status:'paid',     date_paid:'01 avr. 2025' },
+  ],
 };
 
-// ── Toast ─────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────
 function toast(msg, good) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -160,59 +187,66 @@ function toast(msg, good) {
   setTimeout(() => el.classList.remove('show'), 3000);
 }
 
-// ── API helper ────────────────────────────────────────────
-async function api(path, body, method) {
-  try {
-    const r = await fetch(API + path, {
-      method: method || (body ? 'POST' : 'GET'),
-      headers: { 'Content-Type': 'application/json' },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    return r.json();
-  } catch(e) { return { error: 'Connexion impossible.' }; }
+function closeModal() {
+  document.getElementById('modal-bg')?.remove();
 }
 
-// ── Données démo ──────────────────────────────────────────
-function getDemoData() {
-  return {
-    kpis: {
-      revenue_total: 1847.60,
-      revenue_month: 386.10,
-      subscribers: 42,
-      scans_month: 387,
-      gyms: 4,
-      pending_virements: 3,
-    },
-    gyms: [
-      { id:'1', name:'FitnessPlus Lausanne',  filiale:'FitnessPlus', members:18, scans:156, revenue:178.20, virement_status:'pending',  virement_amount:142.56, last_virement:'15 avr. 2025' },
-      { id:'2', name:'FitnessPlus Genève',    filiale:'FitnessPlus', members:12, scans:98,  revenue:118.80, virement_status:'pending',  virement_amount:95.04,  last_virement:'15 avr. 2025' },
-      { id:'3', name:'CrossFit Berne',        filiale:'CrossFit',    members:8,  scans:74,  revenue:79.20,  virement_status:'paid',     virement_amount:63.36,  last_virement:'01 mai 2025' },
-      { id:'4', name:'Iron Gym Zurich',       filiale:'IronGym',     members:4,  scans:59,  revenue:39.60,  virement_status:'pending',  virement_amount:31.68,  last_virement:'15 avr. 2025' },
-    ],
-    clients: [
-      { id:'1', name:'Alexandre M.', email:'alex@email.ch',    gym:'FitnessPlus Lausanne', plan:'Trimestriel', subscribed:true,  scans:22, revenue:24.90, joined:'12 mar. 2025' },
-      { id:'2', name:'Sophie D.',    email:'sophie@email.ch',  gym:'FitnessPlus Lausanne', plan:'Mensuel',     subscribed:true,  scans:18, revenue:9.90,  joined:'03 avr. 2025' },
-      { id:'3', name:'Marc F.',      email:'marc@email.ch',    gym:'FitnessPlus Genève',   plan:'Annuel',      subscribed:true,  scans:31, revenue:89.90, joined:'20 jan. 2025' },
-      { id:'4', name:'Laura K.',     email:'laura@email.ch',   gym:'CrossFit Berne',       plan:'Mensuel',     subscribed:true,  scans:14, revenue:9.90,  joined:'01 mai 2025' },
-      { id:'5', name:'Pierre G.',    email:'pierre@email.ch',  gym:'FitnessPlus Lausanne', plan:'Trimestriel', subscribed:true,  scans:19, revenue:24.90, joined:'28 fév. 2025' },
-      { id:'6', name:'Claire M.',    email:'claire@email.ch',  gym:'FitnessPlus Genève',   plan:'Mensuel',     subscribed:false, scans:6,  revenue:9.90,  joined:'10 avr. 2025' },
-      { id:'7', name:'Thomas F.',    email:'thomas@email.ch',  gym:'Iron Gym Zurich',      plan:'Mensuel',     subscribed:true,  scans:9,  revenue:9.90,  joined:'22 avr. 2025' },
-      { id:'8', name:'Emma R.',      email:'emma@email.ch',    gym:'CrossFit Berne',       plan:'Trimestriel', subscribed:true,  scans:26, revenue:24.90, joined:'15 fév. 2025' },
-    ],
-    payments: [
-      { id:'1', client:'Alexandre M.', plan:'Trimestriel', amount:24.90, method:'Stripe', date:'12 mar. 2025', status:'success' },
-      { id:'2', client:'Marc F.',      plan:'Annuel',      amount:89.90, method:'Stripe', date:'20 jan. 2025', status:'success' },
-      { id:'3', client:'Sophie D.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'03 avr. 2025', status:'success' },
-      { id:'4', client:'Emma R.',      plan:'Trimestriel', amount:24.90, method:'Stripe', date:'15 fév. 2025', status:'success' },
-      { id:'5', client:'Pierre G.',    plan:'Trimestriel', amount:24.90, method:'Stripe', date:'28 fév. 2025', status:'success' },
-      { id:'6', client:'Laura K.',     plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'01 mai 2025', status:'success' },
-      { id:'7', client:'Thomas F.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'22 avr. 2025', status:'success' },
-      { id:'8', client:'Claire M.',    plan:'Mensuel',     amount:9.90,  method:'Stripe', date:'10 avr. 2025', status:'failed'  },
-    ],
-  };
+function fmtChf(n) {
+  return 'CHF ' + Number(n).toFixed(2);
 }
 
-// ── Login ─────────────────────────────────────────────────
+function today() {
+  return new Date().toLocaleDateString('fr-CH', { day:'numeric', month:'short', year:'numeric' });
+}
+
+// ── Nav ───────────────────────────────────────────────────
+const PAGES = [
+  { id:'dashboard', icon:'📊', label:'Dashboard'  },
+  { id:'virements', icon:'💸', label:'Virements'  },
+  { id:'compta',    icon:'📋', label:'Comptabilité'},
+  { id:'gyms',      icon:'🏋️', label:'Fitness'    },
+  { id:'clients',   icon:'👥', label:'Clients'    },
+  { id:'payments',  icon:'💳', label:'Paiements'  },
+];
+
+function goTo(page) {
+  S.page = page;
+  document.querySelectorAll('.nav-item[data-page]').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+  document.getElementById('main-content').innerHTML = renderPage();
+  bindPage();
+}
+
+function renderPage() {
+  if (S.page === 'dashboard') return pageDashboard();
+  if (S.page === 'virements') return pageVirements();
+  if (S.page === 'compta')    return pageCompta();
+  if (S.page === 'gyms')      return pageGyms();
+  if (S.page === 'clients')   return pageClients();
+  if (S.page === 'payments')  return pagePayments();
+  return '';
+}
+
+function bindPage() {
+  // Bind status selects for virements
+  document.querySelectorAll('.virement-status-select').forEach(sel => {
+    sel.onchange = function() {
+      const id     = this.dataset.id;
+      const status = this.value;
+      const v      = S.virements.find(x => x.id === id);
+      if (!v) return;
+      v.status    = status;
+      v.date_paid = status === 'paid' ? today() : null;
+      toast(status === 'paid' ? `✅ Virement ${v.gym_name} — ${v.month} marqué PAYÉ` :
+            status === 'not_paid' ? `⚠️ Marqué NON PAYÉ` : `🔄 Mis en attente`);
+      // Refresh juste la ligne
+      goTo(S.page);
+    };
+  });
+}
+
+// ── LOGIN ─────────────────────────────────────────────────
 function renderLogin() {
   document.getElementById('app').innerHTML = `
   <div class="login-wrap">
@@ -220,22 +254,21 @@ function renderLogin() {
       <div class="login-logo">VOLT.</div>
       <div class="login-sub"><span>⚡ ADMIN</span> Espace administrateur</div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div><label class="lbl">Email</label><input class="inp" id="l-email" type="email" placeholder="admin@volt.energy.ch" value="admin@volt.energy.ch"/></div>
+        <div><label class="lbl">Email</label><input class="inp" id="l-email" type="email" value="admin@volt.energy.ch"/></div>
         <div><label class="lbl">Mot de passe</label><input class="inp" id="l-pwd" type="password" placeholder="••••••••"/></div>
         <div id="l-err" style="display:none;background:#FFF0F2;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:#FF3B5C"></div>
         <button class="btn btn-blue" style="width:100%;justify-content:center" onclick="doLogin()">Accéder au dashboard →</button>
       </div>
     </div>
   </div>`;
-  document.getElementById('l-pwd').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('l-pwd').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
 }
 
 function doLogin() {
   const email = document.getElementById('l-email').value.trim();
   const pwd   = document.getElementById('l-pwd').value;
   if (email === ADMIN_EMAIL && pwd === ADMIN_PWD) {
-    state.logged = true;
-    state.data = getDemoData();
+    S.logged = true;
     renderApp();
   } else {
     const err = document.getElementById('l-err');
@@ -244,18 +277,15 @@ function doLogin() {
   }
 }
 
-// ── App ───────────────────────────────────────────────────
-function renderApp() {
-  const pages = [
-    { id:'dashboard', icon:'📊', label:'Dashboard' },
-    { id:'virements', icon:'💸', label:'Virements' },
-    { id:'gyms',      icon:'🏋️', label:'Fitness' },
-    { id:'clients',   icon:'👥', label:'Clients' },
-    { id:'payments',  icon:'💳', label:'Paiements' },
-  ];
+function doLogout() {
+  S.logged = false;
+  renderLogin();
+}
 
-  const navItems = pages.map(p => `
-    <button class="nav-item ${state.page===p.id?'active':''}" onclick="goTo('${p.id}')">
+// ── APP SHELL ─────────────────────────────────────────────
+function renderApp() {
+  const navItems = PAGES.map(p => `
+    <button class="nav-item ${S.page===p.id?'active':''}" data-page="${p.id}" onclick="goTo('${p.id}')">
       <span class="ni">${p.icon}</span>
       <span class="nl">${p.label}</span>
     </button>`).join('');
@@ -278,231 +308,308 @@ function renderApp() {
         </button>
       </div>
     </div>
-    <div class="main" id="main-content"></div>
+    <div class="main" id="main-content">${renderPage()}</div>
   </div>`;
 
-  renderPage();
-}
-
-function goTo(page) {
-  state.page = page;
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(el => {
-    if (el.getAttribute('onclick') === `goTo('${page}')`) el.classList.add('active');
-  });
-  renderPage();
-}
-
-function doLogout() {
-  state.logged = false;
-  state.page = 'dashboard';
-  renderLogin();
-}
-
-function renderPage() {
-  const main = document.getElementById('main-content');
-  if (!main) return;
-  if      (state.page === 'dashboard') main.innerHTML = pageDashboard();
-  else if (state.page === 'virements') main.innerHTML = pageVirements();
-  else if (state.page === 'gyms')      main.innerHTML = pageGyms();
-  else if (state.page === 'clients')   main.innerHTML = pageClients();
-  else if (state.page === 'payments')  main.innerHTML = pagePayments();
+  bindPage();
 }
 
 // ── DASHBOARD ─────────────────────────────────────────────
 function pageDashboard() {
-  const k = state.data.kpis;
-  const months = ['Jan','Fév','Mar','Avr','Mai','Jun'];
-  const vals   = [12, 18, 26, 31, 38, 42];
+  const totalRev   = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
+  const monthRev   = 386.10;
+  const activeClients = S.clients.filter(c=>c.subscribed).length;
+  const pendingV   = S.virements.filter(v=>v.status==='pending').length;
+  const totalPendingNet = S.virements.filter(v=>v.status==='pending').reduce((s,v)=>s+v.net,0);
+
+  const months = ['Jan','Fév','Mar','Avr','Mai'];
+  const vals   = [18, 26, 31, 38, 42];
   const maxV   = Math.max(...vals);
-  const bars   = vals.map((v,i) => `
-    <div style="flex:1;display:flex;flex-direction:column;align-items:center">
-      <div class="bar" style="width:100%;height:${Math.round(v/maxV*70)}px" title="${v} abonnés"></div>
-      <div class="bar-label">${months[i]}</div>
-    </div>`).join('');
 
   return `
   <div class="topbar">
-    <div>
-      <div class="page-title">Dashboard</div>
-      <div class="page-sub">Vue globale VOLT. · ${new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'long',year:'numeric'})}</div>
-    </div>
+    <div><div class="page-title">Dashboard</div><div class="page-sub">${new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'long',year:'numeric'})}</div></div>
     <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 Exporter CSV</button>
   </div>
 
   <div class="kpi-grid">
     <div class="kpi">
-      <div class="kpi-val blue">CHF ${k.revenue_month.toFixed(2)}</div>
+      <div class="kpi-val blue">${fmtChf(monthRev)}</div>
       <div class="kpi-label">Revenus ce mois</div>
-      <div class="kpi-sub">CHF ${k.revenue_total.toFixed(2)} total</div>
+      <div class="kpi-sub">${fmtChf(totalRev)} au total</div>
     </div>
     <div class="kpi">
-      <div class="kpi-val green">${k.subscribers}</div>
+      <div class="kpi-val green">${activeClients}</div>
       <div class="kpi-label">Abonnés actifs</div>
-      <div class="kpi-sub">+3 ce mois</div>
+      <div class="kpi-sub">Sur ${S.clients.length} clients</div>
     </div>
     <div class="kpi">
-      <div class="kpi-val">${k.scans_month}</div>
-      <div class="kpi-label">Scans ce mois</div>
-      <div class="kpi-sub">${Math.round(k.scans_month/k.subscribers)} moy./abonné</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-val" style="color:var(--orange)">${k.pending_virements}</div>
+      <div class="kpi-val orange">${pendingV}</div>
       <div class="kpi-label">Virements en attente</div>
-      <div class="kpi-sub"><button class="btn btn-ghost btn-sm" onclick="goTo('virements')" style="font-size:12px;padding:4px 10px">Voir →</button></div>
+      <div class="kpi-sub">${fmtChf(totalPendingNet)} à reverser</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">${S.gyms.filter(g=>g.active).length}</div>
+      <div class="kpi-label">Fitness actifs</div>
+      <div class="kpi-sub">Sur ${S.gyms.length} partenaires</div>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;margin-bottom:20px">
     <div class="card" style="padding:24px">
-      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">Croissance abonnés</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:12px">2025</div>
-      <div class="chart-bar">${bars}</div>
-    </div>
-    <div class="card" style="padding:24px">
-      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Répartition par plan</div>
-      ${[
-        { label:'Mensuel',     pct:45, n:19, col:'#0057FF' },
-        { label:'Trimestriel', pct:38, n:16, col:'#2979FF' },
-        { label:'Annuel',      pct:17, n:7,  col:'#A8C4FF' },
-      ].map(p => `
-        <div style="margin-bottom:14px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px">
-            <span style="font-size:13px;font-weight:600">${p.label}</span>
-            <span style="font-size:13px;font-weight:700;color:var(--ink3)">${p.n} · ${p.pct}%</span>
-          </div>
-          <div style="height:6px;background:var(--bg2);border-radius:3px;overflow:hidden">
-            <div style="height:100%;width:${p.pct}%;background:${p.col};border-radius:3px;transition:width .5s"></div>
-          </div>
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Abonnés — croissance 2025</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:80px">
+        ${vals.map((v,i)=>`
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="font-size:10px;font-weight:700;color:var(--ink3)">${v}</div>
+          <div style="width:100%;height:${Math.round(v/maxV*60)}px;background:var(--blue);border-radius:4px 4px 0 0;opacity:${i===vals.length-1?1:.6}"></div>
+          <div style="font-size:10px;font-weight:600;color:var(--ink4)">${months[i]}</div>
         </div>`).join('')}
+      </div>
+    </div>
+    <div class="card" style="padding:24px">
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:16px">Répartition plans</div>
+      ${[{l:'Mensuel',pct:45,n:19,c:'#0057FF'},{l:'Trimestriel',pct:38,n:16,c:'#2979FF'},{l:'Annuel',pct:17,n:7,c:'#A8C4FF'}].map(p=>`
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:13px;font-weight:600">${p.l}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--ink3)">${p.n}</span>
+        </div>
+        <div style="height:6px;background:var(--bg2);border-radius:3px">
+          <div style="height:100%;width:${p.pct}%;background:${p.c};border-radius:3px"></div>
+        </div>
+      </div>`).join('')}
     </div>
   </div>
 
+  <!-- Virements urgents -->
+  ${pendingV > 0 ? `
   <div class="card" style="padding:24px">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">Top fitness ce mois</div>
-      <button class="btn btn-ghost btn-sm" onclick="goTo('gyms')" style="font-size:12px">Voir tout →</button>
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">Virements en attente</div>
+      <button class="btn btn-blue btn-sm" onclick="goTo('virements')">Gérer →</button>
     </div>
+    ${S.virements.filter(v=>v.status==='pending').map(v=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border2)">
+      <div style="font-weight:700;flex:1">${v.gym_name}</div>
+      <div style="color:var(--ink3);font-size:13px">${v.month}</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(v.net)}</div>
+      <span class="badge badge-orange">⏳ En attente</span>
+    </div>`).join('')}
+    <div style="display:flex;justify-content:flex-end;margin-top:14px;padding-top:14px;border-top:2px solid var(--border2)">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px">Total : ${fmtChf(totalPendingNet)}</div>
+    </div>
+  </div>` : ''}`;
+}
+
+// ── VIREMENTS ─────────────────────────────────────────────
+function statusBadge(status) {
+  if (status === 'paid')     return '<span class="badge badge-green">✓ Payé</span>';
+  if (status === 'not_paid') return '<span class="badge badge-red">✗ Non payé</span>';
+  return '<span class="badge badge-orange">⏳ En attente</span>';
+}
+
+function statusSelect(v) {
+  return `
+  <select class="status-select virement-status-select" data-id="${v.id}" style="border-color:${v.status==='paid'?'var(--green)':v.status==='not_paid'?'var(--red)':'var(--orange)'}">
+    <option value="pending"  ${v.status==='pending' ?'selected':''}>⏳ En attente</option>
+    <option value="paid"     ${v.status==='paid'    ?'selected':''}>✓ Payé</option>
+    <option value="not_paid" ${v.status==='not_paid'?'selected':''}>✗ Non payé</option>
+  </select>`;
+}
+
+function pageVirements() {
+  const months = [...new Set(S.virements.map(v=>v.month))];
+  const pending = S.virements.filter(v=>v.status==='pending');
+  const totalPending = pending.reduce((s,v)=>s+v.net,0);
+
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Virements</div><div class="page-sub">Reversements 80% du chiffre d'affaires aux fitness</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="goTo('compta')">📋 Récap compta →</button>
+  </div>
+
+  ${pending.length > 0 ? `
+  <div style="background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:24px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+    <div>
+      <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">${pending.length} virement(s) en attente</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:44px;color:#fff;letter-spacing:-1px">${fmtChf(totalPending)}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:4px">à reverser aux fitness partenaires</div>
+    </div>
+    <button class="btn" style="background:#fff;color:var(--blue)" onclick="payAllPending()">Tout marquer payé ✓</button>
+  </div>` : `
+  <div style="background:rgba(0,196,122,.07);border:1px solid rgba(0,196,122,.2);border-radius:16px;padding:20px;margin-bottom:24px;text-align:center">
+    <div style="font-size:28px;margin-bottom:8px">✅</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--green)">Tous les virements sont à jour !</div>
+  </div>`}
+
+  <div class="card">
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Fitness</th><th>Filiale</th><th>Membres</th><th>Scans</th><th>Revenus</th><th>Virement</th></tr></thead>
-        <tbody>
-          ${state.data.gyms.map(g => `
+        <thead>
           <tr>
-            <td><strong>${g.name}</strong></td>
-            <td><span class="badge badge-blue">${g.filiale}</span></td>
-            <td>${g.members}</td>
-            <td>${g.scans}</td>
-            <td><strong>CHF ${g.revenue.toFixed(2)}</strong></td>
-            <td>${g.virement_status==='paid'
-              ? '<span class="badge badge-green">✓ Payé</span>'
-              : `<span class="badge badge-orange">⏳ En attente</span>`}</td>
+            <th>Fitness</th>
+            <th>Mois</th>
+            <th>CA brut</th>
+            <th>Commission VOLT (20%)</th>
+            <th>Net à reverser (80%)</th>
+            <th>Date paiement</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${S.virements.map(v => `
+          <tr>
+            <td><strong>${v.gym_name}</strong></td>
+            <td style="color:var(--ink3)">${v.month}</td>
+            <td>${fmtChf(v.brut)}</td>
+            <td style="color:var(--blue)">${fmtChf(v.commission)}</td>
+            <td><strong>${fmtChf(v.net)}</strong></td>
+            <td style="color:var(--ink3);font-size:13px">${v.date_paid || '—'}</td>
+            <td>${statusSelect(v)}</td>
           </tr>`).join('')}
         </tbody>
+        <tfoot>
+          <tr style="background:var(--bg)">
+            <td colspan="2"><strong>TOTAL</strong></td>
+            <td><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.brut,0))}</strong></td>
+            <td style="color:var(--blue)"><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.commission,0))}</strong></td>
+            <td><strong>${fmtChf(S.virements.reduce((s,v)=>s+v.net,0))}</strong></td>
+            <td colspan="2"></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>`;
 }
 
-// ── VIREMENTS ─────────────────────────────────────────────
-function pageVirements() {
-  const gyms = state.data.gyms;
-  const pending = gyms.filter(g => g.virement_status === 'pending');
-  const paid    = gyms.filter(g => g.virement_status === 'paid');
-  const totalPending = pending.reduce((s,g) => s + g.virement_amount, 0);
+function payAllPending() {
+  const t = today();
+  S.virements = S.virements.map(v => v.status === 'pending' ? {...v, status:'paid', date_paid:t} : v);
+  toast('✅ Tous les virements en attente marqués comme payés !');
+  goTo('virements');
+}
+
+// ── COMPTABILITÉ ──────────────────────────────────────────
+function pageCompta() {
+  const months = [...new Set(S.virements.map(v=>v.month))];
 
   return `
   <div class="topbar">
-    <div>
-      <div class="page-title">Virements</div>
-      <div class="page-sub">Reversements aux fitness partenaires</div>
+    <div><div class="page-title">Comptabilité</div><div class="page-sub">Récapitulatif mensuel — VOLT.</div></div>
+    <button class="btn btn-ghost btn-sm" onclick="printCompta()">🖨️ Imprimer</button>
+  </div>
+
+  <!-- Résumé global -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+    <div class="kpi">
+      <div class="kpi-val blue">${fmtChf(S.virements.reduce((s,v)=>s+v.brut,0))}</div>
+      <div class="kpi-label">CA total généré</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val green">${fmtChf(S.virements.reduce((s,v)=>s+v.commission,0))}</div>
+      <div class="kpi-label">Commission VOLT (20%)</div>
+      <div class="kpi-sub">Ton revenu net</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-val">${fmtChf(S.virements.filter(v=>v.status==='paid').reduce((s,v)=>s+v.net,0))}</div>
+      <div class="kpi-label">Total reversé aux fitness</div>
     </div>
   </div>
 
-  ${pending.length > 0 ? `
-  <div style="background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:24px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center">
-    <div>
-      <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">Total en attente</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:44px;color:#fff;letter-spacing:-1px">CHF ${totalPending.toFixed(2)}</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:4px">${pending.length} fitness à payer</div>
-    </div>
-    <button class="btn" style="background:#fff;color:var(--blue);font-size:16px" onclick="payAll()">Tout marquer payé ✓</button>
-  </div>` : `
-  <div style="background:rgba(0,196,122,.08);border:1px solid rgba(0,196,122,.2);border-radius:16px;padding:20px;margin-bottom:24px;text-align:center">
-    <div style="font-size:28px;margin-bottom:8px">✅</div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--green)">Tous les virements sont à jour !</div>
-  </div>`}
-
-  <div style="margin-bottom:8px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">EN ATTENTE (${pending.length})</div>
-  ${pending.map(g => virementsRow(g)).join('')}
-
-  ${paid.length > 0 ? `
-  <div style="margin:20px 0 8px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">PAYÉS (${paid.length})</div>
-  ${paid.map(g => virementsRow(g)).join('')}` : ''}`;
+  <!-- Par mois -->
+  ${months.map(month => {
+    const mvs    = S.virements.filter(v=>v.month===month);
+    const brut   = mvs.reduce((s,v)=>s+v.brut,0);
+    const comm   = mvs.reduce((s,v)=>s+v.commission,0);
+    const net    = mvs.reduce((s,v)=>s+v.net,0);
+    const paidN  = mvs.filter(v=>v.status==='paid').length;
+    const allPaid = paidN === mvs.length;
+    return `
+    <div class="compta-month" id="cm-${month.replace(/[^a-z0-9]/gi,'_')}">
+      <div class="compta-header" onclick="toggleCompta('${month.replace(/[^a-z0-9]/gi,'_')}')">
+        <div style="flex:1">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px">${month}</div>
+          <div style="font-size:12px;color:var(--ink3);margin-top:2px">${mvs.length} fitness · ${paidN}/${mvs.length} payés</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:20px">
+          <div style="text-align:right">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase">CA brut</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(brut)}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase">Commission</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--blue)">${fmtChf(comm)}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase">Net fitness</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(net)}</div>
+          </div>
+          ${allPaid ? '<span class="badge badge-green">✓ Tout payé</span>' : `<span class="badge badge-orange">⏳ ${mvs.length-paidN} en attente</span>`}
+          <div style="font-size:18px;color:var(--ink3)">▼</div>
+        </div>
+      </div>
+      <div class="compta-body" id="body-${month.replace(/[^a-z0-9]/gi,'_')}">
+        <table>
+          <thead><tr><th>Fitness</th><th>CA brut</th><th>Commission (20%)</th><th>Net (80%)</th><th>Statut</th><th>Date paiement</th></tr></thead>
+          <tbody>
+            ${mvs.map(v=>`
+            <tr>
+              <td><strong>${v.gym_name}</strong></td>
+              <td>${fmtChf(v.brut)}</td>
+              <td style="color:var(--blue)">${fmtChf(v.commission)}</td>
+              <td><strong>${fmtChf(v.net)}</strong></td>
+              <td>${statusSelect(v)}</td>
+              <td style="color:var(--ink3);font-size:13px">${v.date_paid||'—'}</td>
+            </tr>`).join('')}
+          </tbody>
+          <tfoot>
+            <tr style="background:var(--bg)">
+              <td><strong>Total ${month}</strong></td>
+              <td><strong>${fmtChf(brut)}</strong></td>
+              <td style="color:var(--blue)"><strong>${fmtChf(comm)}</strong></td>
+              <td><strong>${fmtChf(net)}</strong></td>
+              <td colspan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>`;
+  }).join('')}`;
 }
 
-function virementsRow(g) {
-  const isPending = g.virement_status === 'pending';
-  return `
-  <div class="virement-row">
-    <div style="width:44px;height:44px;background:var(--soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏋️</div>
-    <div style="flex:1">
-      <div style="font-size:15px;font-weight:700">${g.name}</div>
-      <div style="font-size:12px;font-weight:500;color:var(--ink3)">${g.members} membres · ${g.scans} scans · Dernier: ${g.last_virement}</div>
-    </div>
-    <div style="text-align:right;margin-right:16px">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px">CHF ${g.virement_amount.toFixed(2)}</div>
-      <div style="font-size:11px;color:var(--ink3)">80% de CHF ${g.revenue.toFixed(2)}</div>
-    </div>
-    ${isPending
-      ? `<button class="btn btn-success btn-sm" onclick="markPaid('${g.id}')">Marquer payé ✓</button>`
-      : `<span class="badge badge-green">✓ Payé</span>`}
-  </div>`;
+function toggleCompta(id) {
+  const body = document.getElementById('body-' + id);
+  if (body) body.classList.toggle('open');
 }
 
-function markPaid(gymId) {
-  state.data.gyms = state.data.gyms.map(g =>
-    g.id === gymId ? { ...g, virement_status: 'paid', last_virement: new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}) } : g
-  );
-  state.data.kpis.pending_virements = state.data.gyms.filter(g => g.virement_status === 'pending').length;
-  toast('✅ Virement marqué comme payé !');
-  renderPage();
-}
-
-function payAll() {
-  const today = new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'});
-  state.data.gyms = state.data.gyms.map(g => ({ ...g, virement_status: 'paid', last_virement: today }));
-  state.data.kpis.pending_virements = 0;
-  toast('✅ Tous les virements marqués comme payés !');
-  renderPage();
+function printCompta() {
+  window.print();
 }
 
 // ── GYMS ──────────────────────────────────────────────────
 function pageGyms() {
   return `
   <div class="topbar">
-    <div>
-      <div class="page-title">Fitness partenaires</div>
-      <div class="page-sub">${state.data.gyms.length} établissements dans le réseau</div>
-    </div>
+    <div><div class="page-title">Fitness partenaires</div><div class="page-sub">${S.gyms.length} établissements — ${S.gyms.filter(g=>g.active).length} actifs</div></div>
     <button class="btn btn-blue btn-sm" onclick="showAddGym()">+ Ajouter un fitness</button>
   </div>
   <div class="card">
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Fitness</th><th>Filiale</th><th>Email</th><th>Membres</th><th>Scans / mois</th><th>Revenus</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Fitness</th><th>Filiale</th><th>Email login</th><th>Membres</th><th>CA / mois</th><th>Statut</th><th>Actions</th></tr></thead>
         <tbody>
-          ${state.data.gyms.map(g => `
+          ${S.gyms.map(g => `
           <tr>
             <td><strong>${g.name}</strong></td>
             <td><span class="badge badge-blue">${g.filiale}</span></td>
-            <td style="color:var(--ink3)">${g.id}@volt.ch</td>
+            <td style="color:var(--ink3);font-size:13px">${g.email}</td>
             <td>${g.members}</td>
-            <td>${g.scans}</td>
-            <td><strong>CHF ${g.revenue.toFixed(2)}</strong></td>
-            <td style="display:flex;gap:6px">
-              <button class="btn btn-ghost btn-sm" style="font-size:12px" onclick="toast('Modification à venir')">✏️</button>
-              <button class="btn btn-danger btn-sm" style="font-size:12px" onclick="removeGym('${g.id}')">🗑️</button>
+            <td><strong>${fmtChf(g.revenue)}</strong></td>
+            <td>${g.active ? '<span class="badge badge-green">● Actif</span>' : '<span class="badge badge-gray">● Inactif</span>'}</td>
+            <td style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn btn-ghost btn-sm" style="font-size:12px" onclick="showEditGym('${g.id}')">✏️ Modifier</button>
+              <button class="btn ${g.active?'btn-danger':'btn-success'} btn-sm" style="font-size:12px" onclick="toggleGym('${g.id}')">${g.active?'Désactiver':'Activer'}</button>
             </td>
           </tr>`).join('')}
         </tbody>
@@ -515,14 +622,41 @@ function showAddGym() {
   document.body.insertAdjacentHTML('beforeend', `
   <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:24px">Ajouter un fitness</div>
+      <div class="modal-title">Ajouter un fitness partenaire</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div><label class="lbl">Nom du fitness</label><input class="inp" id="g-name" placeholder="FitnessPlus Lausanne"/></div>
-        <div><label class="lbl">Adresse</label><input class="inp" id="g-addr" placeholder="Rue de la Gare 1 · Lausanne"/></div>
-        <div><label class="lbl">Filiale (réseau d'accès)</label><input class="inp" id="g-filiale" placeholder="FitnessPlus"/></div>
-        <div><label class="lbl">Email du gérant</label><input class="inp" id="g-email" type="email" placeholder="manager@fitness.ch"/></div>
+        <div class="row2">
+          <div><label class="lbl">Filiale / Réseau</label><input class="inp" id="g-filiale" placeholder="FitnessPlus"/></div>
+          <div><label class="lbl">Ville</label><input class="inp" id="g-ville" placeholder="Lausanne"/></div>
+        </div>
+        <div><label class="lbl">Email du gérant (= login)</label><input class="inp" id="g-email" type="email" placeholder="manager@fitness.ch"/></div>
+        <div><label class="lbl">Mot de passe provisoire</label><input class="inp" id="g-pwd" type="text" value="fitness123" /></div>
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;font-weight:500;color:var(--blue)">
+          ℹ️ Le gérant se connecte sur <strong>energy-volt.vercel.app/VoltApp.html</strong> avec cet email et ce mot de passe.
+        </div>
         <div style="display:flex;gap:10px;margin-top:8px">
-          <button class="btn btn-blue" style="flex:1;justify-content:center" onclick="addGym()">Ajouter ✓</button>
+          <button class="btn btn-blue" style="flex:1;justify-content:center" onclick="addGym()">Créer le compte ✓</button>
+          <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+}
+
+function showEditGym(id) {
+  const g = S.gyms.find(x=>x.id===id);
+  if (!g) return;
+  document.body.insertAdjacentHTML('beforeend', `
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">Modifier — ${g.name}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="lbl">Nom</label><input class="inp" id="eg-name" value="${g.name}"/></div>
+        <div><label class="lbl">Filiale</label><input class="inp" id="eg-filiale" value="${g.filiale}"/></div>
+        <div><label class="lbl">Email</label><input class="inp" id="eg-email" type="email" value="${g.email}"/></div>
+        <div><label class="lbl">Nouveau mot de passe (laisser vide = inchangé)</label><input class="inp" id="eg-pwd" type="text" placeholder="Nouveau mot de passe"/></div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-blue" style="flex:1;justify-content:center" onclick="editGym('${id}')">Enregistrer ✓</button>
           <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal()">Annuler</button>
         </div>
       </div>
@@ -532,56 +666,59 @@ function showAddGym() {
 
 function addGym() {
   const name    = document.getElementById('g-name').value.trim();
-  const addr    = document.getElementById('g-addr').value.trim();
   const filiale = document.getElementById('g-filiale').value.trim();
   const email   = document.getElementById('g-email').value.trim();
-  if (!name || !filiale || !email) { toast('Remplis tous les champs.', false); return; }
-  const newGym = { id: Date.now().toString(), name, address: addr, filiale, members:0, scans:0, revenue:0, virement_status:'paid', virement_amount:0, last_virement:'—' };
-  state.data.gyms.push(newGym);
-  state.data.kpis.gyms++;
+  const pwd     = document.getElementById('g-pwd').value.trim();
+  if (!name || !filiale || !email || !pwd) { toast('Remplis tous les champs.', false); return; }
+  const id = Date.now().toString();
+  S.gyms.push({ id, name, filiale, email, pwd, members:0, scans:0, revenue:0, active:true });
   closeModal();
-  toast(`✅ ${name} ajouté au réseau !`);
-  renderPage();
+  toast(`✅ ${name} ajouté ! Email: ${email} / MDP: ${pwd}`);
+  goTo('gyms');
 }
 
-function removeGym(id) {
-  if (!confirm('Supprimer ce fitness du réseau ?')) return;
-  state.data.gyms = state.data.gyms.filter(g => g.id !== id);
-  state.data.kpis.gyms--;
-  toast('Fitness supprimé.', false);
-  renderPage();
+function editGym(id) {
+  const g = S.gyms.find(x=>x.id===id);
+  if (!g) return;
+  g.name    = document.getElementById('eg-name').value.trim() || g.name;
+  g.filiale = document.getElementById('eg-filiale').value.trim() || g.filiale;
+  g.email   = document.getElementById('eg-email').value.trim() || g.email;
+  const pwd = document.getElementById('eg-pwd').value.trim();
+  if (pwd) g.pwd = pwd;
+  closeModal();
+  toast(`✅ ${g.name} mis à jour !`);
+  goTo('gyms');
+}
+
+function toggleGym(id) {
+  const g = S.gyms.find(x=>x.id===id);
+  if (!g) return;
+  g.active = !g.active;
+  toast(g.active ? `✅ ${g.name} activé` : `⚠️ ${g.name} désactivé`);
+  goTo('gyms');
 }
 
 // ── CLIENTS ───────────────────────────────────────────────
 function pageClients() {
-  const clients = state.data.clients;
   return `
   <div class="topbar">
-    <div>
-      <div class="page-title">Clients</div>
-      <div class="page-sub">${clients.filter(c=>c.subscribed).length} abonnés actifs sur ${clients.length}</div>
-    </div>
+    <div><div class="page-title">Clients</div><div class="page-sub">${S.clients.filter(c=>c.subscribed).length} abonnés actifs sur ${S.clients.length}</div></div>
     <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 CSV</button>
   </div>
   <div class="card">
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans</th><th>Revenus</th><th>Inscrit le</th><th>Statut</th></tr></thead>
+        <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans</th><th>CA</th><th>Inscrit</th><th>Statut</th></tr></thead>
         <tbody>
-          ${clients.map(c => `
+          ${S.clients.map(c=>`
           <tr>
-            <td>
-              <div style="font-weight:700">${c.name}</div>
-              <div style="font-size:12px;color:var(--ink3)">${c.email}</div>
-            </td>
+            <td><div style="font-weight:700">${c.name}</div><div style="font-size:12px;color:var(--ink3)">${c.email}</div></td>
             <td style="color:var(--ink3);font-size:13px">${c.gym}</td>
             <td><span class="badge badge-blue">${c.plan}</span></td>
             <td>${c.scans}</td>
-            <td><strong>CHF ${c.revenue.toFixed(2)}</strong></td>
+            <td><strong>${fmtChf(c.revenue)}</strong></td>
             <td style="color:var(--ink3);font-size:13px">${c.joined}</td>
-            <td>${c.subscribed
-              ? '<span class="badge badge-green">✓ Actif</span>'
-              : '<span class="badge badge-red">✗ Expiré</span>'}</td>
+            <td>${c.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-red">✗ Expiré</span>'}</td>
           </tr>`).join('')}
         </tbody>
       </table>
@@ -589,16 +726,12 @@ function pageClients() {
   </div>`;
 }
 
-// ── PAYMENTS ──────────────────────────────────────────────
+// ── PAIEMENTS ─────────────────────────────────────────────
 function pagePayments() {
-  const payments = state.data.payments;
-  const total = payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
+  const total = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
   return `
   <div class="topbar">
-    <div>
-      <div class="page-title">Paiements</div>
-      <div class="page-sub">Total encaissé : CHF ${total.toFixed(2)}</div>
-    </div>
+    <div><div class="page-title">Paiements</div><div class="page-sub">Total encaissé : ${fmtChf(total)}</div></div>
     <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 CSV</button>
   </div>
   <div class="card">
@@ -606,30 +739,38 @@ function pagePayments() {
       <table>
         <thead><tr><th>Client</th><th>Plan</th><th>Montant</th><th>Méthode</th><th>Date</th><th>Statut</th></tr></thead>
         <tbody>
-          ${payments.map(p => `
+          ${S.payments.map(p=>`
           <tr>
             <td><strong>${p.client}</strong></td>
             <td><span class="badge badge-blue">${p.plan}</span></td>
-            <td><strong>CHF ${p.amount.toFixed(2)}</strong></td>
+            <td><strong>${fmtChf(p.amount)}</strong></td>
             <td style="color:var(--ink3)">${p.method}</td>
             <td style="color:var(--ink3);font-size:13px">${p.date}</td>
-            <td>${p.status==='success'
-              ? '<span class="badge badge-green">✓ Succès</span>'
-              : '<span class="badge badge-red">✗ Échoué</span>'}</td>
+            <td>${p.status==='success'?'<span class="badge badge-green">✓ Succès</span>':'<span class="badge badge-red">✗ Échoué</span>'}</td>
           </tr>`).join('')}
         </tbody>
+        <tfoot>
+          <tr style="background:var(--bg)">
+            <td colspan="2"><strong>Total encaissé</strong></td>
+            <td colspan="4"><strong>${fmtChf(total)}</strong></td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>`;
 }
 
 // ── UTILS ─────────────────────────────────────────────────
-function closeModal() {
-  document.getElementById('modal-bg')?.remove();
-}
-
 function exportCSV() {
-  toast('📥 Export CSV envoyé par email !');
+  const data = S.virements.map(v =>
+    [v.gym_name, v.month, v.brut, v.commission, v.net, v.status, v.date_paid||''].join(',')
+  );
+  const csv  = ['Fitness,Mois,CA Brut,Commission,Net,Statut,Date paiement', ...data].join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'volt-virements.csv'; a.click();
+  toast('📥 CSV téléchargé !');
 }
 
 // ── BOOT ──────────────────────────────────────────────────
