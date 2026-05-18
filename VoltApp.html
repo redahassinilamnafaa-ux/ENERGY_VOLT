@@ -622,12 +622,11 @@ function renderPay() {
 
     + (method === 'card'
       ? '<div class="card" style="padding:20px;margin-bottom:14px">'
-        + '<div style="margin-bottom:12px"><label class="lbl">Numéro de carte</label><div id="stripe-el"></div></div>'
-        + '<div class="row2"><div><label class="lbl">Expiration</label><div id="stripe-exp" style="background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px"></div></div>'
-        + '<div><label class="lbl">CVV</label><div id="stripe-cvc" style="background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px"></div></div></div>'
-        + '<div style="text-align:center;font-size:12px;font-weight:600;color:var(--ink3);margin-top:12px">🔒 Paiement sécurisé par Stripe</div>'
+        + '<label class="lbl" style="display:block;margin-bottom:8px">Carte bancaire</label>'
+        + '<div id="stripe-el" style="background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;transition:all .2s;min-height:46px"></div>'
+        + '<div id="pay-err" style="display:none;color:var(--red);font-size:13px;font-weight:600;margin-top:10px"></div>'
+        + '<div style="text-align:center;font-size:12px;font-weight:600;color:var(--ink3);margin-top:14px">🔒 Paiement sécurisé par Stripe</div>'
         + '</div>'
-        + '<div id="pay-err" style="display:none;background:#FFF0F2;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red);margin-bottom:10px"></div>'
         + '<button class="btn btn-blue" id="btn-pay">PAYER CHF '+planPrice+' →</button>'
       : '<div class="card" style="padding:28px;text-align:center;margin-bottom:14px">'
         + '<div style="font-size:48px;margin-bottom:12px">🇨🇭</div>'
@@ -656,24 +655,56 @@ window.setMethod = function(m) {
 
 let stripeInst = null, stripeCard = null;
 function bindPay() {
-  if (S.payMethod === 'card') initStripe();
+  if (S.payMethod === 'card') {
+    // Attendre que la clé soit disponible puis initialiser
+    waitForStripeKey();
+  }
   const btnPay = document.getElementById('btn-pay');
   if (btnPay) btnPay.onclick = doPay;
   const btnTw = document.getElementById('btn-twint');
   if (btnTw) btnTw.onclick = doTwint;
 }
 
+function waitForStripeKey(attempts) {
+  attempts = attempts || 0;
+  if (attempts > 20) return; // abandon après 4 secondes
+  if (!CFG.STRIPE_KEY || CFG.STRIPE_KEY === '') {
+    setTimeout(() => waitForStripeKey(attempts + 1), 200);
+    return;
+  }
+  initStripe();
+}
+
 function initStripe() {
-  if (!window.Stripe) return;
+  if (!window.Stripe || !CFG.STRIPE_KEY) return;
   try {
     stripeInst = Stripe(CFG.STRIPE_KEY);
-    const els = stripeInst.elements({ locale:'fr' });
-    const style = { base:{ fontSize:'15px', color:'#050A14', fontFamily:'Barlow, sans-serif', '::placeholder':{ color:'#A8B4CC' } } };
-    stripeCard = els.create('cardNumber', { style });
+    const els = stripeInst.elements({ locale: 'fr' });
+    const style = {
+      base: {
+        fontSize: '16px',
+        color: '#0A0F1E',
+        fontFamily: '"Barlow", sans-serif',
+        '::placeholder': { color: '#A8B4CC' }
+      }
+    };
+    // Élément unique qui gère carte + expiration + CVV
+    stripeCard = els.create('card', {
+      style,
+      hidePostalCode: true
+    });
     stripeCard.mount('#stripe-el');
-    els.create('cardExpiry', { style }).mount('#stripe-exp');
-    els.create('cardCvc', { style }).mount('#stripe-cvc');
-  } catch(e) {}
+    stripeCard.on('focus', () => {
+      const el = document.getElementById('stripe-el');
+      if (el) { el.style.borderColor = 'var(--blue)'; el.style.background = 'var(--white)'; }
+    });
+    stripeCard.on('blur', () => {
+      const el = document.getElementById('stripe-el');
+      if (el) { el.style.borderColor = 'transparent'; el.style.background = 'var(--bg2)'; }
+    });
+  } catch(e) {
+    console.error('Stripe init error:', e);
+  }
 }
 
 async function doPay() {
