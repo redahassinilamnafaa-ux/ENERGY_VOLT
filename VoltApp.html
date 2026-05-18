@@ -174,7 +174,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 // ═══════════════════════════════════════════
 const CFG = {
   API: 'https://volt-backend-final.vercel.app',
-  STRIPE_KEY: 'pk_test_51TYCI6E7UUiIVPAosSnoKWduegm2VfkgBPClr1GiXoMd3fSrY20QqBywkARXcrMUwwsOjjnHSXRz7rsIvXPxFpbA00rX5t22Mr',
+  STRIPE_KEY: 'REMPLACER_PAR_CLE_PK_TEST',
   DEMO_CODE: 'volt-admin-2025',
   CD_SECS: 900,
 };
@@ -761,7 +761,8 @@ async function doPay() {
     S.screen = 'home'; render();
 
   } catch(e) {
-    showPayErr('Erreur lors du paiement. Réessaie.');
+    console.error('doPay error:', e);
+    showPayErr('Erreur: ' + (e.message || JSON.stringify(e)));
     btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false;
   }
 }
