@@ -477,17 +477,17 @@ function pageVirements() {
       <label style="font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Mois</label>
       <select class="status-select" style="padding:9px 16px;font-size:14px;border-radius:50px" onchange="S.vFilter_month=this.value;goTo('virements')">
         <option value="">Tous les mois</option>
-        ${months.map(m=>\`<option value="\${m}" \${filterMonth===m?'selected':''}>\${m}</option>\`).join('')}
+        ${months.map(m => '<option value="' + m + '" ' + (filterMonth===m?'selected':'') + '>' + m + '</option>').join('')}
       </select>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <label style="font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Fitness</label>
       <select class="status-select" style="padding:9px 16px;font-size:14px;border-radius:50px" onchange="S.vFilter_gym=this.value;goTo('virements')">
         <option value="">Tous les fitness</option>
-        ${gymNames.map(g=>\`<option value="\${g}" \${filterGym===g?'selected':''}>\${g}</option>\`).join('')}
+        ${gymNames.map(g => '<option value="' + g + '" ' + (filterGym===g?'selected':'') + '>' + g + '</option>').join('')}
       </select>
     </div>
-    ${filterMonth||filterGym ? \`<button class="btn btn-ghost btn-sm" onclick="S.vFilter_month='';S.vFilter_gym='';goTo('virements')">✕ Effacer filtres</button>\` : ''}
+    ${filterMonth||filterGym ? '<button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Effacer filtres</button>' : ''}
     <div style="margin-left:auto;font-size:13px;font-weight:600;color:var(--ink3)">\${filtered.length} résultat(s)</div>
   </div>
 
@@ -537,6 +537,12 @@ function pageVirements() {
       </table>
     </div>
   </div>`;
+}
+
+function clearFilters() {
+  S.vFilter_month = '';
+  S.vFilter_gym   = '';
+  goTo('virements');
 }
 
 function payAllPending() {
