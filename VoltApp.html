@@ -584,6 +584,31 @@ function bindHome() {
 //  PAY
 // ═══════════════════════════════════════════
 function renderPay() {
+  const u = S.user;
+  
+  if (u && u.subscribed) {
+    const endDate = u.sub_expires_at ? new Date(u.sub_expires_at).toLocaleDateString('fr-CH') : 'Non définie';
+    const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
+    return '<div class="screen">'
+      + '<div class="hdr" style="padding-bottom:18px">'
+      + '<div class="hdr-row"><div class="bc" style="font-weight:900;font-size:28px;color:#fff">MON ABONNEMENT</div>'
+      + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">VOLT.</div></div>'
+      + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38)">Gère ton forfait actuel</div>'
+      + '</div>'
+      + '<div style="padding:14px 16px 0">'
+      + '<div class="card" style="padding:24px;margin-bottom:14px;text-align:center">'
+      + '<div style="font-size:40px;margin-bottom:12px">⚡</div>'
+      + '<div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">Forfait ' + plan.label + ' Actif</div>'
+      + '<div style="font-size:14px;color:var(--ink3);margin-bottom:24px">Prochaine échéance : <strong>' + endDate + '</strong></div>'
+      + (u.cancel_at_period_end 
+          ? '<div style="background:var(--bg2);color:var(--ink3);padding:12px;border-radius:12px;font-size:13px;font-weight:600">Renouvellement automatique annulé</div>' 
+          : '<button class="btn btn-dark" style="background:#FFEBEB;color:#D80000;border:none" onclick="cancelSub()">Annuler le renouvellement auto.</button>')
+      + '</div>'
+      + '<div style="text-align:center;font-size:12px;font-weight:500;color:var(--ink3);margin-top:12px;padding:0 20px">En annulant, tu gardes l\'accès à VOLT. jusqu\'à la fin de la période déjà payée.</div>'
+      + '</div></div>';
+  }
+
+
   const sel = S.plan;
   const method = S.payMethod;
   const planPrice = (PLANS.find(p=>p.id===sel)||PLANS[0]).chf;
@@ -638,6 +663,24 @@ function renderPay() {
     + '<div style="text-align:center;font-size:12px;font-weight:500;color:var(--ink3);margin-top:12px;padding-bottom:10px">Sans engagement · Annulation à tout moment</div>'
     + '</div></div>';
 }
+
+window.cancelSub = async function() {
+  if(!confirm("Es-tu sûr(e) de vouloir annuler ton abonnement ?\n\nTu garderas l'accès aux machines VOLT jusqu'à la date de fin prévue, mais il ne sera plus renouvelé automatiquement.")) return;
+  const btn = document.querySelector('button[onclick="cancelSub()"]');
+  if(btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  
+  const res = await api('/api/cancel-sub', {});
+  
+  if (res.error) {
+    toast("Erreur : " + res.error);
+    if(btn) { btn.innerHTML = 'Annuler le renouvellement auto.'; btn.disabled = false; }
+  } else {
+    toast('✅ Renouvellement automatique annulé.');
+    S.user.cancel_at_period_end = true;
+    saveSess();
+    render();
+  }
+};
 
 window.selPlan = function(id) {
   S.plan = id;
