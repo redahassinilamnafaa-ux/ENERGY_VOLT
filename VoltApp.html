@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <title>VOLT.</title>
-<meta name="theme-color" content="#0A0F1E"/>
+<meta name="theme-color" content="#060D2E"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="VOLT."/>
@@ -24,7 +24,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
   --blue-soft:rgba(0,87,255,.07);
   --blue-soft2:rgba(0,87,255,.12);
   --blue-glow:rgba(0,87,255,.22);
-  --ink:#0A0F1E;
+  --ink:#060D2E;
   --ink2:#2D3652;
   --ink3:#6B7A99;
   --ink4:#A8B4CC;
@@ -359,7 +359,7 @@ function startCdTick() {
 function renderVerifyPending() {
   const email = S.user ? S.user.email : '';
   return '<div class="screen-full" style="background:var(--ink);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
-    + '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(0,87,255,.25),transparent 65%);pointer-events:none"></div>'
+    + '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 50% 0%,rgba(0,87,255,.7),rgba(0,40,180,.35) 50%,transparent 75%);pointer-events:none"></div>'
     + '<div style="position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:fadeUp .7s ease both">'
     + '<div style="width:88px;height:88px;background:rgba(0,87,255,.12);border-radius:24px;border:1.5px solid rgba(0,87,255,.25);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 28px;line-height:88px">📧</div>'
     + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:32px;color:#fff;letter-spacing:-.5px;margin-bottom:20px">VOLT<span style="color:#0057FF">.</span></div>'
@@ -419,7 +419,7 @@ function renderLogin() {
   const isConn = S.tab === 'conn';
   return '<div class="screen-full" style="background:var(--ink);display:flex;flex-direction:column;min-height:100%">'
     + '<div style="position:relative;overflow:hidden;flex:1;display:flex;flex-direction:column">'
-    + '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 80% 0%,rgba(0,87,255,.28),transparent 70%);pointer-events:none"></div>'
+    + '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 75% 0%,rgba(0,87,255,.7),rgba(0,40,180,.35) 50%,transparent 75%);pointer-events:none"></div>'
     + '<div style="padding:56px 28px 28px;position:relative;animation:fadeUp .7s ease both">'
     + '<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:76px;color:#fff;letter-spacing:-2px;line-height:.9">VOLT<span style="color:#fff">.</span></div>'
     + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38);margin-top:10px">L\'énergie illimitée dans ton fitness</div>'
@@ -549,7 +549,7 @@ function renderHome() {
   const u = S.user;
   const cd = cdLeft();
   const cdCol = cd < 60 ? '#FF3B5C' : cd < 180 ? '#FF9500' : '#0057FF';
-  const planLabel = (PLANS.find(p=>p.id===u.plan)||PLANS[0]).label;
+  const planLabel = u.subscribed ? (PLANS.find(p=>p.id===u.plan)||PLANS[0]).label : 'AUCUN PLAN';
   const ini = u.initials || initials(u.name);
 
   return '<div class="screen">'
