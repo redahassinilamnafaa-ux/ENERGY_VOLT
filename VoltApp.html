@@ -83,7 +83,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 
 /* QR CARD */
 .qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden}
-.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 85% 15%,rgba(0,87,255,.22),transparent);pointer-events:none}
+.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 80% 10%,rgba(0,87,255,.55),rgba(0,40,180,.2) 60%,transparent);pointer-events:none}
 .qr-inner{position:relative;z-index:1}
 .qr-box{background:var(--white);border-radius:16px;padding:12px;display:inline-block}
 .qr-box.blur{filter:blur(6px);pointer-events:none}
@@ -124,7 +124,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 .plan-card:hover{border-color:var(--blue);box-shadow:0 8px 28px var(--blue-glow);transform:translateY(-2px)}
 .plan-card.sel{border:2px solid var(--blue);box-shadow:0 8px 28px var(--blue-glow),0 0 0 3px var(--blue-soft)}
 .plan-card.feat{background:linear-gradient(145deg,var(--blue-dark),var(--blue));border-color:transparent;box-shadow:0 12px 32px var(--blue-glow)}
-.plan-card.feat.sel{box-shadow:0 16px 44px rgba(0,87,255,.4),0 0 0 3px var(--blue-soft2)}
+.plan-card.feat.sel{box-shadow:0 16px 44px rgba(0,87,255,.4),0 0 0 3px rgba(255,255,255,.5);border:2px solid rgba(255,255,255,.6)!important}
 
 /* REFERRAL */
 .ref-card{background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:22px;margin-bottom:14px}
@@ -250,6 +250,24 @@ function doLogout() {
   S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card' };
   render();
 }
+
+window.toggleNotifs = function() {
+  S.notifs = !S.notifs;
+  saveSess();
+  const lbl = document.getElementById('notif-toggle-label');
+  if (lbl) {
+    lbl.textContent = S.notifs ? 'Actives' : 'Désactivées';
+    lbl.style.color = S.notifs ? 'var(--blue)' : 'var(--ink3)';
+  }
+  toast(S.notifs ? 'Notifications activées 🔔' : 'Notifications désactivées 🔕');
+};
+
+window.sendInvoiceEmail = async function() {
+  const u = S.user;
+  if (!u || !u.subscribed) { toast('Aucun abonnement actif.', false); return; }
+  toast('Facture envoyée à ' + u.email + ' 📧');
+  // TODO: connecter à /api/send-invoice quand backend prêt
+};
 
 window.confirmDeleteAccount = function() {
   openModal('Supprimer mon compte',
@@ -587,17 +605,17 @@ function renderHome() {
       : '')
 
     + '<div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">'
-    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:var(--blue)">∞</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase">RÉSEAU</div></div>'
-    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:var(--blue)">15</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase">MIN COOLDOWN</div></div>'
-    + '<div style="text-align:center"><div class="bc" id="scan-count" style="font-weight:900;font-size:22px;color:var(--blue)">—</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase">CE MOIS</div></div>'
+    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">∞</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">RÉSEAU</div></div>'
+    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">15</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">MIN COOLDOWN</div></div>'
+    + '<div style="text-align:center"><div class="bc" id="scan-count" style="font-weight:900;font-size:22px;color:#fff">—</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">CE MOIS</div></div>'
     + '</div></div></div>'
 
     // QR explanation
     + '<div style="padding:14px 16px 0">'
     + '<div style="background:'+(cd>0?'rgba(255,149,0,.07)':'rgba(0,87,255,.06)')+';border:1px solid '+(cd>0?'rgba(255,149,0,.2)':'rgba(0,87,255,.18)')+';border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px">'
     + '<div style="font-size:22px;flex-shrink:0">'+(cd>0?'⏳':'📲')+'</div>'
-    + '<div><div class="bc" style="font-weight:800;font-size:18px;color:var(--ink)">'+(cd>0?'Disponible dans '+fmtCd(cd):'PRÉSENTE TON QR AU SCANNER')+'</div>'
-    + '<div style="font-size:12px;font-weight:500;color:var(--ink3);margin-top:2px">'+(cd>0?'1 boisson max toutes les 15 minutes':'La machine lit ton code automatiquement')+'</div></div>'
+    + '<div><div class="bc" style="font-weight:800;font-size:18px;color:var(--ink)">'+(cd>0?'Disponible dans '+fmtCd(cd):'PRÉSENTE TON CODE QR AU SCANNER')+'</div>'
+    + '<div style="font-size:12px;font-weight:500;color:var(--ink3);margin-top:2px">'+(cd>0?'1 boisson max toutes les 15 minutes':'La machine lit ton Code QR automatiquement')+'</div></div>'
     + '</div></div>'
 
     // Stats
@@ -944,7 +962,7 @@ function renderHist() {
     + '</div>'
     + '<div class="card" style="padding:0 16px">'
     + (h.length === 0
-      ? '<div style="padding:40px 0;text-align:center"><div style="font-size:40px;margin-bottom:12px">⚡</div><div style="font-size:15px;font-weight:600;color:var(--ink)">Pas encore de scan</div><div style="font-size:13px;color:var(--ink3);margin-top:6px">Présente ton QR à un terminal VOLT.</div></div>'
+      ? '<div style="padding:40px 0;text-align:center"><div style="font-size:40px;margin-bottom:12px">⚡</div><div style="font-size:15px;font-weight:600;color:var(--ink)">Pas encore de scan</div><div style="font-size:13px;color:var(--ink3);margin-top:6px">Présente ton Code QR à un terminal VOLT.</div></div>'
       : h.map((x,i) => '<div class="hist-row"'+(i===h.length-1?' style="border-bottom:none"':'')+'>'+
           '<div class="hist-ico">⚡</div>'+
           '<div><div style="font-size:15px;font-weight:600">1 boisson prise</div><div style="font-size:12px;font-weight:500;color:var(--ink3)">'+x.gym+'</div></div>'+
@@ -964,7 +982,7 @@ function renderAcc() {
   const refLink = 'volt.energy.ch/join?ref='+code;
 
   return '<div class="screen">'
-    + '<div class="hdr" style="padding-bottom:22px">'
+    + '<div class="hdr" style="padding-bottom:22px;background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 100%)">'
     + '<div class="hdr-row">'
     + '<div><div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.38)">Mon compte</div>'
     + '<div class="bc" style="font-weight:900;font-size:22px;color:#fff;margin-top:2px">'+(u.name||u.email)+'</div></div>'
@@ -1003,8 +1021,8 @@ function renderAcc() {
     + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">PARAMÈTRES</div>'
     + '<div class="row-item" id="btn-edit-prof"><div class="row-ico">👤</div><div class="row-lbl">Modifier le profil</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="nav(\'pay\')"><div class="row-ico">💳</div><div class="row-lbl">Gérer l\'abonnement</div><div class="row-r">CHF '+plan.chf+'</div><div class="row-chev">›</div></div>'
-    + '<div class="row-item" onclick="toast(\'Factures envoyées par email 📧\')"><div class="row-ico">🧾</div><div class="row-lbl">Mes factures</div><div class="row-chev">›</div></div>'
-    + '<div class="row-item" onclick="toast(\'Notifications actives 🔔\')"><div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div class="row-r" style="color:var(--blue)">Actives</div><div class="row-chev">›</div></div>'
+    + '<div class="row-item" onclick="sendInvoiceEmail()"><div class="row-ico">🧾</div><div class="row-lbl">Mes factures</div><div class="row-r" style="font-size:12px;color:var(--blue)">Envoyer par email</div><div class="row-chev">›</div></div>'
+    + '<div class="row-item" onclick="toggleNotifs()"><div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div id="notif-toggle-label" style="font-size:13px;font-weight:700;color:'+(S.notifs?'var(--blue)':'var(--ink3)')+'">'+(S.notifs?'Actives':'Désactivées')+'</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="showCGV()"><div class="row-ico">📄</div><div class="row-lbl">CGV & Confidentialité</div><div class="row-chev">›</div></div>'
     + '<div style="margin-top:14px"><div class="row-item row-danger" onclick="doLogout()"><div class="row-ico">🚪</div><div class="row-lbl">Déconnexion</div><div class="row-chev">›</div></div></div>'
     + '<div style="margin-top:4px"><div class="row-item row-danger" onclick="confirmDeleteAccount()"><div class="row-ico">🗑️</div><div class="row-lbl">Supprimer mon compte</div><div class="row-chev">›</div></div></div>'
