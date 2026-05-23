@@ -253,6 +253,13 @@ function doLogout() {
 
 window.navPay = function() { nav("pay"); };
 
+window.goToLogin = function() {
+  localStorage.removeItem("volt_s");
+  S = { screen:"login", user:null, token:null, plan:"quarter", cdEnd:0, history:[], tab:"conn", cgv:false, payMethod:"card", notifs:true };
+  window.history.replaceState({}, document.title, window.location.pathname);
+  render();
+};
+
 window.toggleNotifs = function() {
   S.notifs = !S.notifs;
   saveSess();
@@ -376,6 +383,17 @@ function startCdTick() {
 // ═══════════════════════════════════════════
 //  RENDER ENGINE
 // ═══════════════════════════════════════════
+function renderVerifySuccess() {
+  return '<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
+    + '<div style="position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:fadeUp .7s ease both">'
+    + '<div style="width:96px;height:96px;background:rgba(0,196,122,.15);border-radius:28px;border:2px solid rgba(0,196,122,.35);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 28px;line-height:96px">✅</div>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:36px;color:#fff;letter-spacing:-.5px;margin-bottom:8px">VOLT<span style="color:#0057FF">.</span></div>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:30px;color:#fff;line-height:1.1;margin-bottom:16px">Email confirmé ! 🎉</div>'
+    + '<div style="font-size:15px;font-weight:500;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:36px">Ton adresse email a bien été vérifiée.<br/>Tu peux maintenant te connecter à VOLT.</div>'
+    + '<button onclick="goToLogin()" class="btn" style="background:#0057FF;color:#fff;font-family:Arial,sans-serif;font-size:21px;font-weight:900;border-radius:50px;padding:15px;width:100%">SE CONNECTER →</button>'
+    + '</div></div>';
+}
+
 function renderVerifyPending() {
   const email = S.user ? S.user.email : '';
   return '<div class="screen-full" style="background:var(--ink);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
@@ -407,6 +425,7 @@ window.resendVerification = async function() {
 function render() {
   clearInterval(cdTick);
   const app = document.getElementById('app');
+  if (S.screen === 'verify-success') { app.innerHTML = renderVerifySuccess(); return; }
   if (!S.user) { app.innerHTML = renderLogin(); bindLogin(); return; }
   if (S.screen === 'verify-pending' || S.user.email_verified === false) { app.innerHTML = renderVerifyPending(); return; }
   const navHtml = renderNav();
@@ -1133,12 +1152,11 @@ if (DEMO && !S.user) { S.user = DEMO_USER; S.token = 'demo'; S.screen = 'home'; 
 
 // Gestion retour lien email
 const VERIFY_STATUS = PARAMS.get('verify');
-if (VERIFY_STATUS === 'success' && S.user) {
-  S.user.email_verified = true;
-  saveSess();
-  S.screen = 'pay';
+if (VERIFY_STATUS === 'success') {
+  // Déconnecte et affiche l'écran de confirmation
+  localStorage.removeItem('volt_s');
+  S = { screen:'verify-success', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card', notifs:true };
   window.history.replaceState({}, document.title, window.location.pathname);
-  setTimeout(() => notif('✅', 'Email confirmé ! Choisis ton abonnement ⚡'), 600);
 } else if (VERIFY_STATUS === 'expired') {
   window.history.replaceState({}, document.title, window.location.pathname);
   setTimeout(() => toast('Lien expiré. Reconnecte-toi pour renvoyer un email.', false), 400);
