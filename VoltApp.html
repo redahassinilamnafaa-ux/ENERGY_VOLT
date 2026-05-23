@@ -251,6 +251,30 @@ function doLogout() {
   render();
 }
 
+window.confirmDeleteAccount = function() {
+  openModal('Supprimer mon compte',
+    '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div style="text-align:center;font-size:40px;margin-bottom:4px">⚠️</div>'
+    + '<div style="font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.6">Cette action est <strong>irréversible</strong>.<br/>Ton compte, tes données et ton abonnement seront définitivement supprimés.</div>'
+    + '<div style="background:#FFF0F2;border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--red);text-align:center">⚠ Tu perdras immédiatement accès à VOLT.</div>'
+    + '<button class="btn" style="background:var(--red);color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-size:19px;font-weight:900" onclick="doDeleteAccount()">OUI, SUPPRIMER MON COMPTE</button>'
+    + '<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>'
+    + '</div>'
+  );
+};
+
+window.doDeleteAccount = async function() {
+  closeModal();
+  const res = await api('/api/user-update', {}, 'DELETE');
+  if (res && res.error) { toast(res.error, false); return; }
+  toast('Compte supprimé. À bientôt 👋');
+  setTimeout(() => {
+    localStorage.removeItem('volt_s');
+    S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card' };
+    render();
+  }, 1500);
+};
+
 // ═══════════════════════════════════════════
 //  API
 // ═══════════════════════════════════════════
@@ -953,6 +977,7 @@ function renderAcc() {
     + '<div class="row-item" onclick="toast(\'Notifications actives 🔔\')"><div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div class="row-r" style="color:var(--blue)">Actives</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="showCGV()"><div class="row-ico">📄</div><div class="row-lbl">CGV & Confidentialité</div><div class="row-chev">›</div></div>'
     + '<div style="margin-top:14px"><div class="row-item row-danger" onclick="doLogout()"><div class="row-ico">🚪</div><div class="row-lbl">Déconnexion</div><div class="row-chev">›</div></div></div>'
+    + '<div style="margin-top:4px"><div class="row-item row-danger" onclick="confirmDeleteAccount()"><div class="row-ico">🗑️</div><div class="row-lbl">Supprimer mon compte</div><div class="row-chev">›</div></div></div>'
     + '<div style="text-align:center;padding:18px 0;font-size:12px;color:var(--ink3)">VOLT. · <a href="mailto:info@volt.energy.ch" style="color:var(--ink3)">info@volt.energy.ch</a></div>'
     + '</div></div>';
 }
