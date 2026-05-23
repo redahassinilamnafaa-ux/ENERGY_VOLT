@@ -559,9 +559,18 @@ async function doLogin() {
   const btn = document.getElementById('btn-login');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await api('/api/login', { email, password: pwd });
+  // Email non vérifié — backend renvoie 403 avec email_verified: false
+  if (res.email_verified === false) {
+    if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; }
+    // Crée un user temporaire pour afficher l'écran de vérification
+    S.user = { email: res.email || email, email_verified: false };
+    S.token = null;
+    S.screen = 'verify-pending';
+    render();
+    return;
+  }
   if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; } return; }
   S.user = res.user; S.token = res.token; saveSess();
-  if (res.user && res.user.email_verified === false) { S.screen = 'verify-pending'; render(); return; }
   S.screen = 'home'; render();
 }
 
