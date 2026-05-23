@@ -77,13 +77,13 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 .card{background:var(--white);border-radius:20px;border:1px solid var(--border2)}
 
 /* DARK HEADER */
-.hdr{background:var(--ink);padding:16px 20px 0}
+.hdr{background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);padding:16px 20px 0}
 .hdr-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px}
 .logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px}
 
 /* QR CARD */
 .qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden}
-.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 80% 10%,rgba(0,87,255,.55),rgba(0,40,180,.2) 60%,transparent);pointer-events:none}
+.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 80% 0%,rgba(0,87,255,.85),rgba(0,60,220,.45) 50%,rgba(0,20,120,.2) 80%,transparent);pointer-events:none}
 .qr-inner{position:relative;z-index:1}
 .qr-box{background:var(--white);border-radius:16px;padding:12px;display:inline-block}
 .qr-box.blur{filter:blur(6px);pointer-events:none}
