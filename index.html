@@ -201,10 +201,18 @@ nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06)}
   transition:transform .3s,box-shadow .3s,border-color .3s;
   cursor:default;
 }
-.step:hover{
+.step:hover,.step.touched{
   transform:translateY(-6px);
   box-shadow:0 20px 50px var(--blue-glow),0 0 0 1.5px var(--blue);
   border-color:var(--blue);
+}
+@media(hover:none){
+  .step:active{
+    transform:scale(.97);
+    box-shadow:0 8px 30px var(--blue-glow),0 0 0 2px var(--blue);
+    border-color:var(--blue);
+    transition:all .15s;
+  }
 }
 .step-num{
   font-family:'Barlow Condensed',sans-serif;font-weight:900;
@@ -300,7 +308,15 @@ nav.scrolled{box-shadow:0 2px 24px rgba(0,0,0,.06)}
   display:flex;gap:20px;align-items:flex-start;
   transition:all .3s;cursor:default;
 }
-.benefit:hover{transform:translateY(-5px);box-shadow:0 20px 50px var(--blue-glow),0 0 0 1.5px var(--blue);border-color:var(--blue)}
+.benefit:hover,.benefit.touched{transform:translateY(-5px);box-shadow:0 20px 50px var(--blue-glow),0 0 0 1.5px var(--blue);border-color:var(--blue)}
+@media(hover:none){
+  .benefit:active{
+    transform:scale(.97);
+    box-shadow:0 8px 30px var(--blue-glow),0 0 0 2px var(--blue);
+    border-color:var(--blue);
+    transition:all .15s;
+  }
+}
 .benefit-icon{
   width:56px;height:56px;border-radius:16px;flex-shrink:0;
   background:var(--blue-soft);border:1.5px solid var(--border);
@@ -361,7 +377,7 @@ footer{background:var(--ink);padding:64px 24px 36px}
 .footer-inner{max-width:1100px;margin:0 auto}
 .footer-top{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:48px;margin-bottom:52px}
 .footer-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;color:#fff;margin-bottom:12px}
-.footer-logo em{color:var(--ink);font-style:normal}
+.footer-logo em{color:#fff;font-style:normal}
 .footer-desc{font-size:13px;color:rgba(255,255,255,.3);line-height:1.8;max-width:250px}
 .footer-col-h{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px}
 .footer-links{display:flex;flex-direction:column;gap:10px}
@@ -627,29 +643,29 @@ footer{background:var(--ink);padding:64px 24px 36px}
       <div class="benefit reveal d1">
         <div class="benefit-icon">🔐</div>
         <div>
-          <div class="benefit-title">QR CODE PERSONNEL</div>
-          <div class="benefit-desc">Ton QR est unique, permanent, non partageable. Personne ne peut l'utiliser à ta place — sécurisé côté serveur à chaque scan.</div>
+          <div class="benefit-title">TON CODE QR, TON ACCÈS</div>
+          <div class="benefit-desc">Ton Code QR ne peut pas être partagé ou copié. À chaque scan, le système vérifie que c'est bien toi. Simple, rapide, fiable.</div>
         </div>
       </div>
       <div class="benefit reveal d2">
         <div class="benefit-icon">⏱️</div>
         <div>
-          <div class="benefit-title">1 BOISSON / 15 MIN</div>
-          <div class="benefit-desc">Le cooldown est géré automatiquement côté serveur. Tu reçois une notification dès que tu peux scanner à nouveau. Équitable pour tous.</div>
+          <div class="benefit-title">UNE BOISSON, UN DÉLAI</div>
+          <div class="benefit-desc">Une boisson toutes les 15 minutes — ni plus, ni moins. Le système gère tout automatiquement. Équitable pour tout le monde.</div>
         </div>
       </div>
       <div class="benefit reveal d1">
         <div class="benefit-icon">🏋️</div>
         <div>
-          <div class="benefit-title">MULTI-FITNESS</div>
-          <div class="benefit-desc">Un seul abonnement, tous les fitness de la même filiale. Ton QR fonctionne partout dans le réseau. Aucune restriction géographique.</div>
+          <div class="benefit-title">PARTOUT DANS LE RÉSEAU</div>
+          <div class="benefit-desc">Un seul abonnement te donne accès à tous les fitness du réseau partenaire. Pas besoin de changer quoi que ce soit si tu changes de salle.</div>
         </div>
       </div>
       <div class="benefit reveal d2">
         <div class="benefit-icon">📱</div>
         <div>
-          <div class="benefit-title">SANS APP STORE</div>
-          <div class="benefit-desc">L'app VOLT s'installe depuis ton navigateur en 1 tap. Aucun téléchargement, aucun compte Google ou Apple. Juste un lien.</div>
+          <div class="benefit-title">PRÊT EN 30 SECONDES</div>
+          <div class="benefit-desc">Pas d'App Store, pas de téléchargement. Tu ouvres le lien dans ton navigateur et tu ajoutes l'app à ton écran d'accueil. C'est tout.</div>
         </div>
       </div>
     </div>
@@ -696,19 +712,19 @@ footer{background:var(--ink);padding:64px 24px 36px}
       <div>
         <div class="footer-col-h">Contact</div>
         <div class="footer-links">
-          <a href="mailto:info@volt.energy.ch">info@volt.energy.ch</a>
-          <a href="https://volt.energy.ch">volt.energy.ch</a>
-          <a href="#">Mentions légales</a>
-          <a href="#">Confidentialité</a>
+          <a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a>
+          <a href="https://volt-energy.ch">volt-energy.ch</a>
+          <a href="/mentions-legales.html">Mentions légales</a>
+          <a href="/confidentialite.html">Confidentialité</a>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-copy">© 2025 VOLT. — Tous droits réservés</div>
+      <div class="footer-copy">© 2026 VOLT. — Tous droits réservés</div>
       <div class="footer-legal">
-        <a href="#">CGV</a>
-        <a href="#">Confidentialité</a>
-        <a href="#">Cookies</a>
+        <a href="/cgv.html">CGV</a>
+        <a href="/confidentialite.html">Confidentialité</a>
+        <a href="/cookies.html">Cookies</a>
       </div>
     </div>
   </div>
@@ -763,6 +779,12 @@ faqs.forEach(f => {
   };
   faqList.appendChild(item);
   obs.observe(item);
+});
+
+// Touch effects pour mobile (steps + benefits)
+document.querySelectorAll('.step, .benefit').forEach(el => {
+  el.addEventListener('touchstart', () => el.classList.add('touched'), { passive: true });
+  el.addEventListener('touchend', () => setTimeout(() => el.classList.remove('touched'), 300), { passive: true });
 });
 
 // Plan selection
