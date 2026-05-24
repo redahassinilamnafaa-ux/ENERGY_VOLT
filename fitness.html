@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VOLT. — Espace Fitness</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#0057FF;--blue2:#2979FF;--blue-dark:#003FCC;
+  --glow:rgba(0,87,255,.18);--soft:rgba(0,87,255,.07);
+  --ink:#0A0F1E;--ink2:#2D3652;--ink3:#6B7A99;--ink4:#A8B4CC;
+  --bg:#F7F9FF;--bg2:#EDF1FB;--white:#fff;
+  --border:rgba(0,87,255,.1);--border2:rgba(10,15,30,.07);
+  --green:#00C47A;--red:#FF3B5C;--orange:#FF9500;
+  --sidebar:230px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+.bc{font-family:'Barlow Condensed',sans-serif}
+.spin{width:20px;height:20px;border:2.5px solid rgba(0,87,255,.2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink);position:relative;overflow:hidden}
+.login-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 10%,rgba(0,87,255,.3),transparent 65%)}
+.login-wrap::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px}
+.login-box{background:#fff;border-radius:28px;padding:44px 40px;width:100%;max-width:400px;position:relative;z-index:1;box-shadow:0 32px 80px rgba(0,0,0,.35);animation:fadeUp .6s ease both}
+.login-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:56px;color:var(--ink);letter-spacing:-2px;line-height:1;margin-bottom:4px}
+.login-tag{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--border);border-radius:50px;padding:4px 12px;margin-bottom:28px}
+.login-tag span{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar);background:var(--ink);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;border-right:1px solid rgba(255,255,255,.05)}
+.sidebar-logo{padding:26px 22px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:#fff;letter-spacing:-1px}
+.sidebar-logo-badge{font-size:10px;font-weight:700;color:rgba(0,87,255,.7);letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+.sidebar-gym{padding:14px 22px 10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sidebar-gym-name{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.sidebar-gym-filiale{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.sidebar-nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:.12em;text-transform:uppercase;padding:12px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;border:1px solid transparent;background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item.active{background:rgba(0,87,255,.18);border-color:rgba(0,87,255,.25)}
+.nav-item .ni{font-size:17px;width:22px;text-align:center;flex-shrink:0}
+.nav-item .nl{font-size:13px;font-weight:600;color:rgba(255,255,255,.6)}
+.nav-item.active .nl{color:#fff}
+.sidebar-footer{padding:12px 10px;border-top:1px solid rgba(255,255,255,.06)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;padding:28px 32px;min-height:100vh;animation:fadeIn .3s ease}
+.topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.page-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;color:var(--ink);letter-spacing:-.5px;line-height:1}
+.page-sub{font-size:13px;font-weight:500;color:var(--ink3);margin-top:3px}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+/* SEARCH */
+.search-wrap{position:relative;display:inline-flex;align-items:center}
+.search-wrap::before{content:'🔍';position:absolute;left:12px;font-size:13px;pointer-events:none}
+.search-inp{background:var(--white);border:1.5px solid var(--border2);border-radius:50px;padding:8px 16px 8px 34px;font-size:13px;font-weight:500;color:var(--ink);font-family:'Barlow',sans-serif;outline:none;width:200px;transition:all .2s}
+.search-inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,87,255,.08);width:240px}
+.search-inp::placeholder{color:var(--ink4)}
+
+/* CARDS */
+.card{background:#fff;border-radius:20px;border:1px solid var(--border2);overflow:hidden}
+.card-pad{padding:24px}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.kpi{background:#fff;border-radius:18px;padding:20px 22px;border:1px solid var(--border2);transition:all .2s;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:var(--soft);border-radius:0 0 0 60px;opacity:.6}
+.kpi:hover{box-shadow:0 8px 24px var(--glow);border-color:rgba(0,87,255,.2);transform:translateY(-2px)}
+.kpi-ico{font-size:22px;margin-bottom:10px;display:block}
+.kpi-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:var(--ink);line-height:1;letter-spacing:-.5px}
+.kpi-val.blue{color:var(--blue)}
+.kpi-val.green{color:var(--green)}
+.kpi-val.orange{color:var(--orange)}
+.kpi-label{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
+.kpi-sub{font-size:12px;font-weight:500;color:var(--ink4);margin-top:3px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;padding:11px 16px;text-align:left;border-bottom:1.5px solid var(--border2);white-space:nowrap;background:var(--bg)}
+td{font-size:13px;font-weight:500;color:var(--ink);padding:13px 16px;border-bottom:1px solid var(--border2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+.td-name{font-weight:700;font-size:14px}
+.td-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;font-size:10px;font-weight:700;white-space:nowrap}
+.badge-green{background:rgba(0,196,122,.1);color:var(--green)}
+.badge-red{background:rgba(255,59,92,.1);color:var(--red)}
+.badge-blue{background:var(--soft);color:var(--blue)}
+.badge-orange{background:rgba(255,149,0,.1);color:var(--orange)}
+.badge-gray{background:var(--bg2);color:var(--ink3)}
+
+/* INPUTS & BUTTONS */
+.inp{background:var(--bg2);border:1.5px solid transparent;border-radius:10px;padding:11px 14px;font-size:14px;font-weight:500;color:var(--ink);outline:none;width:100%;font-family:'Barlow',sans-serif;transition:all .2s}
+.inp:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(0,87,255,.07)}
+.inp::placeholder{color:var(--ink4)}
+.lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:5px}
+.btn{padding:10px 22px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px var(--glow)}
+.btn-blue:hover{background:var(--blue2);transform:translateY(-1px)}
+.btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg)}
+.btn-sm{padding:7px 16px;font-size:13px}
+.btn-success{background:rgba(0,196,122,.1);color:var(--green);border:1px solid rgba(0,196,122,.2)}
+.btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-danger{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.15)}
+.btn-danger:hover{background:var(--red);color:#fff}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:all .3s;opacity:0;transform:translateY(10px);pointer-events:none;max-width:320px}
+#toast.show{opacity:1;transform:translateY(0)}
+#toast.err{background:var(--red)}
+
+/* CHART */
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:100px;padding:0 4px}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0}
+.bar-fill{width:100%;border-radius:3px 3px 0 0;min-height:3px;background:var(--blue);opacity:.7;transition:height .4s ease}
+.bar-fill.today{opacity:1;background:var(--blue2)}
+.bar-lbl{font-size:8px;font-weight:600;color:var(--ink4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 24px;color:var(--ink3)}
+.empty-ico{font-size:40px;margin-bottom:14px}
+.empty-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--ink);margin-bottom:6px}
+.empty-sub{font-size:14px;font-weight:500}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+
+<script>
+const BACKEND = 'https://volt-backend-final.vercel.app';
+
+let S = {
+  logged: false, page: 'dashboard',
+  gym: null, token: null,
+  stats: {}, members: [], virements: [], scans: [],
+  search: '',
+};
+
+// ── API ──────────────────────────────────────────────
+async function api(path, body, method='GET') {
+  try {
+    const opts = { method, headers: { 'Content-Type':'application/json' } };
+    if (S.token) opts.headers['Authorization'] = 'Bearer ' + S.token;
+    if (body && method !== 'GET') opts.body = JSON.stringify(body);
+    const r = await fetch(BACKEND + path, opts);
+    return await r.json();
+  } catch(e) { return { error: e.message }; }
+}
+
+// ── HELPERS ──────────────────────────────────────────
+function toast(msg, ok=true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = ok ? 'show' : 'show err';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.className = '', 3500);
+}
+function fmtChf(n) { return 'CHF ' + Number(n||0).toFixed(2); }
+function planLabel(p) { return {month:'Mensuel',quarter:'Trimestriel',year:'Annuel'}[p]||p||'—'; }
+function planBadge(p) { return `<span class="badge badge-blue">${planLabel(p)}</span>`; }
+function filterBySearch(arr, keys) {
+  if (!S.search) return arr;
+  const q = S.search.toLowerCase();
+  return arr.filter(i => keys.some(k => (i[k]||'').toString().toLowerCase().includes(q)));
+}
+
+// ── NAV ──────────────────────────────────────────────
+const PAGES = [
+  { id:'dashboard', icon:'📊', label:'Vue d\'ensemble' },
+  { id:'members',   icon:'👥', label:'Membres'         },
+  { id:'scans',     icon:'⚡', label:'Consommation'    },
+  { id:'virements', icon:'💰', label:'Revenus'         },
+];
+
+function goTo(page) {
+  S.page = page; S.search = '';
+  document.querySelectorAll('.nav-item[data-page]').forEach(el =>
+    el.classList.toggle('active', el.dataset.page === page));
+  document.getElementById('main-content').innerHTML = renderPage();
+  bindPage();
+}
+
+function renderPage() {
+  if (S.page === 'dashboard') return pageDashboard();
+  if (S.page === 'members')   return pageMembers();
+  if (S.page === 'scans')     return pageScans();
+  if (S.page === 'virements') return pageVirements();
+  return '';
+}
+
+function bindPage() {
+  const si = document.getElementById('search-inp');
+  if (si) si.oninput = e => {
+    S.search = e.target.value;
+    document.getElementById('main-content').innerHTML = renderPage();
+    bindPage();
+  };
+}
+
+// ── LOGIN ────────────────────────────────────────────
+function renderLogin() {
+  document.getElementById('app').innerHTML = `
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">VOLT.</div>
+      <div class="login-tag"><span>🏋️ Espace Fitness</span></div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="lbl">Email du fitness</label><input class="inp" id="l-email" type="email" placeholder="manager@fitness.ch" autocomplete="email"/></div>
+        <div><label class="lbl">Mot de passe</label><input class="inp" id="l-pwd" type="password" placeholder="••••••••"/></div>
+        <div id="l-err" style="display:none;background:#FFF0F2;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red)"></div>
+        <button class="btn btn-blue" style="width:100%;justify-content:center;margin-top:4px" id="login-btn" onclick="doLogin()">Accéder →</button>
+      </div>
+      <div style="margin-top:20px;text-align:center;font-size:12px;color:var(--ink4)">Identifiants fournis par VOLT. · <a href="mailto:info@volt-energy.ch" style="color:var(--blue);text-decoration:none">info@volt-energy.ch</a></div>
+    </div>
+  </div>`;
+  document.getElementById('l-pwd').onkeydown = e => { if (e.key==='Enter') doLogin(); };
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pwd   = document.getElementById('l-pwd').value;
+  if (!email || !pwd) { showErr('Remplis tous les champs.'); return; }
+  const btn = document.getElementById('login-btn');
+  btn.innerHTML = '<div class="spin"></div> Connexion...'; btn.disabled = true;
+
+  const res = await api('/api/fitness?action=login', { email, password: pwd }, 'POST');
+  if (res.error) {
+    showErr(res.error);
+    btn.innerHTML = 'Accéder →'; btn.disabled = false;
+    return;
+  }
+
+  S.token = res.token; S.gym = res.gym; S.logged = true;
+
+  // Charge toutes les données
+  const [statsRes, membersRes, scansRes, virementsRes] = await Promise.all([
+    api('/api/fitness?action=stats'),
+    api('/api/fitness?action=members'),
+    api('/api/fitness?action=scans'),
+    api('/api/fitness?action=virements'),
+  ]);
+  if (!statsRes.error)     S.stats     = statsRes;
+  if (!membersRes.error)   S.members   = membersRes.members || [];
+  if (!scansRes.error)     S.scans     = scansRes.scans     || [];
+  if (!virementsRes.error) S.virements = virementsRes.virements || [];
+
+  renderApp();
+}
+
+function showErr(msg) {
+  const err = document.getElementById('l-err');
+  if (err) { err.textContent = '❌ ' + msg; err.style.display = 'block'; }
+}
+
+function doLogout() {
+  S = { logged:false, page:'dashboard', gym:null, token:null, stats:{}, members:[], virements:[], scans:[], search:'' };
+  renderLogin();
+}
+
+// ── APP SHELL ────────────────────────────────────────
+function renderApp() {
+  const navItems = PAGES.map(p => `
+    <button class="nav-item ${S.page===p.id?'active':''}" data-page="${p.id}" onclick="goTo('${p.id}')">
+      <span class="ni">${p.icon}</span><span class="nl">${p.label}</span>
+    </button>`).join('');
+
+  document.getElementById('app').innerHTML = `
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-txt">VOLT.</div>
+        <div class="sidebar-logo-badge">⚡ Espace Fitness</div>
+      </div>
+      <div class="sidebar-gym">
+        <div class="sidebar-gym-name">${S.gym?.name || 'Mon fitness'}</div>
+        <div class="sidebar-gym-filiale">${S.gym?.filiale || ''} ${S.gym?.address ? '· ' + S.gym.address : ''}</div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-section">Navigation</div>
+        ${navItems}
+      </div>
+      <div class="sidebar-footer">
+        <div style="padding:10px 12px;margin-bottom:4px">
+          <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.6)">${S.gym?.email || ''}</div>
+        </div>
+        <button class="nav-item" onclick="doLogout()" style="width:100%">
+          <span class="ni">🚪</span>
+          <span class="nl" style="color:rgba(255,59,92,.7)">Déconnexion</span>
+        </button>
+      </div>
+    </div>
+    <div class="main" id="main-content">${renderPage()}</div>
+  </div>`;
+  bindPage();
+}
+
+// ── DASHBOARD ────────────────────────────────────────
+function pageDashboard() {
+  const st = S.stats;
+  const activeMembers = st.members_active || S.members.filter(m=>m.subscribed).length;
+  const totalMembers  = st.members_total  || S.members.length;
+  const scansMonth    = st.scans_month    || 0;
+  const revMonth      = st.rev_month      || 0;
+  const revTotal      = st.rev_total      || 0;
+
+  const recentMembers = [...S.members].slice(0,5);
+
+  return `
+  <div class="topbar">
+    <div>
+      <div class="page-title">Vue d'ensemble</div>
+      <div class="page-sub">${S.gym?.name} · ${new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'long',year:'numeric'})}</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="refreshData()">🔄 Actualiser</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-ico">👥</span>
+      <div class="kpi-val green">${activeMembers}</div>
+      <div class="kpi-label">Membres actifs</div>
+      <div class="kpi-sub">${totalMembers} inscrits au total</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">⚡</span>
+      <div class="kpi-val blue">${scansMonth}</div>
+      <div class="kpi-label">Boissons ce mois</div>
+      <div class="kpi-sub">${st.scans_total || 0} au total</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">💰</span>
+      <div class="kpi-val orange">${fmtChf(revMonth)}</div>
+      <div class="kpi-label">Revenus ce mois</div>
+      <div class="kpi-sub">${fmtChf(revTotal)} au total</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px">
+    <!-- Graphique scans -->
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px">Boissons distribuées — 30 derniers jours</div>
+      ${S.scans.length === 0
+        ? '<div style="text-align:center;padding:30px 0;color:var(--ink4);font-size:13px">Aucune donnée disponible</div>'
+        : (() => {
+          const maxN = Math.max(...S.scans.map(s=>s.n), 1);
+          const today = new Date().toISOString().slice(0,10);
+          return `<div class="bar-chart">
+            ${S.scans.map(s => `
+              <div class="bar-item">
+                <div class="bar-fill ${s.day===today?'today':''}" style="height:${Math.max(Math.round(s.n/maxN*80),3)}px" title="${s.n} scan(s)"></div>
+                <div class="bar-lbl">${new Date(s.day).toLocaleDateString('fr-CH',{day:'numeric',month:'numeric'})}</div>
+              </div>`).join('')}
+          </div>`;
+        })()
+      }
+    </div>
+
+    <!-- Répartition plans -->
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px">Répartition des plans</div>
+      ${(() => {
+        const plans = [{id:'month',l:'Mensuel',c:'#0057FF'},{id:'quarter',l:'Trimestriel',c:'#2979FF'},{id:'year',l:'Annuel',c:'#A8C4FF'}];
+        const total = S.members.filter(m=>m.subscribed).length || 1;
+        return plans.map(p => {
+          const n = S.members.filter(m=>m.subscribed && m.plan===p.id).length;
+          const pct = Math.round(n/total*100);
+          return `<div style="margin-bottom:14px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px">
+              <span style="font-size:13px;font-weight:600">${p.l}</span>
+              <span style="font-size:13px;font-weight:700;color:var(--ink3)">${n} · ${pct}%</span>
+            </div>
+            <div style="height:7px;background:var(--bg2);border-radius:4px">
+              <div style="height:100%;width:${pct}%;background:${p.c};border-radius:4px"></div>
+            </div>
+          </div>`;
+        }).join('');
+      })()}
+    </div>
+  </div>
+
+  <!-- Derniers membres -->
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--border2)">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase">Derniers membres inscrits</div>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('members')">Voir tout →</button>
+    </div>
+    ${recentMembers.length === 0
+      ? '<div class="empty"><div class="empty-ico">👥</div><div class="empty-sub">Aucun membre pour l\'instant</div></div>'
+      : `<div class="table-wrap"><table>
+          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Inscrit</th><th>Statut</th></tr></thead>
+          <tbody>
+            ${recentMembers.map(m=>`<tr>
+              <td><div class="td-name">${m.name}</div><div class="td-sub">${m.email}</div></td>
+              <td>${planBadge(m.plan)}</td>
+              <td style="font-weight:700">${m.scans_month}</td>
+              <td style="font-size:12px;color:var(--ink3)">${m.joined}</td>
+              <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table></div>`
+    }
+  </div>`;
+}
+
+// ── MEMBRES ──────────────────────────────────────────
+function pageMembers() {
+  const filtered = filterBySearch(S.members, ['name','email','plan']);
+  const active   = S.members.filter(m=>m.subscribed).length;
+
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Membres</div><div class="page-sub">${active} abonnés actifs · ${S.members.length} inscrits</div></div>
+    <div class="topbar-actions">
+      <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
+    </div>
+  </div>
+  <div class="card">
+    ${filtered.length === 0
+      ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div></div>'
+      : `<div class="table-wrap"><table>
+          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Total scans</th><th>CA total</th><th>Inscrit</th><th>Statut</th><th>Accès</th></tr></thead>
+          <tbody>
+            ${filtered.map(m=>`<tr>
+              <td><div class="td-name">${m.name}</div><div class="td-sub">${m.email}</div></td>
+              <td>${planBadge(m.plan)}</td>
+              <td style="font-weight:700">${m.scans_month}</td>
+              <td style="color:var(--ink3)">${m.scans_total}</td>
+              <td><strong>${fmtChf(m.revenue)}</strong></td>
+              <td style="font-size:12px;color:var(--ink3)">${m.joined}</td>
+              <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
+              <td>
+                <button class="btn btn-sm ${m.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${m.id}',${!m.authorized})">
+                  ${m.authorized?'🔒 Bloquer':'🔓 Débloquer'}
+                </button>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table></div>`
+    }
+  </div>`;
+}
+
+async function toggleAccess(userId, authorized) {
+  const res = await api('/api/fitness?action=access', { user_id: userId, authorized }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  const m = S.members.find(x=>x.id==userId);
+  if (m) m.authorized = authorized;
+  toast(authorized ? '🔓 Accès rétabli' : '🔒 Membre bloqué');
+  goTo('members');
+}
+
+// ── CONSOMMATION ─────────────────────────────────────
+function pageScans() {
+  const totalMonth = S.scans.reduce((s,r)=>s+r.n,0);
+  const maxDay     = S.scans.length ? S.scans.reduce((a,b)=>a.n>b.n?a:b,{n:0}) : null;
+  const maxN       = Math.max(...S.scans.map(s=>s.n), 1);
+  const today      = new Date().toISOString().slice(0,10);
+
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Consommation</div><div class="page-sub">Boissons distribuées — 30 derniers jours</div></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-ico">⚡</span>
+      <div class="kpi-val blue">${totalMonth}</div>
+      <div class="kpi-label">Boissons ce mois</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">📅</span>
+      <div class="kpi-val green">${maxDay ? maxDay.n : 0}</div>
+      <div class="kpi-label">Record journalier</div>
+      <div class="kpi-sub">${maxDay ? new Date(maxDay.day).toLocaleDateString('fr-CH',{day:'numeric',month:'short'}) : '—'}</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">📊</span>
+      <div class="kpi-val orange">${S.scans.length ? Math.round(totalMonth/S.scans.length*10)/10 : 0}</div>
+      <div class="kpi-label">Moyenne / jour</div>
+    </div>
+  </div>
+
+  <div class="card card-pad">
+    <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:20px">Détail par jour</div>
+    ${S.scans.length === 0
+      ? '<div class="empty"><div class="empty-ico">📊</div><div class="empty-sub">Aucun scan enregistré ce mois</div></div>'
+      : `<div class="bar-chart" style="height:140px">
+          ${S.scans.map(s => `
+            <div class="bar-item">
+              <div style="font-size:9px;font-weight:700;color:var(--ink3);margin-bottom:2px">${s.n}</div>
+              <div class="bar-fill ${s.day===today?'today':''}" style="height:${Math.max(Math.round(s.n/maxN*100),3)}px"></div>
+              <div class="bar-lbl">${new Date(s.day).toLocaleDateString('fr-CH',{day:'numeric',month:'numeric'})}</div>
+            </div>`).join('')}
+        </div>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border2)">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Date</th><th>Boissons</th></tr></thead>
+            <tbody>
+              ${[...S.scans].reverse().map(s=>`<tr>
+                <td>${new Date(s.day).toLocaleDateString('fr-CH',{weekday:'long',day:'numeric',month:'long'})}</td>
+                <td><strong>${s.n}</strong></td>
+              </tr>`).join('')}
+            </tbody>
+          </table></div>
+        </div>`
+    }
+  </div>`;
+}
+
+// ── REVENUS ──────────────────────────────────────────
+function pageVirements() {
+  const total = S.virements.reduce((s,v)=>s+v.total,0);
+
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Revenus</div><div class="page-sub">CA généré par vos membres abonnés</div></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-ico">💰</span>
+      <div class="kpi-val blue">${fmtChf(S.virements[0]?.total || 0)}</div>
+      <div class="kpi-label">Ce mois</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">📈</span>
+      <div class="kpi-val green">${fmtChf(total)}</div>
+      <div class="kpi-label">Total cumulé</div>
+    </div>
+    <div class="kpi"><span class="kpi-ico">👥</span>
+      <div class="kpi-val orange">${S.members.filter(m=>m.subscribed).length}</div>
+      <div class="kpi-label">Membres actifs</div>
+    </div>
+  </div>
+
+  <div class="card">
+    ${S.virements.length === 0
+      ? '<div class="empty"><div class="empty-ico">💰</div><div class="empty-title">Aucun revenu</div><div class="empty-sub">Les revenus apparaîtront dès qu\'un membre souscrit un abonnement</div></div>'
+      : `<div class="table-wrap"><table>
+          <thead><tr><th>Mois</th><th>CA généré</th><th>Paiements</th><th>Statut</th></tr></thead>
+          <tbody>
+            ${S.virements.map(v=>`<tr>
+              <td style="font-weight:700">${v.month}</td>
+              <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:18px">${fmtChf(v.total)}</strong></td>
+              <td style="color:var(--ink3)">${v.nb_payments} paiement(s)</td>
+              <td><span class="badge badge-green">✓ Comptabilisé</span></td>
+            </tr>`).join('')}
+          </tbody>
+          <tfoot><tr style="background:var(--bg)">
+            <td><strong>TOTAL</strong></td>
+            <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:18px">${fmtChf(total)}</strong></td>
+            <td colspan="2"></td>
+          </tr></tfoot>
+        </table></div>`
+    }
+  </div>
+
+  <div style="margin-top:16px;background:var(--soft);border:1px solid var(--border);border-radius:14px;padding:16px 20px;font-size:13px;color:var(--ink2);font-weight:500">
+    💡 Ces chiffres représentent le CA total généré par vos membres. Les reversements sont effectués par VOLT. chaque mois. Pour toute question : <a href="mailto:info@volt-energy.ch" style="color:var(--blue);font-weight:700;text-decoration:none">info@volt-energy.ch</a>
+  </div>`;
+}
+
+// ── REFRESH ──────────────────────────────────────────
+async function refreshData() {
+  toast('🔄 Actualisation...');
+  const [statsRes, membersRes, scansRes, virementsRes] = await Promise.all([
+    api('/api/fitness?action=stats'),
+    api('/api/fitness?action=members'),
+    api('/api/fitness?action=scans'),
+    api('/api/fitness?action=virements'),
+  ]);
+  if (!statsRes.error)     S.stats     = statsRes;
+  if (!membersRes.error)   S.members   = membersRes.members   || [];
+  if (!scansRes.error)     S.scans     = scansRes.scans       || [];
+  if (!virementsRes.error) S.virements = virementsRes.virements || [];
+  toast('✅ Données actualisées !');
+  goTo(S.page);
+}
+
+// ── BOOT ─────────────────────────────────────────────
+renderLogin();
+</script>
+</body>
+</html>
