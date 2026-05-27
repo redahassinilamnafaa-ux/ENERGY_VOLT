@@ -1037,14 +1037,39 @@ async function doTwint() {
   const btn = document.getElementById('btn-twint');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const plan = PLANS.find(p=>p.id===S.plan);
-  const res = await api('/api/pay/twint', { plan_id: plan.id });
+  const returnUrl = window.location.origin + window.location.pathname + '?payment=twint_success';
+  const res = await api('/api/pay/twint', { plan_id: plan.id, return_url: returnUrl });
   if (DEMO || res.demo) {
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé (TWINT) !'); S.screen = 'home'; render(); return;
   }
+  if (res.error) {
+    toast(res.error, false);
+    if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+    return;
+  }
+  if (res.client_secret) {
+    try {
+      const stripeJs = Stripe(CFG.STRIPE_PK);
+      const result = await stripeJs.confirmTwintPayment(res.client_secret, {
+        payment_method: { twint: {} },
+        return_url: returnUrl,
+      });
+      if (result.error) {
+        toast(result.error.message || 'Erreur de paiement TWINT.', false);
+        if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+      }
+      // Si succès, Stripe redirige automatiquement vers return_url
+    } catch(e) {
+      toast('Erreur TWINT: ' + e.message, false);
+      if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+    }
+    return;
+  }
+  // Fallback legacy redirect_url
   if (res.redirect_url) { window.location.href = res.redirect_url; return; }
   if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
-  toast('Redirection TWINT...', true);
+  toast('Erreur de paiement.', false);
 }
 
 // ═══════════════════════════════════════════
@@ -1242,6 +1267,26 @@ if (VERIFY_STATUS === 'success') {
 } else if (VERIFY_STATUS === 'expired') {
   window.history.replaceState({}, document.title, window.location.pathname);
   setTimeout(() => toast('Lien expiré. Reconnecte-toi pour renvoyer un email.', false), 400);
+}
+
+const PAYMENT_STATUS = PARAMS.get('payment');
+if (PAYMENT_STATUS === 'twint_success') {
+  window.history.replaceState({}, document.title, window.location.pathname);
+  setTimeout(async () => {
+    if (S.token) {
+      const meRes = await api('/api/me', null, 'GET');
+      if (meRes.user) {
+        S.user = Object.assign({}, S.user, meRes.user);
+        saveSess();
+        render();
+        if (S.user.subscribed) {
+          toast('✅ Abonnement activé ! Bienvenue chez VOLT.', true);
+        } else {
+          toast('Paiement en cours de traitement. Réessaie dans quelques instants.', true);
+        }
+      }
+    }
+  }, 2500);
 }
 
 render();
