@@ -486,7 +486,7 @@ function renderNav() {
     { id:'acc',  icon:'👤', label:'Compte' },
   ];
   return '<nav class="bnav">' + tabs.map(t =>
-    '<button class="bnav-btn '+(S.screen===t.id?'on':'')+'" onclick="nav(\''+t.id+'\')">'
+    '<button class="bnav-btn '+(S.screen===t.id?'on':'')+' " onclick="nav(\''+t.id+'\')" >'
     + '<span class="ni">'+t.icon+'</span>'
     + '<span class="nl">'+t.label+'</span>'
     + '</button>'
@@ -841,7 +841,7 @@ function renderPay() {
     + '<div style="padding:14px 16px 0">'
     + PLANS.map(p =>
       '<div class="plan-card'+(p.id===sel?' sel':'')+(p.id==='quarter'?' feat':'')
-      +'" onclick="selPlan(\''+p.id+'\')">'
+      +'" onclick="selPlan(\''+p.id+'\')" >'
       + (p.badge ? '<div style="position:absolute;top:-1px;left:18px;background:var(--blue);color:#fff;font-size:10px;font-weight:800;letter-spacing:.05em;padding:3px 10px;border-radius:0 0 8px 8px">'+p.badge+'</div>' : '')
       + '<div style="display:flex;align-items:center;gap:14px;'+(p.badge?'margin-top:14px':'')+'">'
       + '<div style="width:22px;height:22px;border-radius:50%;border:2px solid '+(p.id===sel?'var(--blue)':'var(--border2)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s">'
@@ -1038,7 +1038,7 @@ async function doTwint() {
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const plan = PLANS.find(p=>p.id===S.plan);
   const returnUrl = window.location.origin + window.location.pathname + '?payment=twint_success';
-  const res = await api('/api/pay/twint', { plan_id: plan.id, return_url: returnUrl });
+  const res = await api('/api/pay-intent', { plan_id: plan.id, method: 'twint', return_url: returnUrl });
   if (DEMO || res.demo) {
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé (TWINT) !'); S.screen = 'home'; render(); return;
@@ -1124,7 +1124,7 @@ function renderAcc() {
     + '<div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase">'+(u.subscribed?'Plan actif':'Aucun abonnement')+'</div>'
     + '<div class="bc" style="font-weight:900;font-size:22px;color:#fff;margin-top:4px">'+(u.subscribed?plan.label:'INACTIF')+'</div>'
     + '<div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.5);margin-top:2px">'+(u.subscribed?'1 boisson max / 15 min':'Aucun plan actif')+'</div></div>'
-    + (u.subscribed ? '<div class="bc" style="font-weight:900;font-size:34px;color:#fff">CHF<br>'+plan.chf+'</div>' : '<button class="btn-sm btn" style="background:#fff;color:var(--blue);font-size:14px;padding:8px 16px" onclick="navPay()">S’abonner →</button>')
+    + (u.subscribed ? '<div class="bc" style="font-weight:900;font-size:34px;color:#fff">CHF<br>'+plan.chf+'</div>' : '<button class="btn-sm btn" style="background:#fff;color:var(--blue);font-size:14px;padding:8px 16px" onclick="navPay()">S\'abonner →</button>')
     + '</div></div>'
 
     // Referral
@@ -1150,7 +1150,7 @@ function renderAcc() {
     + '<div class="row-item" id="btn-edit-prof"><div class="row-ico">👤</div><div class="row-lbl">Modifier le profil</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="navPay()"><div class="row-ico">💳</div><div class="row-lbl">Gérer l\'abonnement</div>'+(u.subscribed?'<div class="row-r">CHF '+plan.chf+'</div>':'')+'<div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="showInvoices()"><div class="row-ico">🧾</div><div class="row-lbl">Mes factures</div><div class="row-r" style="font-size:12px;color:var(--blue)">Voir tout</div><div class="row-chev">›</div></div>'
-    + '<div class="row-item" onclick="toggleNotifs()"><div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div id="notif-toggle-label" style="font-size:13px;font-weight:700;color:'+(S.notifs?'var(--blue)':'var(--ink3)')+'">'+(S.notifs?'Actives':'Désactivées')+'</div><div class="row-chev">›</div></div>'
+    + '<div class="row-item" onclick="toggleNotifs()"><div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div id="notif-toggle-label" style="font-size:13px;font-weight:700;color:'+(S.notifs?'var(--blue)':'var(--ink3)')+'">"'+(S.notifs?'Actives':'Désactivées')+'</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="showCGV()"><div class="row-ico">📄</div><div class="row-lbl">CGV & Confidentialité</div><div class="row-chev">›</div></div>'
     + '<div style="margin-top:14px"><div class="row-item row-danger" onclick="doLogout()"><div class="row-ico">🚪</div><div class="row-lbl">Déconnexion</div><div class="row-chev">›</div></div></div>'
     + '<div style="margin-top:4px"><div class="row-item row-danger" onclick="confirmDeleteAccount()"><div class="row-ico">🗑️</div><div class="row-lbl">Supprimer mon compte</div><div class="row-chev">›</div></div></div>'
@@ -1274,7 +1274,7 @@ if (PAYMENT_STATUS === 'twint_success') {
   window.history.replaceState({}, document.title, window.location.pathname);
   setTimeout(async () => {
     if (S.token) {
-      const meRes = await api('/api/me', null, 'GET');
+      const meRes = await api('/api/user-update?action=me', null, 'GET');
       if (meRes.user) {
         S.user = Object.assign({}, S.user, meRes.user);
         saveSess();
