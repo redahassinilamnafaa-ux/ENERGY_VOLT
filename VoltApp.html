@@ -262,116 +262,140 @@ window.goToLogin = function() {
 
 window.toggleNotifs = function() {
   S.notifs = !S.notifs;
+  saveSess();
   const lbl = document.getElementById('notif-toggle-label');
-  if (lbl) { lbl.textContent = S.notifs ? 'Actives' : 'Désactivées'; lbl.style.color = S.notifs ? 'var(--blue)' : 'var(--ink3)'; }
+  if (lbl) {
+    lbl.textContent = S.notifs ? 'Actives' : 'Désactivées';
+    lbl.style.color = S.notifs ? 'var(--blue)' : 'var(--ink3)';
+  }
+  toast(S.notifs ? 'Notifications activées 🔔' : 'Notifications désactivées 🔕');
 };
 
 window.showInvoices = async function() {
-  openModal('Mes factures', '<div style="text-align:center;padding:24px 0"><div class="spin" style="border-color:rgba(0,0,0,.1);border-top-color:var(--blue);margin:0 auto"></div></div>');
-  const r = await api('/api/invoices', null, 'GET');
-  if (!r.invoices || r.invoices.length === 0) {
-    openModal('Mes factures', '<div style="text-align:center;padding:24px 0;color:var(--ink3);font-size:14px">Aucune facture pour le moment.</div><button class="btn btn-ghost" style="margin-top:16px" onclick="closeModal()">Fermer</button>');
+  openModal('Mes factures',
+    '<div id="inv-list" style="display:flex;flex-direction:column;gap:10px">'
+    + '<div style="text-align:center;padding:20px"><div class="spin" style="border-color:rgba(0,87,255,.3);border-top-color:var(--blue);margin:0 auto"></div></div>'
+    + '</div>'
+    + '<button class="btn btn-ghost" style="margin-top:12px" onclick="closeModal()">Fermer</button>'
+  );
+
+  const res = await api('/api/user-update?action=invoices', null, 'GET');
+  const el = document.getElementById('inv-list');
+  if (!el) return;
+
+  if (res.error || !res.invoices) {
+    el.innerHTML = '<div style="text-align:center;color:var(--ink3);font-size:14px;padding:20px">Impossible de charger les factures.</div>';
     return;
   }
-  openModal('Mes factures',
-    '<div style="display:flex;flex-direction:column;gap:10px">'
-    + r.invoices.map(inv =>
-        '<div class="row-item" style="justify-content:space-between">'
-        +'<div><div style="font-size:14px;font-weight:700">CHF '+((inv.amount_due||0)/100).toFixed(2)+'</div>'
-        +'<div style="font-size:12px;color:var(--ink3)">'+new Date(inv.created*1000).toLocaleDateString('fr-CH')+'</div></div>'
-        +(inv.invoice_pdf ? '<button onclick="window.sendOneInvoice(\''+inv.id+'\')" style="background:var(--blue-soft);border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer">PDF →</button>' : '')
-        +'</div>'
-      ).join('')
-    + '<button class="btn btn-ghost" style="margin-top:8px" onclick="closeModal()">Fermer</button></div>'
-  );
+
+  if (res.invoices.length === 0) {
+    el.innerHTML = '<div style="text-align:center;padding:24px">'
+      + '<div style="font-size:36px;margin-bottom:10px">🧾</div>'
+      + '<div style="font-size:14px;font-weight:600;color:var(--ink)">Aucune facture pour l\'instant</div>'
+      + '<div style="font-size:13px;color:var(--ink3);margin-top:6px">Tes factures apparaîtront ici après paiement</div>'
+      + '</div>';
+    return;
+  }
+
+  el.innerHTML = res.invoices.map(inv =>
+    '<div style="background:var(--bg2);border-radius:14px;padding:14px 16px;border:1px solid var(--border2)">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    + '<div style="font-size:15px;font-weight:700;color:var(--ink)">CHF ' + inv.amount + '</div>'
+    + '<div style="background:rgba(0,196,122,.12);border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;color:#00C47A">✓ PAYÉ</div>'
+    + '</div>'
+    + '<div style="font-size:12px;color:var(--ink3);margin-bottom:10px">' + inv.date + ' · ' + (inv.number || inv.id) + '</div>'
+    + '<div style="display:flex;gap:8px">'
+    + (inv.hosted_url ? '<a href="' + inv.hosted_url + '" target="_blank" style="flex:1;background:var(--blue);color:#fff;text-align:center;padding:8px;border-radius:10px;font-size:13px;font-weight:700;text-decoration:none">Voir →</a>' : '')
+    + '<button onclick="sendOneInvoice(\'' + inv.id + '\')" style="flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:10px;padding:8px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer">Email 📧</button>'
+    + '</div>'
+    + '</div>'
+  ).join('');
 };
 
 window.sendOneInvoice = async function(invoiceId) {
   toast('Envoi en cours...');
-  const res = await api('/api/user-update?action=send-invoice', { invoiceId }, 'POST');
-  if (res.ok) toast('Facture envoyée par email ✓', true);
-  else toast(res.error || 'Erreur envoi', false);
+  const res = await api('/api/user-update?action=invoices', { invoice_id: invoiceId }, 'POST');
+  if (res.error) { toast(res.error, false); return; }
+  toast('Facture envoyée à ' + S.user.email + ' 📧');
 };
 
 window.confirmDeleteAccount = function() {
   openModal('Supprimer mon compte',
-    '<div style="text-align:center;padding:8px 0">'
-    +'<div style="font-size:40px;margin-bottom:16px">⚠️</div>'
-    +'<div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">Cette action est irréversible.</div>'
-    +'<div style="font-size:13px;color:var(--ink3);margin-bottom:24px">Ton abonnement sera annulé et toutes tes données supprimées.</div>'
-    +'<button class="btn btn-dark" style="background:var(--red)" onclick="doDeleteAccount()">Oui, supprimer mon compte</button>'
-    +'<button class="btn btn-ghost" style="margin-top:10px" onclick="closeModal()">Annuler</button>'
-    +'</div>'
+    '<div style="display:flex;flex-direction:column;gap:14px">'
+    + '<div style="text-align:center;font-size:40px;margin-bottom:4px">⚠️</div>'
+    + '<div style="font-size:15px;font-weight:600;color:var(--ink);text-align:center;line-height:1.6">Cette action est <strong>irréversible</strong>.<br/>Ton compte, tes données et ton abonnement seront définitivement supprimés.</div>'
+    + '<div style="background:#FFF0F2;border-radius:12px;padding:12px 14px;font-size:13px;font-weight:600;color:var(--red);text-align:center">⚠ Tu perdras immédiatement accès à VOLT.</div>'
+    + '<button class="btn" style="background:var(--red);color:#fff;font-family:\'Barlow Condensed\',sans-serif;font-size:19px;font-weight:900" onclick="doDeleteAccount()">OUI, SUPPRIMER MON COMPTE</button>'
+    + '<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>'
+    + '</div>'
   );
 };
 
 window.doDeleteAccount = async function() {
   closeModal();
-  toast('Suppression en cours...');
-  const r = await api('/api/user-update', { action:'delete' }, 'DELETE');
-  if (r.ok) {
+  const res = await api('/api/user-update', {}, 'DELETE');
+  if (res && res.error) { toast(res.error, false); return; }
+  toast('Compte supprimé. À bientôt 👋');
+  setTimeout(() => {
     localStorage.removeItem('volt_s');
-    S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card', notifs:true };
+    S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card' };
     render();
-    toast('Compte supprimé.', true);
-  } else {
-    toast(r.error || 'Erreur lors de la suppression.', false);
-  }
+  }, 1500);
 };
 
+// ═══════════════════════════════════════════
+//  API
+// ═══════════════════════════════════════════
 async function api(path, body, method) {
   if (DEMO) return demoApi(path, body);
-  const opts = {
-    method: method || (body ? 'POST' : 'GET'),
-    headers: { 'Content-Type': 'application/json', ...(S.token ? { Authorization: 'Bearer '+S.token } : {}) },
-  };
-  if (body) opts.body = JSON.stringify(body);
   try {
-    const r = await fetch(CFG.API + path, opts);
-    return await r.json();
-  } catch(e) { return { error: 'Erreur réseau.' }; }
+    const r = await fetch(CFG.API + path, {
+      method: method || (body ? 'POST' : 'GET'),
+      headers: { 'Content-Type':'application/json', 'Authorization': S.token ? 'Bearer '+S.token : '' },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    return r.json();
+  } catch(e) { return { error:'Connexion impossible.' }; }
 }
 
 function demoApi(path, body) {
-  if (path.includes('qr-token')) return Promise.resolve({ token: 'DEMO-'+Date.now() });
-  if (path.includes('history')) return Promise.resolve({ history: [
-    { gym:'Fitness Demo', time:'Aujourd\'hui 10:32', today:true },
-    { gym:'Fitness Demo', time:'Hier 08:15', today:false },
-  ]});
-  if (path.includes('invoices')) return Promise.resolve({ invoices: [] });
-  return Promise.resolve({ ok: true });
+  if (path === '/api/login') {
+    if ((body.email||'').toLowerCase() === 'demo@volt.energy.ch')
+      return { user: DEMO_USER, token: 'demo-tok' };
+    return { error: 'Email ou mot de passe incorrect.' };
+  }
+  if (path === '/api/register') return { user: Object.assign({}, DEMO_USER, { name:(body.firstName+' '+body.lastName).trim(), email:body.email, subscribed:false }), token:'demo-tok2' };
+  if (path === '/api/pay-intent') return { ok:true, demo:true };
+  if (path === '/api/history') return { history:[] };
+  return { ok:true };
 }
 
+// ═══════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════
 function cdLeft() { return Math.max(0, Math.ceil(S.cdEnd - Date.now()/1000)); }
 function fmtCd(s) { return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 
 function toast(msg, good) {
   const el = document.getElementById('toast');
-  if (!el) return;
   el.textContent = msg;
-  el.style.background = good === false ? 'var(--red)' : good === true ? 'var(--green)' : 'var(--ink)';
+  el.style.background = good===false ? '#FF3B5C' : '#050A14';
   el.classList.add('show');
-  clearTimeout(toast._t);
-  toast._t = setTimeout(() => el.classList.remove('show'), 3000);
+  setTimeout(() => el.classList.remove('show'), 2600);
 }
 
 function notif(icon, text) {
+  document.getElementById('notif-icon').textContent = icon;
+  document.getElementById('notif-text').textContent = text;
   const el = document.getElementById('notif');
-  const ic = document.getElementById('notif-icon');
-  const tx = document.getElementById('notif-text');
-  if (!el) return;
-  if (ic) ic.textContent = icon;
-  if (tx) tx.textContent = text;
   el.classList.add('show');
-  clearTimeout(notif._t);
-  notif._t = setTimeout(() => el.classList.remove('show'), 5000);
+  setTimeout(() => el.classList.remove('show'), 5000);
 }
 
 function nav(to) { S.screen = to; render(); }
 
 function initials(name) {
-  const p = (name||'').trim().split(' ');
-  return ((p[0]||'')[0]+(p[1]||p[0]||'')[0]).toUpperCase();
+  return (name||'').split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'VU';
 }
 
 async function shareRef() {
@@ -404,32 +428,40 @@ function renderVerifySuccess() {
   return '<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
     + '<div style="position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:fadeUp .7s ease both">'
     + '<div style="width:96px;height:96px;background:rgba(0,196,122,.15);border-radius:28px;border:2px solid rgba(0,196,122,.35);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 28px;line-height:96px">✅</div>'
-    + '<div class="bc" style="font-weight:900;font-size:36px;color:#fff;margin-bottom:12px">Email vérifié !</div>'
-    + '<div style="font-size:15px;color:rgba(255,255,255,.55);margin-bottom:32px;line-height:1.6">Ton adresse email a été confirmée avec succès. Tu peux maintenant te connecter à ton compte VOLT.</div>'
-    + '<button class="btn btn-blue" onclick="goToLogin()">Se connecter →</button>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:36px;color:#fff;letter-spacing:-.5px;margin-bottom:8px">VOLT<span style="color:#0057FF">.</span></div>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:30px;color:#fff;line-height:1.1;margin-bottom:16px">Email confirmé ! 🎉</div>'
+    + '<div style="font-size:15px;font-weight:500;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:36px">Ton adresse email a bien été vérifiée.<br/>Tu peux maintenant te connecter à VOLT.</div>'
+    + '<button onclick="goToLogin()" class="btn" style="background:#0057FF;color:#fff;font-family:Arial,sans-serif;font-size:21px;font-weight:900;border-radius:50px;padding:15px;width:100%">SE CONNECTER →</button>'
     + '</div></div>';
 }
 
 function renderVerifyPending() {
   const email = S.user ? S.user.email : '';
-  return '<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
+  return '<div class="screen-full" style="background:var(--ink);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
+    + '<div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 70% at 50% 0%,rgba(0,87,255,.7),rgba(0,40,180,.35) 50%,transparent 75%);pointer-events:none"></div>'
     + '<div style="position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:fadeUp .7s ease both">'
-    + '<div style="width:96px;height:96px;background:rgba(0,87,255,.15);border-radius:28px;border:2px solid rgba(0,87,255,.35);display:flex;align-items:center;justify-content:center;font-size:48px;margin:0 auto 28px;line-height:96px">📧</div>'
-    + '<div class="bc" style="font-weight:900;font-size:36px;color:#fff;margin-bottom:12px">Vérifie ton email</div>'
-    + '<div style="font-size:15px;color:rgba(255,255,255,.55);margin-bottom:8px;line-height:1.6">Un lien de vérification a été envoyé à</div>'
-    + '<div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:32px">'+email+'</div>'
-    + '<button class="btn btn-blue" onclick="resendVerification()" id="btn-resend">Renvoyer l\'email →</button>'
-    + '<button onclick="doLogout()" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:13px;font-weight:600;cursor:pointer;margin-top:20px;display:block;width:100%">Se déconnecter</button>'
+    + '<div style="width:88px;height:88px;background:rgba(0,87,255,.12);border-radius:24px;border:1.5px solid rgba(0,87,255,.25);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 28px;line-height:88px">📧</div>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:32px;color:#fff;letter-spacing:-.5px;margin-bottom:20px">VOLT<span style="color:#0057FF">.</span></div>'
+    + '<div style="font-family:Arial,sans-serif;font-weight:900;font-size:28px;color:#fff;line-height:1.1;margin-bottom:12px">Confirme ton<br/>adresse email</div>'
+    + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:8px">Un email de confirmation a été envoyé à</div>'
+    + '<div style="font-size:15px;font-weight:700;color:rgba(0,87,255,.9);background:rgba(0,87,255,.1);border:1px solid rgba(0,87,255,.2);border-radius:10px;padding:10px 16px;margin-bottom:24px;word-break:break-all">'+email+'</div>'
+    + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:12px">Clique sur le lien dans l\'email pour activer ton compte.</div>'
+    + '<div style="background:rgba(255,149,0,.12);border:1px solid rgba(255,149,0,.3);border-radius:12px;padding:12px 16px;margin-bottom:32px;font-size:13px;font-weight:700;color:#FF9500;text-align:center">📁 Pense à vérifier ton dossier SPAM<br/><span style="font-size:12px;font-weight:500;color:rgba(255,149,0,.7)">L\'email peut s\'y retrouver automatiquement</span></div>'
+    + '<button onclick="resendVerification()" id="btn-resend" class="btn" style="background:rgba(0,87,255,.15);color:rgba(255,255,255,.7);border:1.5px solid rgba(0,87,255,.25);border-radius:50px;font-family:Arial,sans-serif;font-size:17px;font-weight:900;padding:14px;width:100%;cursor:pointer;margin-bottom:12px">Renvoyer l\'email →</button>'
+    + '<button onclick="doLogout()" style="background:none;border:none;font-size:13px;font-weight:600;color:rgba(255,255,255,.25);cursor:pointer;padding:8px 0">← Changer d\'adresse email</button>'
+    + '<div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);text-align:center">'
+    + '<button onclick="doLogout()" style="background:none;border:none;font-size:13px;font-weight:600;color:rgba(0,87,255,.6);cursor:pointer;padding:8px 0">J\'ai déjà confirmé mon compte → Se connecter</button>'
+    + '</div>'
     + '</div></div>';
 }
 
 window.resendVerification = async function() {
   const btn = document.getElementById('btn-resend');
-  if (btn) { btn.disabled = true; btn.textContent = 'Envoi...'; }
-  const r = await api('/api/auth', { action:'resend-verify', email: S.user.email });
-  if (btn) { btn.disabled = false; btn.textContent = 'Renvoyer l\'email →'; }
-  if (r.ok) toast('Email renvoyé ! Vérifie ta boîte.', true);
-  else toast(r.error || 'Erreur lors de l\'envoi.', false);
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const res = await api('/api/register?action=resend', { email: S.user.email });
+  if (btn) { btn.innerHTML = 'Renvoyer l\'email →'; btn.disabled = false; }
+  if (res && res.error) { toast(res.error, false); return; }
+  toast('Email renvoyé ! Vérifie ta boîte 📧');
 };
 
 function render() {
@@ -568,31 +600,38 @@ async function doLogin() {
   const pwd   = (document.getElementById('l-pwd')||{}).value || '';
   if (!email || !pwd) { toast('Remplis tous les champs.', false); return; }
   const btn = document.getElementById('btn-login');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spin"></div>'; }
-  const r = await api('/api/auth', { action:'login', email, password:pwd });
-  if (btn) { btn.disabled = false; btn.innerHTML = 'Se connecter →'; }
-  if (r.error) { toast(r.error, false); return; }
-  S.user = r.user; S.token = r.token; S.screen = 'home';
-  saveSess(); render();
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const res = await api('/api/login', { email, password: pwd });
+  // Email non vérifié — backend renvoie 403 avec email_verified: false
+  if (res.email_verified === false) {
+    if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; }
+    // Crée un user temporaire pour afficher l'écran de vérification
+    S.user = { email: res.email || email, email_verified: false };
+    S.token = null;
+    S.screen = 'verify-pending';
+    render();
+    return;
+  }
+  if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; } return; }
+  S.user = res.user; S.token = res.token; saveSess();
+  S.screen = 'home'; render();
 }
 
 async function doRegister() {
-  const fn    = (document.getElementById('r-fn')||{}).value || '';
-  const ln    = (document.getElementById('r-ln')||{}).value || '';
-  const email = (document.getElementById('r-email')||{}).value || '';
-  const phone = (document.getElementById('r-phone')||{}).value || '';
-  const pwd   = (document.getElementById('r-pwd')||{}).value || '';
-  if (!fn || !ln || !email || !pwd) { toast('Remplis tous les champs.', false); return; }
   if (!S.cgv) { toast('Accepte les CGV pour continuer.', false); return; }
-  if (pwd.length < 8) { toast('Mot de passe trop court (8 min).', false); return; }
+  const fn    = (document.getElementById('r-fn')||{}).value||'';
+  const ln    = (document.getElementById('r-ln')||{}).value||'';
+  const email = (document.getElementById('r-email')||{}).value||'';
+  const phone = (document.getElementById('r-phone')||{}).value||'';
+  const pwd   = (document.getElementById('r-pwd')||{}).value||'';
+  if (!fn||!ln||!email||!pwd) { toast('Remplis tous les champs.', false); return; }
+  if (pwd.length < 8) { toast('Mot de passe minimum 8 caractères.', false); return; }
   const btn = document.getElementById('btn-register');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spin"></div>'; }
-  const ref = PARAMS.get('ref');
-  const r = await api('/api/auth', { action:'register', firstName:fn, lastName:ln, email, phone, password:pwd, referral:ref });
-  if (btn) { btn.disabled = false; btn.innerHTML = 'Créer mon compte ⚡'; }
-  if (r.error) { toast(r.error, false); return; }
-  S.user = r.user; S.token = r.token; S.screen = 'home';
-  saveSess(); render();
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const res = await api('/api/register', { firstName:fn, lastName:ln, email, phone, password:pwd });
+  if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Créer mon compte ⚡'; btn.disabled=false; } return; }
+  S.user = res.user; S.token = res.token; saveSess();
+  S.screen = 'verify-pending'; render();
 }
 
 // ═══════════════════════════════════════════
@@ -742,189 +781,326 @@ function bindHome() {
 // ═══════════════════════════════════════════
 //  PAY
 // ═══════════════════════════════════════════
+
+window.renderManage = function() {
+  const u = S.user;
+  if (!u) return '';
+  const endDate = getExpiryText(u);
+  const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
+  return '<div class="screen">'
+      + '<div class="hdr" style="padding-bottom:18px">'
+      + '<div style="display:flex;align-items:center;gap:14px">'
+      + '<button onclick="nav(\'acc\')" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer">←</button>'
+      + '<div class="bc" style="font-weight:900;font-size:28px;color:#fff;margin-top:2px">GÉRER L\'ABONNEMENT</div>'
+      + '</div>'
+      + '</div>'
+      + '<div style="padding:14px 16px 0">'
+      + '<div class="card" style="padding:24px;margin-bottom:14px;text-align:center">'
+      + '<div style="font-size:40px;margin-bottom:12px">⚙️</div>'
+      + '<div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">Forfait ' + plan.label + '</div>'
+      + '<div style="font-size:14px;color:var(--ink3);margin-bottom:24px">Valable jusqu\'au : <strong>' + endDate + '</strong></div>'
+      + (u.cancel_at_period_end 
+          ? '<div style="background:var(--bg2);color:var(--ink3);padding:12px;border-radius:12px;font-size:13px;font-weight:600">Renouvellement automatique annulé</div>' 
+          : '<button class="btn btn-dark" style="background:#FFEBEB;color:#D80000;border:none;font-size:16px" onclick="cancelSub()">Annuler le renouvellement auto.</button>')
+      + '</div>'
+      + '<div style="text-align:center;font-size:12px;font-weight:500;color:var(--ink3);margin-top:12px;padding:0 20px">En annulant, tu gardes l\'accès à VOLT. jusqu\'à la fin de la période déjà payée.</div>'
+      + '</div></div>';
+};
+
 function renderPay() {
   const u = S.user;
+  
+  if (u && u.subscribed) {
+    const endDate = getExpiryText(u);
+    const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
+    return '<div class="screen">'
+      + '<div class="hdr" style="padding-bottom:18px">'
+      + '<div class="hdr-row"><div class="bc" style="font-weight:900;font-size:28px;color:#fff">ABONNEMENT</div>'
+      + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">VOLT.</div></div>'
+      + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38)">1 boisson / 15 min · Réseau partenaires Suisse</div>'
+      + '</div>'
+      + '<div style="padding:14px 16px 0">'
+      + '<div class="card" style="padding:28px;text-align:center;background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;border:none">'
+      + '<div style="font-size:48px;margin-bottom:12px">⚡</div>'
+      + '<div class="bc" style="font-size:28px;margin-bottom:6px">FORFAIT ' + plan.label + ' ACTIF</div>'
+      + '<div style="font-size:14px;opacity:0.8;margin-bottom:24px">Plan actif jusqu\'au : <strong>' + endDate + '</strong></div>'
+      + '<button class="btn" style="background:#fff;color:var(--blue);font-size:16px" onclick="nav(\'manage\')">Gérer mon forfait →</button>'
+      + '</div>'
+      + '</div></div>';
+  }
+
+
+  const sel = S.plan;
+  const method = S.payMethod;
+  const planPrice = (PLANS.find(p=>p.id===sel)||PLANS[0]).chf;
+
   return '<div class="screen">'
-    + '<div class="hdr" style="padding-bottom:22px">'
-    + '<div class="hdr-row"><div class="bc" style="font-weight:900;font-size:26px;color:#fff">Abonnement</div>'
-    + (u.subscribed ? '<button onclick="nav(\'manage\')" style="background:rgba(255,255,255,.12);border:none;border-radius:50px;padding:8px 16px;font-size:13px;font-weight:700;color:rgba(255,255,255,.7);cursor:pointer">Gérer →</button>' : '')
+    + '<div class="hdr" style="padding-bottom:18px">'
+    + '<div class="hdr-row"><div class="bc" style="font-weight:900;font-size:28px;color:#fff">ABONNEMENT</div>'
+    + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">VOLT.</div></div>'
+    + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38)">1 boisson / 15 min · Réseau partenaires Suisse</div>'
     + '</div>'
-    + (!u.subscribed ? '<div style="background:rgba(255,59,92,.15);border:1px solid rgba(255,59,92,.3);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px"><div style="font-size:20px">⚠️</div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8)">Aucun abonnement actif. Choisis un plan.</div></div>' : '')
-    + '</div>'
+
     + '<div style="padding:14px 16px 0">'
-    + PLANS.map(p => {
-        const sel = S.plan === p.id;
-        const feat = p.id === 'quarter';
-        return '<div class="plan-card'+(feat?' feat':'')+(sel?' sel':'')+'" onclick="selPlan(\''+p.id+'\')">'
-          + (p.badge ? '<div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:'+(feat?'rgba(255,255,255,.25)':'var(--blue)')+';color:#fff;font-size:11px;font-weight:800;padding:4px 14px;border-radius:50px;white-space:nowrap">'+p.badge+'</div>' : '')
-          + '<div style="display:flex;justify-content:space-between;align-items:flex-start">'
-          + '<div><div class="bc" style="font-weight:900;font-size:22px;color:'+(feat?'#fff':'var(--ink)')+'">'+p.label+'</div>'
-          + '<div style="font-size:12px;font-weight:500;color:'+(feat?'rgba(255,255,255,.55)':'var(--ink3)')+'">'+p.per+'</div></div>'
-          + '<div style="text-align:right"><div class="bc" style="font-weight:900;font-size:30px;color:'+(feat?'#fff':'var(--ink)')+'">CHF '+p.chf+'</div>'
-          + (p.saving ? '<div style="font-size:11px;font-weight:700;color:'+(feat?'rgba(255,255,255,.6)':'var(--green)')+'">'+p.saving+'</div>' : '')
-          + '</div></div>'
-          + '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">'
-          + p.feat.map(f => '<div style="background:'+(feat?'rgba(255,255,255,.15)':'var(--blue-soft)')+';border-radius:50px;padding:5px 12px;font-size:12px;font-weight:600;color:'+(feat?'rgba(255,255,255,.85)':'var(--blue)')+'">'+f+'</div>').join('')
-          + '</div></div>';
-      }).join('')
-    + '<div style="background:var(--white);border-radius:20px;border:1px solid var(--border2);padding:20px;margin-bottom:14px">'
-    + '<div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px">Méthode de paiement</div>'
+    + PLANS.map(p =>
+      '<div class="plan-card'+(p.id===sel?' sel':'')+(p.id==='quarter'?' feat':'')
+      +'" onclick="selPlan(\''+p.id+'\')" >'
+      + (p.badge ? '<div style="position:absolute;top:-1px;left:18px;background:var(--blue);color:#fff;font-size:10px;font-weight:800;letter-spacing:.05em;padding:3px 10px;border-radius:0 0 8px 8px">'+p.badge+'</div>' : '')
+      + '<div style="display:flex;align-items:center;gap:14px;'+(p.badge?'margin-top:14px':'')+'">'
+      + '<div style="width:22px;height:22px;border-radius:50%;border:2px solid '+(p.id===sel?'var(--blue)':'var(--border2)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s">'
+      + (p.id===sel?'<div style="width:12px;height:12px;border-radius:50%;background:var(--blue)"></div>':'')
+      + '</div>'
+      + '<div style="flex:1">'
+      + '<div style="font-size:11px;font-weight:700;color:'+(p.id==='quarter'?'rgba(255,255,255,.45)':'var(--ink3)')+';letter-spacing:.06em;text-transform:uppercase">'+p.label+'</div>'
+      + '<div style="display:flex;align-items:baseline;gap:4px;margin-top:2px">'
+      + '<div class="bc" style="font-weight:900;font-size:36px;color:'+(p.id==='quarter'?'#fff':'var(--ink)')+';letter-spacing:-1px">CHF '+p.chf+'</div>'
+      + '<div style="font-size:14px;color:'+(p.id==='quarter'?'rgba(255,255,255,.4)':'var(--ink3)')+';font-weight:500">'+p.per+'</div>'
+      + '</div></div>'
+      + (p.saving ? '<div style="background:rgba(0,196,122,.12);border-radius:50px;padding:4px 10px;white-space:nowrap"><span style="font-size:11px;font-weight:700;color:#00C47A">'+p.saving+'</span></div>' : '')
+      + '</div></div>'
+    ).join('')
+
+    + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin:16px 0 10px">MÉTHODE DE PAIEMENT</div>'
     + '<div style="display:flex;gap:10px;margin-bottom:16px">'
-    + '<button onclick="setMethod(\'card\')" style="flex:1;padding:12px;border-radius:12px;border:2px solid '+(S.payMethod==='card'?'var(--blue)':'var(--border2)')+';background:'+(S.payMethod==='card'?'var(--blue-soft)':'var(--white)')+';font-size:14px;font-weight:700;cursor:pointer;color:'+(S.payMethod==='card'?'var(--blue)':'var(--ink3)')+'">💳 Carte</button>'
-    + '<button onclick="setMethod(\'twint\')" style="flex:1;padding:12px;border-radius:12px;border:2px solid '+(S.payMethod==='twint'?'var(--blue)':'var(--border2)')+';background:'+(S.payMethod==='twint'?'var(--blue-soft)':'var(--white)')+';font-size:14px;font-weight:700;cursor:pointer;color:'+(S.payMethod==='twint'?'var(--blue)':'var(--ink3)')+'">📱 TWINT</button>'
+    + '<button onclick="setMethod(\'card\')" style="flex:1;padding:12px;border-radius:14px;border:2px solid '+(method==='card'?'var(--blue)':'var(--border2)')+';background:'+(method==='card'?'rgba(0,87,255,.05)':'var(--white)')+';cursor:pointer;font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"><span>💳</span>Carte</button>'
+    + '<button onclick="setMethod(\'twint\')" style="flex:1;padding:12px;border-radius:14px;border:2px solid '+(method==='twint'?'var(--blue)':'var(--border2)')+';background:'+(method==='twint'?'rgba(0,87,255,.05)':'var(--white)')+';cursor:pointer;font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"><span>🇨🇭</span>TWINT</button>'
     + '</div>'
-    + (S.payMethod === 'card'
-      ? '<div id="stripe-el" style="min-height:42px"></div>'
-      : '<div style="background:var(--bg2);border-radius:12px;padding:14px 16px;font-size:14px;font-weight:500;color:var(--ink3)">Tu seras redirigé vers TWINT pour confirmer le paiement.</div>'
+
+    + (method === 'card'
+      ? '<div class="card" style="padding:20px;margin-bottom:14px">'
+        + '<label class="lbl" style="display:block;margin-bottom:8px">Carte bancaire</label>'
+        + '<div id="stripe-el" style="background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;transition:all .2s;min-height:46px"></div>'
+        + '<div id="pay-err" style="display:none;color:var(--red);font-size:13px;font-weight:600;margin-top:10px"></div>'
+        + '<div style="text-align:center;font-size:12px;font-weight:600;color:var(--ink3);margin-top:14px">🔒 Paiement sécurisé par Stripe</div>'
+        + '</div>'
+        + '<button class="btn btn-blue" id="btn-pay">PAYER CHF '+planPrice+' →</button>'
+      : '<div class="card" style="padding:28px;text-align:center;margin-bottom:14px">'
+        + '<div style="font-size:48px;margin-bottom:12px">🇨🇭</div>'
+        + '<div class="bc" style="font-weight:900;font-size:24px;margin-bottom:8px">PAYER AVEC TWINT</div>'
+        + '<div style="font-size:14px;color:var(--ink3);line-height:1.6">Tu seras redirigé vers TWINT pour confirmer le paiement de <strong>CHF '+planPrice+'</strong>.</div>'
+        + '</div>'
+        + '<button class="btn btn-blue" id="btn-twint">PAYER AVEC TWINT →</button>'
     )
-    + '</div>'
-    + '<div id="pay-err" style="color:var(--red);font-size:13px;font-weight:600;margin-bottom:10px;display:none"></div>'
-    + '<button class="btn btn-blue" id="btn-pay">⚡ S\'ABONNER MAINTENANT</button>'
-    + '<div style="text-align:center;margin-top:12px;font-size:11px;font-weight:600;color:var(--ink4)">🔒 Paiement sécurisé · Annulation à tout moment</div>'
+    + '<div style="text-align:center;font-size:12px;font-weight:500;color:var(--ink3);margin-top:12px;padding-bottom:10px">Sans engagement · Annulation à tout moment</div>'
     + '</div></div>';
 }
 
 window.cancelSub = async function() {
-  closeModal();
-  toast('Annulation en cours...');
-  const r = await api('/api/pay-confirm', { action:'cancel' }, 'POST');
-  if (r.ok) {
-    S.user.subscribed = false;
+  if(!confirm("Es-tu sûr(e) de vouloir annuler ton abonnement ?\n\nTu garderas l'accès aux machines VOLT jusqu'à la date de fin prévue, mais il ne sera plus renouvelé automatiquement.")) return;
+  const btn = document.querySelector('button[onclick="cancelSub()"]');
+  if(btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  
+  const res = await api('/api/cancel-sub', {});
+  
+  if (res.error) {
+    toast("Erreur : " + res.error);
+    if(btn) { btn.innerHTML = 'Annuler le renouvellement auto.'; btn.disabled = false; }
+  } else {
+    toast('✅ Renouvellement automatique annulé.');
+    S.user.cancel_at_period_end = true;
     saveSess();
     render();
-    toast('Abonnement annulé.', true);
-  } else {
-    toast(r.error || 'Erreur lors de l\'annulation.', false);
   }
 };
 
 window.selPlan = function(id) {
-  S.plan = id; S.screen = 'pay'; render();
-  setTimeout(() => { if (S.payMethod === 'card') initStripe(); }, 100);
+  S.plan = id;
+  const navHtml = renderNav();
+  document.getElementById('app').innerHTML = renderPay() + navHtml;
+  bindPay();
 };
 
 window.setMethod = function(m) {
   S.payMethod = m;
-  const pay = document.getElementById('btn-pay');
-  const stripeDiv = document.querySelector('#stripe-el');
-  const twintDiv = document.querySelector('.twint-info');
-  if (m === 'card') {
-    if (stripeDiv) stripeDiv.style.display = '';
-  }
-  S.screen = 'pay';
-  render();
-  setTimeout(() => { if (m === 'card') initStripe(); }, 100);
+  const navHtml = renderNav();
+  document.getElementById('app').innerHTML = renderPay() + navHtml;
+  bindPay();
 };
 
+let stripeInst = null, stripeCard = null;
 function bindPay() {
-  const btn = document.getElementById('btn-pay');
-  if (btn) btn.onclick = () => S.payMethod === 'twint' ? doTwint() : doPay();
-  if (S.payMethod === 'card') waitForStripeKey(20);
+  if (S.payMethod === 'card') {
+    // Attendre que la clé soit disponible puis initialiser
+    waitForStripeKey();
+  }
+  const btnPay = document.getElementById('btn-pay');
+  if (btnPay) btnPay.onclick = doPay;
+  const btnTw = document.getElementById('btn-twint');
+  if (btnTw) btnTw.onclick = doTwint;
 }
 
 function waitForStripeKey(attempts) {
-  if (typeof Stripe !== 'undefined') { initStripe(); return; }
-  if (attempts > 0) setTimeout(() => waitForStripeKey(attempts - 1), 300);
+  attempts = attempts || 0;
+  if (attempts > 20) return; // abandon après 4 secondes
+  if (!CFG.STRIPE_KEY || CFG.STRIPE_KEY === '') {
+    setTimeout(() => waitForStripeKey(attempts + 1), 200);
+    return;
+  }
+  initStripe();
 }
 
 function initStripe() {
-  if (typeof Stripe === 'undefined') return;
-  stripeInst = new Stripe(CFG.STRIPE_KEY);
-  const el = document.getElementById('stripe-el');
-  if (!el || el._stripe) return;
-  el._stripe = true;
-  const elements = stripeInst.elements();
-  cardEl = elements.create('card', {
-    style: {
-      base: { fontSize:'16px', fontFamily:'Barlow,sans-serif', color:'#060D2E', '::placeholder':{ color:'#A8B4CC' } },
-      invalid: { color:'#FF3B5C' }
-    },
-    hidePostalCode: true,
-  });
-  cardEl.mount('#stripe-el');
+  if (!window.Stripe || !CFG.STRIPE_KEY) return;
+  try {
+    stripeInst = Stripe(CFG.STRIPE_KEY);
+    const els = stripeInst.elements({ locale: 'fr' });
+    const style = {
+      base: {
+        fontSize: '16px',
+        color: '#0A0F1E',
+        fontFamily: '"Barlow", sans-serif',
+        '::placeholder': { color: '#A8B4CC' }
+      }
+    };
+    // Élément unique qui gère carte + expiration + CVV
+    stripeCard = els.create('card', {
+      style,
+      hidePostalCode: true
+    });
+    stripeCard.mount('#stripe-el');
+    stripeCard.on('focus', () => {
+      const el = document.getElementById('stripe-el');
+      if (el) { el.style.borderColor = 'var(--blue)'; el.style.background = 'var(--white)'; }
+    });
+    stripeCard.on('blur', () => {
+      const el = document.getElementById('stripe-el');
+      if (el) { el.style.borderColor = 'transparent'; el.style.background = 'var(--bg2)'; }
+    });
+  } catch(e) {
+    console.error('Stripe init error:', e);
+  }
 }
-
-let stripeInst = null;
-let cardEl = null;
 
 async function doPay() {
   const btn = document.getElementById('btn-pay');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spin"></div> Traitement...'; }
-  showPayErr('');
-  try {
-    const plan = PLANS.find(p=>p.id===S.plan) || PLANS[0];
-    const res = await api('/api/pay-intent', { plan_id: plan.id });
-    if (res.error) { showPayErr(res.error); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } return; }
+  if (!btn) return;
+  btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true;
+  const plan = PLANS.find(p=>p.id===S.plan);
 
+  // Mode démo
+  if (DEMO) {
+    S.user.subscribed = true; S.user.plan = S.plan; saveSess();
+    toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
+    S.screen = 'home'; render(); return;
+  }
+
+  // 1. Créer le SetupIntent (enregistre la carte)
+  const res = await api('/api/pay-intent', { plan_id: plan.id });
+  if (res.error) {
+    showPayErr(res.error);
+    btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
+  }
+
+  try {
+    // 2. Confirmer l'enregistrement de la carte
     const { setupIntent, error } = await stripeInst.confirmCardSetup(res.client_secret, {
-      payment_method: { card: cardEl }
+      payment_method: {
+        card: stripeCard,
+        billing_details: { email: S.user.email, name: S.user.name }
+      }
     });
 
-    if (error) { showPayErr(error.message); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } return; }
+    if (error) {
+      showPayErr(error.message);
+      btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
+    }
 
-    const confirm = await api('/api/pay-confirm', { setup_intent_id: setupIntent.id, plan_id: plan.id, payment_method_id: setupIntent.payment_method });
-    if (confirm.error) { showPayErr(confirm.error); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } return; }
+    // 3. Créer l'abonnement avec la carte enregistrée
+    const confirm = await api('/api/pay-confirm', {
+      setup_intent_id:   setupIntent.id,
+      payment_method_id: setupIntent.payment_method,
+      plan_id:           S.plan,
+      customer_id:       res.customer_id,
+      price_id:          res.price_id,
+    });
 
-    S.user = Object.assign({}, S.user, confirm.user || {});
-    if (confirm.user) S.user.subscribed = true;
-    saveSess();
-    render();
-    toast('✅ Abonnement activé ! Bienvenue chez VOLT.', true);
+    if (confirm.error) {
+      showPayErr(confirm.error);
+      btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
+    }
+
+    S.user.subscribed = true; S.user.plan = S.plan; saveSess();
+    toast('✅ Abonnement activé ! Renouvellement automatique.');
+    notif('✅','Abonnement activé ! Ton QR est prêt.');
+    S.screen = 'home'; render();
+
   } catch(e) {
-    showPayErr('Erreur de paiement. Réessaie.');
-    if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; }
+    console.error('doPay error:', e);
+    showPayErr('Erreur: ' + (e.message || JSON.stringify(e)));
+    btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false;
   }
 }
 
 function showPayErr(msg) {
   const el = document.getElementById('pay-err');
-  if (!el) return;
-  el.textContent = msg;
-  el.style.display = msg ? 'block' : 'none';
+  if (el) { el.textContent = msg; el.style.display = 'block'; }
 }
 
 async function doTwint() {
-  const btn = document.getElementById('btn-pay');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spin"></div> Redirection TWINT...'; }
-  showPayErr('');
-  try {
-    const plan = PLANS.find(p=>p.id===S.plan) || PLANS[0];
-    const returnUrl = window.location.origin + '/VoltApp.html?payment=twint_success';
-    const res = await api('/api/pay-intent', { plan_id: plan.id, method: 'twint', return_url: returnUrl });
-    if (res.error) { showPayErr(res.error); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } return; }
-
-    if (typeof Stripe === 'undefined') { showPayErr('Stripe non chargé. Réessaie.'); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } return; }
-    if (!stripeInst) stripeInst = new Stripe(CFG.STRIPE_KEY);
-
-    const { error } = await stripeInst.confirmTwintPayment(res.client_secret, {
-      return_url: returnUrl,
-    });
-    if (error) { showPayErr(error.message); if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; } }
-  } catch(e) {
-    showPayErr('Erreur TWINT. Réessaie.');
-    if (btn) { btn.disabled = false; btn.innerHTML = '⚡ S\'ABONNER MAINTENANT'; }
+  const btn = document.getElementById('btn-twint');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const plan = PLANS.find(p=>p.id===S.plan);
+  const returnUrl = window.location.origin + window.location.pathname + '?payment=twint_success';
+  const res = await api('/api/pay-intent', { plan_id: plan.id, method: 'twint', return_url: returnUrl });
+  if (DEMO || res.demo) {
+    S.user.subscribed = true; S.user.plan = S.plan; saveSess();
+    toast('✅ Abonnement activé (TWINT) !'); S.screen = 'home'; render(); return;
   }
+  if (res.error) {
+    toast(res.error, false);
+    if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+    return;
+  }
+  if (res.client_secret) {
+    try {
+      if (!stripeInst) initStripe();
+      const result = await stripeInst.confirmTwintPayment(res.client_secret, {
+        payment_method: { twint: {} },
+        return_url: returnUrl,
+      });
+      if (result.error) {
+        toast(result.error.message || 'Erreur de paiement TWINT.', false);
+        if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+      }
+      // Si succès, Stripe redirige automatiquement vers return_url
+    } catch(e) {
+      toast('Erreur TWINT: ' + e.message, false);
+      if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+    }
+    return;
+  }
+  // Fallback legacy redirect_url
+  if (res.redirect_url) { window.location.href = res.redirect_url; return; }
+  if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
+  toast('Erreur de paiement.', false);
 }
 
 // ═══════════════════════════════════════════
 //  HISTORY
 // ═══════════════════════════════════════════
 function renderHist() {
+  const h = S.history;
   return '<div class="screen">'
-    + '<div class="hdr" style="padding-bottom:22px"><div class="hdr-row"><div class="bc" style="font-weight:900;font-size:26px;color:#fff">Historique</div></div></div>'
-    + '<div style="padding:14px 16px 0">'
-    + (S.history.length === 0
-      ? '<div style="text-align:center;padding:48px 0"><div style="font-size:48px;margin-bottom:12px">📊</div><div style="font-size:16px;font-weight:600;color:var(--ink3)">Aucune boisson prise pour l\'instant</div></div>'
-      : '<div class="card" style="padding:0 16px">'
-        + S.history.map((x,i,a) =>
-            '<div class="hist-row"'+(i===a.length-1?' style="border-bottom:none"':'')+'>'+
-            '<div class="hist-ico">⚡</div>'+
-            '<div><div style="font-size:15px;font-weight:600">1 boisson prise</div><div style="font-size:12px;font-weight:500;color:var(--ink3)">'+x.gym+'</div></div>'+
-            '<div style="font-size:12px;font-weight:600;color:var(--ink3);margin-left:auto">'+x.time+'</div>'+
-            '</div>').join('')
-        + '</div></div>'
+    + '<div class="hdr" style="padding-bottom:18px">'
+    + '<div class="hdr-row"><div class="bc" style="font-weight:900;font-size:28px;color:#fff">HISTORIQUE</div>'
+    + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">VOLT.</div></div>'
+    + '</div>'
+    + '<div style="padding:14px 16px">'
+    + '<div class="stat-grid" style="margin-bottom:14px">'
+    + '<div class="stat-box"><div class="stat-v" style="color:var(--blue)">'+h.length+'</div><div class="stat-l">Ce mois</div></div>'
+    + '<div class="stat-box"><div class="stat-v">'+h.filter(x=>x.today).length+'</div><div class="stat-l">Aujourd\'hui</div></div>'
+    + '<div class="stat-box"><div class="stat-v">'+Math.round(h.length*9.9/30)+'.-</div><div class="stat-l">CHF éco.</div></div>'
+    + '</div>'
+    + '<div class="card" style="padding:0 16px">'
+    + (h.length === 0
+      ? '<div style="padding:40px 0;text-align:center"><div style="font-size:40px;margin-bottom:12px">⚡</div><div style="font-size:15px;font-weight:600;color:var(--ink)">Pas encore de scan</div><div style="font-size:13px;color:var(--ink3);margin-top:6px">Présente ton Code QR à un terminal VOLT.</div></div>'
+      : h.map((x,i) => '<div class="hist-row"'+(i===h.length-1?' style="border-bottom:none"':'')+'>'+
+          '<div class="hist-ico">⚡</div>'+
+          '<div><div style="font-size:15px;font-weight:600">1 boisson prise</div><div style="font-size:12px;font-weight:500;color:var(--ink3)">'+x.gym+'</div></div>'+
+          '<div style="font-size:12px;font-weight:600;color:var(--ink3);margin-left:auto">'+x.time+'</div>'+
+          '</div>').join('')
     )
-    + '</div></div>';
+    + '</div></div></div>';
 }
 
 // ═══════════════════════════════════════════
@@ -1017,28 +1193,6 @@ window.saveProfile = async function() {
   saveSess(); closeModal(); toast('Profil mis à jour ✓');
   document.getElementById('app').innerHTML = renderAcc() + renderNav();
   bindAcc();
-};
-
-// ═══════════════════════════════════════════
-//  MANAGE SUB
-// ═══════════════════════════════════════════
-window.renderManage = function() {
-  const u = S.user;
-  const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
-  return '<div class="screen-full" style="background:var(--bg)">'
-    + '<div class="hdr" style="padding-bottom:22px"><div class="hdr-row">'
-    + '<button onclick="nav(\'acc\')" style="background:none;border:none;color:rgba(255,255,255,.6);font-size:24px;cursor:pointer;padding:4px">‹</button>'
-    + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">Gérer l\'abonnement</div>'
-    + '<div style="width:32px"></div></div></div>'
-    + '<div style="padding:16px">'
-    + '<div style="background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:20px;margin-bottom:14px">'
-    + '<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em">Plan actuel</div>'
-    + '<div class="bc" style="font-weight:900;font-size:26px;color:#fff;margin-top:4px">'+plan.label+'</div>'
-    + '<div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:2px">CHF '+plan.chf+' · Renouvellement auto.</div>'
-    + '<div style="font-size:13px;color:rgba(255,255,255,.6);margin-top:8px">Expire le : '+getExpiryText(u)+'</div>'
-    + '</div>'
-    + '<button onclick="openModal(\'Annuler l\'abonnement\',\'<div style=\\\"text-align:center;padding:8px 0\\\"><div style=\\\"font-size:40px;margin-bottom:16px\\\">⚠️</div><div style=\\\"font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px\\\">Annuler l\\\'abonnement ?</div><div style=\\\"font-size:13px;color:var(--ink3);margin-bottom:24px\\\">Tu gardes l\\\'accès jusqu\\\'à la fin de la période payée.</div><button class=\\\"btn btn-dark\\\" style=\\\"background:var(--red)\\\" onclick=\\\"cancelSub()\\\">Oui, annuler</button><button class=\\\"btn btn-ghost\\\" style=\\\"margin-top:10px\\\" onclick=\\\"closeModal()\\\">Garder l\\\'abonnement</button></div>\')" class="btn btn-ghost" style="color:var(--red);border:1.5px solid var(--red)">Annuler l\'abonnement</button>'
-    + '</div></div>';
 };
 
 // ═══════════════════════════════════════════
