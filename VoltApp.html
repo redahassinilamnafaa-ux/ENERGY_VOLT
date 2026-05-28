@@ -80,7 +80,7 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 .logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px}
 
 /* QR CARD */
-.qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden}
+.qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden;animation:fadeIn .35s ease}
 .qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 80% 0%,rgba(0,87,255,.85),rgba(0,60,220,.45) 50%,rgba(0,20,120,.2) 80%,transparent);pointer-events:none}
 .qr-inner{position:relative;z-index:1}
 .qr-box{background:var(--white);border-radius:16px;padding:12px;display:inline-block}
@@ -724,14 +724,26 @@ function renderHome() {
 
 // ── QR ROTATIF ─────────────────────────────────────────────────────
 let qrRotateTimer = null;
+let qrCache = { dataUrl: null, expiry: 0 };
 
 async function generateRotatingQR() {
   const el = document.getElementById('qr-el');
   if (!el) return;
   if (typeof QRCode === 'undefined') { setTimeout(generateRotatingQR, 400); return; }
 
-  // Affiche un spinner pendant le chargement
+  const now = Date.now();
+
+  // Si QR en cache encore valide → affichage immédiat, sans spinner
+  if (qrCache.dataUrl && now < qrCache.expiry) {
+    el.innerHTML = '<img src="' + qrCache.dataUrl + '" style="width:180px;height:180px;display:block;border-radius:4px"/>';
+    return;
+  }
+
+  // Spinner uniquement lors du premier chargement / renouvellement
+  el.style.opacity = '0';
+  el.style.transition = 'opacity 0.25s';
   el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center"><div class="spin" style="border-color:rgba(0,87,255,.3);border-top-color:var(--blue)"></div></div>';
+  requestAnimationFrame(() => { el.style.opacity = '1'; });
 
   const res = await api('/api/qr-token', null, 'GET');
   if (res.error || !res.token) {
@@ -740,6 +752,7 @@ async function generateRotatingQR() {
   }
 
   // Génère le QR avec le token temporaire
+  el.style.opacity = '0';
   el.innerHTML = '';
   try {
     new QRCode(el, {
@@ -748,13 +761,25 @@ async function generateRotatingQR() {
       colorDark: '#050A14', colorLight: '#ffffff',
       correctLevel: QRCode.CorrectLevel.M
     });
+    // Met en cache le QR pour les re-renders suivants
+    const canvas = el.querySelector('canvas');
+    if (canvas) {
+      qrCache.dataUrl = canvas.toDataURL();
+      qrCache.expiry = now + 110_000;
+    }
   } catch(e) {
     el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>';
   }
 
+  // Fade-in doux après génération
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 0.4s';
+    el.style.opacity = '1';
+  });
+
   // Renouvelle automatiquement avant expiration (toutes les 110 secondes)
   if (qrRotateTimer) clearTimeout(qrRotateTimer);
-  qrRotateTimer = setTimeout(generateRotatingQR, 110 * 1000);
+  qrRotateTimer = setTimeout(generateRotatingQR, 110_000);
 }
 
 function bindHome() {
