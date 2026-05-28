@@ -1300,9 +1300,14 @@ if ('serviceWorker' in navigator) {
 
     const PAYMENT_STATUS = PARAMS.get('payment');
     if (PAYMENT_STATUS === 'twint_success') {
+      const piId = PARAMS.get('payment_intent');
       window.history.replaceState({}, document.title, window.location.pathname);
       setTimeout(async () => {
         if (S.token) {
+          // Activer l'abonnement côté backend si PaymentIntent TWINT réussi
+          if (piId) {
+            await api('/api/pay-confirm', { payment_intent_id: piId, method: 'twint' });
+          }
           const meRes = await api('/api/user-update?action=me', null, 'GET');
           if (meRes.user) {
             S.user = Object.assign({}, S.user, meRes.user);
@@ -1315,7 +1320,7 @@ if ('serviceWorker' in navigator) {
             }
           }
         }
-      }, 2500);
+      }, 500);
     }
 
     render();
