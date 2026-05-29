@@ -169,9 +169,6 @@ html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);co
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
 <script src="https://js.stripe.com/v3/" async></script>
 <script>
-// ═══════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════
 const CFG = {
   API: 'https://volt-backend-final.vercel.app',
   STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
@@ -185,9 +182,6 @@ const PLANS = [
   { id:'year',    label:'ANNUEL',       chf:'89.90', per:'/an',      saving:'Éco. CHF 28.90', badge:'🏆 MEILLEUR PRIX', feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Tarif le plus bas'] },
 ];
 
-// ═══════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════
 window.getExpiryText = function(u) {
   if (!u || !u.subscribed) return 'NON ABONNÉ';
   let d;
@@ -207,6 +201,7 @@ window.getExpiryText = function(u) {
 
 const PARAMS = new URLSearchParams(location.search);
 const DEMO = PARAMS.get('access') === CFG.DEMO_CODE;
+if (PARAMS.get('ref')) localStorage.setItem('volt_ref', PARAMS.get('ref'));
 
 let S = {
   screen: 'login',
@@ -268,7 +263,7 @@ window.toggleNotifs = function() {
     lbl.textContent = S.notifs ? 'Actives' : 'Désactivées';
     lbl.style.color = S.notifs ? 'var(--blue)' : 'var(--ink3)';
   }
-  toast(S.notifs ? 'Notifications activées 🔔' : 'Notifications désactivées 🔕');
+  toast(S.notifs ? 'Notifications activées 🔔' : 'Notifications désactivées 🕕');
 };
 
 window.showInvoices = async function() {
@@ -343,9 +338,6 @@ window.doDeleteAccount = async function() {
   }, 1500);
 };
 
-// ═══════════════════════════════════════════
-//  API
-// ═══════════════════════════════════════════
 async function api(path, body, method) {
   if (DEMO) return demoApi(path, body);
   try {
@@ -370,9 +362,6 @@ function demoApi(path, body) {
   return { ok:true };
 }
 
-// ═══════════════════════════════════════════
-//  HELPERS
-// ═══════════════════════════════════════════
 function cdLeft() { return Math.max(0, Math.ceil(S.cdEnd - Date.now()/1000)); }
 function fmtCd(s) { return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 
@@ -421,9 +410,6 @@ function startCdTick() {
   }, 1000);
 }
 
-// ═══════════════════════════════════════════
-//  RENDER ENGINE
-// ═══════════════════════════════════════════
 function renderVerifySuccess() {
   return '<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column;min-height:100%;align-items:center;justify-content:center;padding:32px 24px">'
     + '<div style="position:relative;z-index:1;width:100%;max-width:360px;text-align:center;animation:fadeUp .7s ease both">'
@@ -495,9 +481,6 @@ function renderNav() {
   ).join('') + '</nav>';
 }
 
-// ═══════════════════════════════════════════
-//  LOGIN
-// ═══════════════════════════════════════════
 function renderLogin() {
   const isConn = S.tab === 'conn';
   return '<div class="screen-full" style="background:var(--ink);display:flex;flex-direction:column;min-height:100%">'
@@ -602,10 +585,8 @@ async function doLogin() {
   const btn = document.getElementById('btn-login');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await api('/api/login', { email, password: pwd });
-  // Email non vérifié — backend renvoie 403 avec email_verified: false
   if (res.email_verified === false) {
     if (btn) { btn.innerHTML='Se connecter →'; btn.disabled=false; }
-    // Crée un user temporaire pour afficher l'écran de vérification
     S.user = { email: res.email || email, email_verified: false };
     S.token = null;
     S.screen = 'verify-pending';
@@ -628,184 +609,13 @@ async function doRegister() {
   if (pwd.length < 8) { toast('Mot de passe minimum 8 caractères.', false); return; }
   const btn = document.getElementById('btn-register');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await api('/api/register', { firstName:fn, lastName:ln, email, phone, password:pwd });
+  const refCode = localStorage.getItem('volt_ref') || '';
+  const res = await api('/api/register', { firstName:fn, lastName:ln, email, phone, password:pwd, ref_code: refCode || undefined });
   if (res.error) { toast(res.error, false); if (btn) { btn.innerHTML='Créer mon compte ⚡'; btn.disabled=false; } return; }
+  localStorage.removeItem('volt_ref');
   S.user = res.user; S.token = res.token; saveSess();
   S.screen = 'verify-pending'; render();
 }
-
-// ═══════════════════════════════════════════
-//  HOME
-// ═══════════════════════════════════════════
-function renderHome() {
-  const u = S.user;
-  const cd = cdLeft();
-  const cdCol = cd < 60 ? '#FF3B5C' : cd < 180 ? '#FF9500' : '#0057FF';
-  const planLabel = u.subscribed ? (PLANS.find(p=>p.id===u.plan)||PLANS[0]).label : 'AUCUN PLAN';
-  const ini = u.initials || initials(u.name);
-
-  return '<div class="screen">'
-    // Header
-    + '<div class="hdr">'
-    + '<div class="hdr-row">'
-    + '<div><div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.38)">Bonjour 👋</div>'
-    + '<div class="bc" style="font-weight:900;font-size:28px;color:#fff;line-height:1;margin-top:2px">'+(u.name||'').split(' ')[0]+'</div></div>'
-    + '<div class="bc" style="font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px">VOLT.</div>'
-    + '</div></div>'
-
-    // QR CARD
-    + '<div class="qr-card"><div class="qr-inner">'
-    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">'
-    + '<div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase">Plan actif '+(u.subscribed ? 'jusqu\'au '+getExpiryText(u) : '')+'</div>'
-    + '<div class="bc" style="font-weight:800;font-size:18px;color:#fff;margin-top:2px">'+planLabel+'</div></div>'
-    + (u.subscribed
-      ? '<div style="background:rgba(0,196,122,.2);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:#00C47A">● ACTIF</div>'
-      : '<div style="background:rgba(255,59,92,.15);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:#FF3B5C">⚠ INACTIF</div>')
-    + '</div>'
-
-    + '<div style="display:flex;justify-content:center;margin-bottom:16px">'
-    + '<div style="position:relative">'
-    + (!u.subscribed 
-        ? '<div style="width:204px;height:204px;background:#1a2133;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.15);margin:0 auto"><div style="font-size:48px;margin-bottom:8px">🔒</div><div style="font-size:14px;font-weight:700;color:rgba(255,255,255,.6);text-align:center">Abonnement<br>Requis</div></div>' 
-        : '<div class="qr-box" id="qr-el"></div>' + (cd > 0 ? '<div class="qr-overlay" style="width:204px;height:204px" id="cd-overlay"><div class="bc" id="cd-time" style="font-weight:900;font-size:44px;color:'+cdCol+';letter-spacing:1px">'+fmtCd(cd)+'</div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);margin-top:4px">PROCHAIN SCAN</div></div>' : '')
-      )
-    + '</div></div>'
-
-    + (u.subscribed && cd === 0 ? '<div style="text-align:center;margin-bottom:12px"><span style="background:rgba(0,196,122,.15);border-radius:50px;padding:5px 16px;font-size:12px;font-weight:700;color:#00C47A">✓ PRÊT À SCANNER</span></div>' : '')
-
-    + (cd > 0
-      ? '<div style="margin-bottom:10px"><div class="cd-track"><div class="cd-fill" id="cd-fill" style="width:'+(cd/CFG.CD_SECS*100)+'%;background:'+cdCol+'"></div></div>'
-        + '<div style="display:flex;justify-content:space-between;margin-top:5px"><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3)">1 boisson max toutes les 15 minutes</div><div id="cd-sub" style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3)">'+fmtCd(cd)+'</div></div></div>'
-      : '')
-
-    + '<div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">'
-    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">∞</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">RÉSEAU</div></div>'
-    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">15</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">MIN COOLDOWN</div></div>'
-    + '<div style="text-align:center"><div class="bc" id="scan-count" style="font-weight:900;font-size:22px;color:#fff">—</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">CE MOIS</div></div>'
-    + '</div></div></div>'
-
-    // QR explanation
-    + '<div style="padding:14px 16px 0">'
-    + '<div style="background:'+(cd>0?'rgba(255,149,0,.07)':'rgba(0,87,255,.06)')+';border:1px solid '+(cd>0?'rgba(255,149,0,.2)':'rgba(0,87,255,.18)')+';border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px">'
-    + '<div style="font-size:22px;flex-shrink:0">'+(cd>0?'⏳':'📲')+'</div>'
-    + '<div><div class="bc" style="font-weight:800;font-size:18px;color:var(--ink)">'+(cd>0?'Disponible dans '+fmtCd(cd):'PRÉSENTE TON CODE QR AU SCANNER')+'</div>'
-    + '<div style="font-size:12px;font-weight:500;color:var(--ink3);margin-top:2px">'+(cd>0?'1 boisson max toutes les 15 minutes':'La machine lit ton Code QR automatiquement')+'</div></div>'
-    + '</div></div>'
-
-    // Stats
-    + '<div style="padding:12px 16px 0">'
-    + '<div class="stat-grid">'
-    + '<div class="stat-box"><div class="stat-v" id="stat-today">—</div><div class="stat-l">Aujourd\'hui</div></div>'
-    + '<div class="stat-box"><div class="stat-v" id="stat-month">—</div><div class="stat-l">Ce mois</div></div>'
-    + '<div class="stat-box"><div class="stat-v">15\'</div><div class="stat-l">Cooldown</div></div>'
-    + '</div></div>'
-
-    // Recent history
-    + '<div style="padding:12px 16px 0">'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-    + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">Dernières boissons</div>'
-    + '<button onclick="nav(\'hist\')" style="background:none;border:none;font-size:12px;font-weight:700;color:var(--blue);cursor:pointer">Voir tout →</button>'
-    + '</div>'
-    + '<div class="card" style="padding:0 16px">'
-    + (S.history.length === 0
-      ? '<div style="padding:24px 0;text-align:center;color:var(--ink3);font-size:14px;font-weight:500">Ton historique apparaîtra ici</div>'
-      : S.history.slice(0,3).map((h,i,a) => '<div class="hist-row"'+(i===a.length-1?' style="border-bottom:none"':'')+'>'+
-          '<div class="hist-ico">⚡</div>'+
-          '<div><div style="font-size:15px;font-weight:600">1 boisson prise</div><div style="font-size:12px;font-weight:500;color:var(--ink3)">'+h.gym+'</div></div>'+
-          '<div style="font-size:12px;font-weight:600;color:var(--ink3);margin-left:auto">'+h.time+'</div>'+
-          '</div>').join('')
-    )
-    + '</div></div>'
-
-    + (!u.subscribed ? '<div style="padding:14px 16px 0"><button class="btn btn-blue" onclick="navPay()">⚡ ACTIVER MON ABONNEMENT</button></div>' : '')
-
-    + '</div>';
-}
-
-// ── QR ROTATIF ─────────────────────────────────────────────────────
-let qrRotateTimer = null;
-let qrCache = { dataUrl: null, expiry: 0 };
-
-async function generateRotatingQR() {
-  const el = document.getElementById('qr-el');
-  if (!el) return;
-  if (typeof QRCode === 'undefined') { setTimeout(generateRotatingQR, 400); return; }
-
-  const now = Date.now();
-
-  // Si QR en cache encore valide → affichage immédiat, sans spinner
-  if (qrCache.dataUrl && now < qrCache.expiry) {
-    el.innerHTML = '<img src="' + qrCache.dataUrl + '" style="width:180px;height:180px;display:block;border-radius:4px"/>';
-    return;
-  }
-
-  // Spinner uniquement lors du premier chargement / renouvellement
-  el.style.opacity = '0';
-  el.style.transition = 'opacity 0.25s';
-  el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center"><div class="spin" style="border-color:rgba(0,87,255,.3);border-top-color:var(--blue)"></div></div>';
-  requestAnimationFrame(() => { el.style.opacity = '1'; });
-
-  const res = await api('/api/qr-token', null, 'GET');
-  if (res.error || !res.token) {
-    el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>';
-    return;
-  }
-
-  // Génère le QR avec le token temporaire
-  el.style.opacity = '0';
-  el.innerHTML = '';
-  try {
-    new QRCode(el, {
-      text: 'VOLT:' + res.token,
-      width: 180, height: 180,
-      colorDark: '#050A14', colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-    // Met en cache le QR pour les re-renders suivants
-    const canvas = el.querySelector('canvas');
-    if (canvas) {
-      qrCache.dataUrl = canvas.toDataURL();
-      qrCache.expiry = now + 110_000;
-    }
-  } catch(e) {
-    el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>';
-  }
-
-  // Fade-in doux après génération
-  requestAnimationFrame(() => {
-    el.style.transition = 'opacity 0.4s';
-    el.style.opacity = '1';
-  });
-
-  // Renouvelle automatiquement avant expiration (toutes les 110 secondes)
-  if (qrRotateTimer) clearTimeout(qrRotateTimer);
-  qrRotateTimer = setTimeout(generateRotatingQR, 110_000);
-}
-
-function bindHome() {
-  const u = S.user;
-  if (u.subscribed) {
-    generateRotatingQR();
-  }
-  if (cdLeft() > 0) startCdTick();
-  api('/api/history', null, 'GET').then(r => {
-    if (r.history) {
-      S.history = r.history;
-      const cnt = document.getElementById('scan-count');
-      const st  = document.getElementById('stat-today');
-      const sm  = document.getElementById('stat-month');
-      if (cnt) cnt.textContent = r.history.length;
-      if (st)  st.textContent = r.history.filter(h=>h.today).length;
-      if (sm)  sm.textContent = r.history.length;
-    } else {
-      ['scan-count','stat-today','stat-month'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = '0'; });
-    }
-  });
-}
-
-// ═══════════════════════════════════════════
-//  PAY
-// ═══════════════════════════════════════════
 
 window.renderManage = function() {
   const u = S.user;
@@ -824,8 +634,8 @@ window.renderManage = function() {
       + '<div style="font-size:40px;margin-bottom:12px">⚙️</div>'
       + '<div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">Forfait ' + plan.label + '</div>'
       + '<div style="font-size:14px;color:var(--ink3);margin-bottom:24px">Valable jusqu\'au : <strong>' + endDate + '</strong></div>'
-      + (u.cancel_at_period_end 
-          ? '<div style="background:var(--bg2);color:var(--ink3);padding:12px;border-radius:12px;font-size:13px;font-weight:600">Renouvellement automatique annulé</div>' 
+      + (u.cancel_at_period_end
+          ? '<div style="background:var(--bg2);color:var(--ink3);padding:12px;border-radius:12px;font-size:13px;font-weight:600">Renouvellement automatique annulé</div>'
           : '<button class="btn btn-dark" style="background:#FFEBEB;color:#D80000;border:none;font-size:16px" onclick="cancelSub()">Annuler le renouvellement auto.</button>')
       + '</div>'
       + '<div style="text-align:center;font-size:12px;font-weight:500;color:var(--ink3);margin-top:12px;padding:0 20px">En annulant, tu gardes l\'accès à VOLT. jusqu\'à la fin de la période déjà payée.</div>'
@@ -834,7 +644,7 @@ window.renderManage = function() {
 
 function renderPay() {
   const u = S.user;
-  
+
   if (u && u.subscribed) {
     const endDate = getExpiryText(u);
     const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
@@ -854,7 +664,6 @@ function renderPay() {
       + '</div></div>';
   }
 
-
   const sel = S.plan;
   const method = S.payMethod;
   const planPrice = (PLANS.find(p=>p.id===sel)||PLANS[0]).chf;
@@ -865,11 +674,9 @@ function renderPay() {
     + '<div class="bc" style="font-weight:900;font-size:24px;color:#fff">VOLT.</div></div>'
     + '<div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38)">1 boisson / 15 min · Réseau partenaires Suisse</div>'
     + '</div>'
-
     + '<div style="padding:14px 16px 0">'
     + PLANS.map(p =>
-      '<div class="plan-card'+(p.id===sel?' sel':'')+(p.id==='quarter'?' feat':'')
-      +'" onclick="selPlan(\''+p.id+'\')" >'
+      '<div class="plan-card'+(p.id===sel?' sel':'')+(p.id==='quarter'?' feat':'')+'" onclick="selPlan(\''+p.id+'\')" >'
       + (p.badge ? '<div style="position:absolute;top:-1px;left:18px;background:var(--blue);color:#fff;font-size:10px;font-weight:800;letter-spacing:.05em;padding:3px 10px;border-radius:0 0 8px 8px">'+p.badge+'</div>' : '')
       + '<div style="display:flex;align-items:center;gap:14px;'+(p.badge?'margin-top:14px':'')+'">'
       + '<div style="width:22px;height:22px;border-radius:50%;border:2px solid '+(p.id===sel?'var(--blue)':'var(--border2)')+';display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s">'
@@ -884,13 +691,11 @@ function renderPay() {
       + (p.saving ? '<div style="background:rgba(0,196,122,.12);border-radius:50px;padding:4px 10px;white-space:nowrap"><span style="font-size:11px;font-weight:700;color:#00C47A">'+p.saving+'</span></div>' : '')
       + '</div></div>'
     ).join('')
-
     + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin:16px 0 10px">MÉTHODE DE PAIEMENT</div>'
     + '<div style="display:flex;gap:10px;margin-bottom:16px">'
     + '<button onclick="setMethod(\'card\')" style="flex:1;padding:12px;border-radius:14px;border:2px solid '+(method==='card'?'var(--blue)':'var(--border2)')+';background:'+(method==='card'?'rgba(0,87,255,.05)':'var(--white)')+';cursor:pointer;font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"><span>💳</span>Carte</button>'
     + '<button onclick="setMethod(\'twint\')" style="flex:1;padding:12px;border-radius:14px;border:2px solid '+(method==='twint'?'var(--blue)':'var(--border2)')+';background:'+(method==='twint'?'rgba(0,87,255,.05)':'var(--white)')+';cursor:pointer;font-size:14px;font-weight:700;color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s"><span>🇨🇭</span>TWINT</button>'
     + '</div>'
-
     + (method === 'card'
       ? '<div class="card" style="padding:20px;margin-bottom:14px">'
         + '<label class="lbl" style="display:block;margin-bottom:8px">Carte bancaire</label>'
@@ -914,9 +719,7 @@ window.cancelSub = async function() {
   if(!confirm("Es-tu sûr(e) de vouloir annuler ton abonnement ?\n\nTu garderas l'accès aux machines VOLT jusqu'à la date de fin prévue, mais il ne sera plus renouvelé automatiquement.")) return;
   const btn = document.querySelector('button[onclick="cancelSub()"]');
   if(btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  
   const res = await api('/api/cancel-sub', {});
-  
   if (res.error) {
     toast("Erreur : " + res.error);
     if(btn) { btn.innerHTML = 'Annuler le renouvellement auto.'; btn.disabled = false; }
@@ -945,7 +748,6 @@ window.setMethod = function(m) {
 let stripeInst = null, stripeCard = null;
 function bindPay() {
   if (S.payMethod === 'card') {
-    // Attendre que la clé soit disponible puis initialiser
     waitForStripeKey();
   }
   const btnPay = document.getElementById('btn-pay');
@@ -956,7 +758,7 @@ function bindPay() {
 
 function waitForStripeKey(attempts) {
   attempts = attempts || 0;
-  if (attempts > 20) return; // abandon après 4 secondes
+  if (attempts > 20) return;
   if (!CFG.STRIPE_KEY || CFG.STRIPE_KEY === '') {
     setTimeout(() => waitForStripeKey(attempts + 1), 200);
     return;
@@ -977,11 +779,7 @@ function initStripe() {
         '::placeholder': { color: '#A8B4CC' }
       }
     };
-    // Élément unique qui gère carte + expiration + CVV
-    stripeCard = els.create('card', {
-      style,
-      hidePostalCode: true
-    });
+    stripeCard = els.create('card', { style, hidePostalCode: true });
     stripeCard.mount('#stripe-el');
     stripeCard.on('focus', () => {
       const el = document.getElementById('stripe-el');
@@ -1001,36 +799,27 @@ async function doPay() {
   if (!btn) return;
   btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true;
   const plan = PLANS.find(p=>p.id===S.plan);
-
-  // Mode démo
   if (DEMO) {
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé !'); notif('✅','Abonnement activé ! Ton QR est prêt.');
     S.screen = 'home'; render(); return;
   }
-
-  // 1. Créer le SetupIntent (enregistre la carte)
   const res = await api('/api/pay-intent', { plan_id: plan.id });
   if (res.error) {
     showPayErr(res.error);
     btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
   }
-
   try {
-    // 2. Confirmer l'enregistrement de la carte
     const { setupIntent, error } = await stripeInst.confirmCardSetup(res.client_secret, {
       payment_method: {
         card: stripeCard,
         billing_details: { email: S.user.email, name: S.user.name }
       }
     });
-
     if (error) {
       showPayErr(error.message);
       btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
     }
-
-    // 3. Créer l'abonnement avec la carte enregistrée
     const confirm = await api('/api/pay-confirm', {
       setup_intent_id:   setupIntent.id,
       payment_method_id: setupIntent.payment_method,
@@ -1038,17 +827,14 @@ async function doPay() {
       customer_id:       res.customer_id,
       price_id:          res.price_id,
     });
-
     if (confirm.error) {
       showPayErr(confirm.error);
       btn.innerHTML = 'PAYER CHF '+plan.chf+' →'; btn.disabled = false; return;
     }
-
     S.user.subscribed = true; S.user.plan = S.plan; saveSess();
     toast('✅ Abonnement activé ! Renouvellement automatique.');
     notif('✅','Abonnement activé ! Ton QR est prêt.');
     S.screen = 'home'; render();
-
   } catch(e) {
     console.error('doPay error:', e);
     showPayErr('Erreur: ' + (e.message || JSON.stringify(e)));
@@ -1087,22 +873,17 @@ async function doTwint() {
         toast(result.error.message || 'Erreur de paiement TWINT.', false);
         if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
       }
-      // Si succès, Stripe redirige automatiquement vers return_url
     } catch(e) {
       toast('Erreur TWINT: ' + e.message, false);
       if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
     }
     return;
   }
-  // Fallback legacy redirect_url
   if (res.redirect_url) { window.location.href = res.redirect_url; return; }
   if (btn) { btn.innerHTML = 'PAYER AVEC TWINT →'; btn.disabled = false; }
   toast('Erreur de paiement.', false);
 }
 
-// ═══════════════════════════════════════════
-//  HISTORY
-// ═══════════════════════════════════════════
 function renderHist() {
   const h = S.history;
   return '<div class="screen">'
@@ -1128,9 +909,6 @@ function renderHist() {
     + '</div></div></div>';
 }
 
-// ═══════════════════════════════════════════
-//  ACCOUNT
-// ═══════════════════════════════════════════
 function renderAcc() {
   const u = S.user;
   const plan = PLANS.find(p=>p.id===u.plan) || PLANS[0];
@@ -1144,9 +922,7 @@ function renderAcc() {
     + '<div class="bc" style="font-weight:900;font-size:22px;color:#fff;margin-top:2px">'+(u.name||u.email)+'</div></div>'
     + '<div style="width:50px;height:50px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:18px;color:#fff">'+(u.initials||initials(u.name))+'</div>'
     + '</div></div>'
-
     + '<div style="padding:14px 16px 0">'
-    // Plan summary
     + '<div style="background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:20px;margin-bottom:14px">'
     + '<div style="display:flex;justify-content:space-between;align-items:center">'
     + '<div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:.06em;text-transform:uppercase">'+(u.subscribed?'Plan actif':'Aucun abonnement')+'</div>'
@@ -1154,8 +930,6 @@ function renderAcc() {
     + '<div style="font-size:12px;font-weight:500;color:rgba(255,255,255,.5);margin-top:2px">'+(u.subscribed?'1 boisson max / 15 min':'Aucun plan actif')+'</div></div>'
     + (u.subscribed ? '<div class="bc" style="font-weight:900;font-size:34px;color:#fff">CHF<br>'+plan.chf+'</div>' : '<button class="btn-sm btn" style="background:#fff;color:var(--blue);font-size:14px;padding:8px 16px" onclick="navPay()">S\'abonner →</button>')
     + '</div></div>'
-
-    // Referral
     + '<div class="ref-card">'
     + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">'
     + '<div><div class="bc" style="font-weight:900;font-size:20px;color:#fff">🤝 PARRAINAGE</div>'
@@ -1172,8 +946,6 @@ function renderAcc() {
     + '<div style="flex:1;font-size:13px;font-weight:600;color:rgba(255,255,255,.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+refLink+'</div>'
     + '<button onclick="shareRef()" style="background:rgba(255,255,255,.2);border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap">Partager →</button>'
     + '</div></div>'
-
-    // Settings rows
     + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px">PARAMÈTRES</div>'
     + '<div class="row-item" id="btn-edit-prof"><div class="row-ico">👤</div><div class="row-lbl">Modifier le profil</div><div class="row-chev">›</div></div>'
     + '<div class="row-item" onclick="navPay()"><div class="row-ico">💳</div><div class="row-lbl">Gérer l\'abonnement</div>'+(u.subscribed?'<div class="row-r">CHF '+plan.chf+'</div>':'')+'<div class="row-chev">›</div></div>'
@@ -1197,8 +969,8 @@ function editProfile() {
   openModal('Modifier le profil',
     '<div style="display:flex;flex-direction:column;gap:14px">'
     +'<div class="row2"><div><label class="lbl">Prénom</label><input class="inp" id="ep-fn" value="'+(parts[0]||'')+'"/></div><div><label class="lbl">Nom</label><input class="inp" id="ep-ln" value="'+(parts[1]||'')+'"/></div></div>'
-    +'<div><label class="lbl">Email</label><input class="inp" id="ep-email" type="email" value="'+(u.email||'')+'"/></div>'
-    +'<div><label class="lbl">Téléphone</label><input class="inp" id="ep-phone" type="tel" value="'+(u.phone||'')+'"/></div>'
+    +'<div><label class="lbl">Email</label><input class="inp" id="ep-email" type="email" value="'+(u.email||'')+'" /></div>'
+    +'<div><label class="lbl">Téléphone</label><input class="inp" id="ep-phone" type="tel" value="'+(u.phone||'')+'" /></div>'
     +'<button class="btn btn-dark" onclick="saveProfile()">Enregistrer</button>'
     +'<button class="btn btn-ghost" onclick="closeModal()">Annuler</button>'
     +'</div>'
@@ -1220,9 +992,6 @@ window.saveProfile = async function() {
   bindAcc();
 };
 
-// ═══════════════════════════════════════════
-//  MODAL
-// ═══════════════════════════════════════════
 window.openModal = function(title, content) {
   closeModal();
   const bg = document.createElement('div');
@@ -1237,9 +1006,6 @@ window.closeModal = function() {
   if (el) el.remove();
 };
 
-// ═══════════════════════════════════════════
-//  PWA INSTALL
-// ═══════════════════════════════════════════
 let dip = null;
 window.addEventListener('beforeinstallprompt', e => {
   e.preventDefault(); dip = e;
@@ -1279,15 +1045,144 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').catch(()=>{});
 }
 
-// ═══════════════════════════════════════════
-//  BOOT
-// ═══════════════════════════════════════════
+function renderHome() {
+  const u = S.user;
+  const cd = cdLeft();
+  const cdCol = cd < 60 ? '#FF3B5C' : cd < 180 ? '#FF9500' : '#0057FF';
+  const planLabel = u.subscribed ? (PLANS.find(p=>p.id===u.plan)||PLANS[0]).label : 'AUCUN PLAN';
+  const ini = u.initials || initials(u.name);
+
+  return '<div class="screen">'
+    + '<div class="hdr">'
+    + '<div class="hdr-row">'
+    + '<div><div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.38)">Bonjour 👋</div>'
+    + '<div class="bc" style="font-weight:900;font-size:28px;color:#fff;line-height:1;margin-top:2px">'+(u.name||'').split(' ')[0]+'</div></div>'
+    + '<div class="bc" style="font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px">VOLT.</div>'
+    + '</div></div>'
+    + '<div class="qr-card"><div class="qr-inner">'
+    + '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">'
+    + '<div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase">Plan actif '+(u.subscribed ? 'jusqu\'au '+getExpiryText(u) : '')+'</div>'
+    + '<div class="bc" style="font-weight:800;font-size:18px;color:#fff;margin-top:2px">'+planLabel+'</div></div>'
+    + (u.subscribed
+      ? '<div style="background:rgba(0,196,122,.2);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:#00C47A">● ACTIF</div>'
+      : '<div style="background:rgba(255,59,92,.15);border-radius:50px;padding:5px 12px;font-size:11px;font-weight:700;color:#FF3B5C">⚠ INACTIF</div>')
+    + '</div>'
+    + '<div style="display:flex;justify-content:center;margin-bottom:16px">'
+    + '<div style="position:relative">'
+    + (!u.subscribed
+        ? '<div style="width:204px;height:204px;background:#1a2133;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,.15);margin:0 auto"><div style="font-size:48px;margin-bottom:8px">🔒</div><div style="font-size:14px;font-weight:700;color:rgba(255,255,255,.6);text-align:center">Abonnement<br>Requis</div></div>'
+        : '<div class="qr-box" id="qr-el"></div>' + (cd > 0 ? '<div class="qr-overlay" style="width:204px;height:204px" id="cd-overlay"><div class="bc" id="cd-time" style="font-weight:900;font-size:44px;color:'+cdCol+';letter-spacing:1px">'+fmtCd(cd)+'</div><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);margin-top:4px">PROCHAIN SCAN</div></div>' : ''))
+    + '</div></div>'
+    + (u.subscribed && cd === 0 ? '<div style="text-align:center;margin-bottom:12px"><span style="background:rgba(0,196,122,.15);border-radius:50px;padding:5px 16px;font-size:12px;font-weight:700;color:#00C47A">✓ PRÊT À SCANNER</span></div>' : '')
+    + (cd > 0
+      ? '<div style="margin-bottom:10px"><div class="cd-track"><div class="cd-fill" id="cd-fill" style="width:'+(cd/CFG.CD_SECS*100)+'%;background:'+cdCol+'"></div></div>'
+        + '<div style="display:flex;justify-content:space-between;margin-top:5px"><div style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3)">1 boisson max toutes les 15 minutes</div><div id="cd-sub" style="font-size:11px;font-weight:600;color:rgba(255,255,255,.3)">'+fmtCd(cd)+'</div></div></div>'
+      : '')
+    + '<div style="display:flex;justify-content:space-between;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)">'
+    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">∞</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">RÉSEAU</div></div>'
+    + '<div style="text-align:center"><div class="bc" style="font-weight:900;font-size:22px;color:#fff">15</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">MIN COOLDOWN</div></div>'
+    + '<div style="text-align:center"><div class="bc" id="scan-count" style="font-weight:900;font-size:22px;color:#fff">—</div><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">CE MOIS</div></div>'
+    + '</div></div></div>'
+    + '<div style="padding:14px 16px 0">'
+    + '<div style="background:'+(cd>0?'rgba(255,149,0,.07)':'rgba(0,87,255,.06)')+';border:1px solid '+(cd>0?'rgba(255,149,0,.2)':'rgba(0,87,255,.18)')+';border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px">'
+    + '<div style="font-size:22px;flex-shrink:0">'+(cd>0?'⏳':'📲')+'</div>'
+    + '<div><div class="bc" style="font-weight:800;font-size:18px;color:var(--ink)">'+(cd>0?'Disponible dans '+fmtCd(cd):'PRÉSENTE TON CODE QR AU SCANNER')+'</div>'
+    + '<div style="font-size:12px;font-weight:500;color:var(--ink3);margin-top:2px">'+(cd>0?'1 boisson max toutes les 15 minutes':'La machine lit ton Code QR automatiquement')+'</div></div>'
+    + '</div></div>'
+    + '<div style="padding:12px 16px 0">'
+    + '<div class="stat-grid">'
+    + '<div class="stat-box"><div class="stat-v" id="stat-today">—</div><div class="stat-l">Aujourd\'hui</div></div>'
+    + '<div class="stat-box"><div class="stat-v" id="stat-month">—</div><div class="stat-l">Ce mois</div></div>'
+    + '<div class="stat-box"><div class="stat-v">15\'</div><div class="stat-l">Cooldown</div></div>'
+    + '</div></div>'
+    + '<div style="padding:12px 16px 0">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+    + '<div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">Dernières boissons</div>'
+    + '<button onclick="nav(\'hist\')" style="background:none;border:none;font-size:12px;font-weight:700;color:var(--blue);cursor:pointer">Voir tout →</button>'
+    + '</div>'
+    + '<div class="card" style="padding:0 16px">'
+    + (S.history.length === 0
+      ? '<div style="padding:24px 0;text-align:center;color:var(--ink3);font-size:14px;font-weight:500">Ton historique apparaîtra ici</div>'
+      : S.history.slice(0,3).map((h,i,a) => '<div class="hist-row"'+(i===a.length-1?' style="border-bottom:none"':'')+'>'+
+          '<div class="hist-ico">⚡</div>'+
+          '<div><div style="font-size:15px;font-weight:600">1 boisson prise</div><div style="font-size:12px;font-weight:500;color:var(--ink3)">'+h.gym+'</div></div>'+
+          '<div style="font-size:12px;font-weight:600;color:var(--ink3);margin-left:auto">'+h.time+'</div>'+
+          '</div>').join('')
+    )
+    + '</div></div>'
+    + (!u.subscribed ? '<div style="padding:14px 16px 0"><button class="btn btn-blue" onclick="navPay()">⚡ ACTIVER MON ABONNEMENT</button></div>' : '')
+    + '</div>';
+}
+
+let qrRotateTimer = null;
+let qrCache = { dataUrl: null, expiry: 0 };
+
+async function generateRotatingQR() {
+  const el = document.getElementById('qr-el');
+  if (!el) return;
+  if (typeof QRCode === 'undefined') { setTimeout(generateRotatingQR, 400); return; }
+  const now = Date.now();
+  if (qrCache.dataUrl && now < qrCache.expiry) {
+    el.innerHTML = '<img src="' + qrCache.dataUrl + '" style="width:180px;height:180px;display:block;border-radius:4px"/>';
+    return;
+  }
+  el.style.opacity = '0';
+  el.style.transition = 'opacity 0.25s';
+  el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center"><div class="spin" style="border-color:rgba(0,87,255,.3);border-top-color:var(--blue)"></div></div>';
+  requestAnimationFrame(() => { el.style.opacity = '1'; });
+  const res = await api('/api/qr-token', null, 'GET');
+  if (res.error || !res.token) {
+    el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>';
+    return;
+  }
+  el.style.opacity = '0';
+  el.innerHTML = '';
+  try {
+    new QRCode(el, {
+      text: 'VOLT:' + res.token,
+      width: 180, height: 180,
+      colorDark: '#050A14', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    const canvas = el.querySelector('canvas');
+    if (canvas) {
+      qrCache.dataUrl = canvas.toDataURL();
+      qrCache.expiry = now + 110_000;
+    }
+  } catch(e) {
+    el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>';
+  }
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 0.4s';
+    el.style.opacity = '1';
+  });
+  if (qrRotateTimer) clearTimeout(qrRotateTimer);
+  qrRotateTimer = setTimeout(generateRotatingQR, 110_000);
+}
+
+function bindHome() {
+  const u = S.user;
+  if (u.subscribed) { generateRotatingQR(); }
+  if (cdLeft() > 0) startCdTick();
+  api('/api/history', null, 'GET').then(r => {
+    if (r.history) {
+      S.history = r.history;
+      const cnt = document.getElementById('scan-count');
+      const st  = document.getElementById('stat-today');
+      const sm  = document.getElementById('stat-month');
+      if (cnt) cnt.textContent = r.history.length;
+      if (st)  st.textContent = r.history.filter(h=>h.today).length;
+      if (sm)  sm.textContent = r.history.length;
+    } else {
+      ['scan-count','stat-today','stat-month'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = '0'; });
+    }
+  });
+}
+
 (function boot() {
   try {
     loadSess();
     if (DEMO && !S.user) { S.user = DEMO_USER; S.token = 'demo'; S.screen = 'home'; }
-
-    // Gestion retour lien email
     const VERIFY_STATUS = PARAMS.get('verify');
     if (VERIFY_STATUS === 'success') {
       localStorage.removeItem('volt_s');
@@ -1297,14 +1192,12 @@ if ('serviceWorker' in navigator) {
       window.history.replaceState({}, document.title, window.location.pathname);
       setTimeout(() => toast('Lien expiré. Reconnecte-toi pour renvoyer un email.', false), 400);
     }
-
     const PAYMENT_STATUS = PARAMS.get('payment');
     if (PAYMENT_STATUS === 'twint_success') {
       const piId = PARAMS.get('payment_intent');
       window.history.replaceState({}, document.title, window.location.pathname);
       setTimeout(async () => {
         if (S.token) {
-          // Activer l'abonnement côté backend si PaymentIntent TWINT réussi
           if (piId) {
             await api('/api/pay-confirm', { payment_intent_id: piId, method: 'twint' });
           }
@@ -1322,7 +1215,6 @@ if ('serviceWorker' in navigator) {
         }
       }, 500);
     }
-
     render();
   } catch(e) {
     try {
@@ -1334,6 +1226,5 @@ if ('serviceWorker' in navigator) {
     }
   }
 })();
-</script>
-</body>
+</script></body>
 </html>
