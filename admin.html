@@ -26,42 +26,23 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-h
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes fadeUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-/* ── LOGIN ── */
-.login-wrap{
-  min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-  background:var(--ink);position:relative;overflow:hidden;
-}
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--ink);position:relative;overflow:hidden;}
 .login-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 75% 10%,rgba(0,87,255,.35),transparent 65%)}
 .login-wrap::after{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);background-size:32px 32px}
-.login-box{
-  background:#fff;border-radius:28px;padding:44px 40px;width:100%;max-width:400px;
-  position:relative;z-index:1;box-shadow:0 32px 80px rgba(0,0,0,.35);
-  animation:fadeUp .6s ease both;
-}
+.login-box{background:#fff;border-radius:28px;padding:44px 40px;width:100%;max-width:400px;position:relative;z-index:1;box-shadow:0 32px 80px rgba(0,0,0,.35);animation:fadeUp .6s ease both;}
 .login-logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:56px;color:var(--ink);letter-spacing:-2px;line-height:1;margin-bottom:4px}
 .login-logo em{color:var(--ink);font-style:normal}
 .login-tag{display:inline-flex;align-items:center;gap:6px;background:var(--soft);border:1px solid var(--border);border-radius:50px;padding:4px 12px;margin-bottom:28px}
 .login-tag span{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase}
-
-/* ── LAYOUT ── */
 .layout{display:flex;min-height:100vh}
-.sidebar{
-  width:var(--sidebar);background:var(--ink);flex-shrink:0;
-  display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;
-  border-right:1px solid rgba(255,255,255,.05);
-}
+.sidebar{width:var(--sidebar);background:var(--ink);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;border-right:1px solid rgba(255,255,255,.05);}
 .sidebar-logo{padding:26px 22px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sidebar-logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:#fff;letter-spacing:-1px;line-height:1}
 .sidebar-logo-txt em{color:#fff;font-style:normal}
 .sidebar-logo-badge{font-size:10px;font-weight:700;color:rgba(0,87,255,.7);letter-spacing:.1em;text-transform:uppercase;margin-top:4px}
 .sidebar-nav{padding:14px 10px;flex:1;overflow-y:auto}
 .nav-section{font-size:9px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:.12em;text-transform:uppercase;padding:14px 12px 6px}
-.nav-item{
-  display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;
-  border:1px solid transparent;background:none;width:100%;text-align:left;
-}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;margin-bottom:2px;border:1px solid transparent;background:none;width:100%;text-align:left;}
 .nav-item:hover{background:rgba(255,255,255,.06)}
 .nav-item.active{background:rgba(0,87,255,.18);border-color:rgba(0,87,255,.25)}
 .nav-item .ni{font-size:17px;width:22px;text-align:center;flex-shrink:0}
@@ -72,44 +53,29 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--ink);min-h
 .sidebar-admin{padding:12px 12px;margin-bottom:6px}
 .sidebar-admin-name{font-size:13px;font-weight:700;color:rgba(255,255,255,.8)}
 .sidebar-admin-email{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
-
-/* ── MAIN ── */
 .main{margin-left:var(--sidebar);flex:1;padding:28px 32px;min-height:100vh;animation:fadeIn .3s ease}
 .topbar{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
 .page-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;color:var(--ink);letter-spacing:-.5px;line-height:1}
 .page-sub{font-size:13px;font-weight:500;color:var(--ink3);margin-top:3px}
 .topbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-
-/* ── SEARCH ── */
 .search-wrap{position:relative;display:inline-flex;align-items:center}
 .search-wrap::before{content:'🔍';position:absolute;left:12px;font-size:13px;pointer-events:none}
 .search-inp{background:var(--white);border:1.5px solid var(--border2);border-radius:50px;padding:8px 16px 8px 34px;font-size:13px;font-weight:500;color:var(--ink);font-family:'Barlow',sans-serif;outline:none;width:200px;transition:all .2s}
 .search-inp:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,87,255,.08);width:240px}
 .search-inp::placeholder{color:var(--ink4)}
-
-/* ── CARDS / KPI ── */
 .card{background:#fff;border-radius:20px;border:1px solid var(--border2);overflow:hidden}
 .card-pad{padding:24px}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.kpi{
-  background:#fff;border-radius:18px;padding:20px 22px;border:1px solid var(--border2);
-  transition:all .2s;cursor:default;position:relative;overflow:hidden;
-}
+.kpi{background:#fff;border-radius:18px;padding:20px 22px;border:1px solid var(--border2);transition:all .2s;cursor:default;position:relative;overflow:hidden;}
 .kpi::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;background:var(--soft);border-radius:0 0 0 60px;opacity:.6}
 .kpi:hover{box-shadow:0 8px 24px var(--glow);border-color:rgba(0,87,255,.2);transform:translateY(-2px)}
 .kpi-ico{font-size:22px;margin-bottom:10px;display:block}
 .kpi-val{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:36px;color:var(--ink);line-height:1;letter-spacing:-.5px}
-.kpi-val.blue{color:var(--blue)}
-.kpi-val.green{color:var(--green)}
-.kpi-val.orange{color:var(--orange)}
-.kpi-val.red{color:var(--red)}
+.kpi-val.blue{color:var(--blue)}.kpi-val.green{color:var(--green)}.kpi-val.orange{color:var(--orange)}.kpi-val.red{color:var(--red)}
 .kpi-label{font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:6px}
 .kpi-sub{font-size:12px;font-weight:500;color:var(--ink4);margin-top:3px}
 .kpi-trend{font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:3px;margin-top:6px;padding:2px 8px;border-radius:50px}
-.kpi-trend.up{background:rgba(0,196,122,.1);color:var(--green)}
-.kpi-trend.down{background:rgba(255,59,92,.1);color:var(--red)}
-
-/* ── TABLE ── */
+.kpi-trend.up{background:rgba(0,196,122,.1);color:var(--green)}.kpi-trend.down{background:rgba(255,59,92,.1);color:var(--red)}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse}
 th{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;padding:11px 16px;text-align:left;border-bottom:1.5px solid var(--border2);white-space:nowrap;background:var(--bg);cursor:pointer;user-select:none;transition:color .15s}
@@ -119,92 +85,56 @@ tr:last-child td{border-bottom:none}
 tr:hover td{background:var(--bg);transition:background .1s}
 .td-name{font-weight:700;font-size:14px}
 .td-sub{font-size:11px;color:var(--ink3);margin-top:1px}
-
-/* ── BADGES ── */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:50px;font-size:10px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
-.badge-green{background:rgba(0,196,122,.1);color:var(--green)}
-.badge-red{background:rgba(255,59,92,.1);color:var(--red)}
-.badge-blue{background:var(--soft);color:var(--blue)}
-.badge-orange{background:rgba(255,149,0,.1);color:var(--orange)}
-.badge-gray{background:var(--bg2);color:var(--ink3)}
-
-/* ── INPUTS ── */
+.badge-green{background:rgba(0,196,122,.1);color:var(--green)}.badge-red{background:rgba(255,59,92,.1);color:var(--red)}.badge-blue{background:var(--soft);color:var(--blue)}.badge-orange{background:rgba(255,149,0,.1);color:var(--orange)}.badge-gray{background:var(--bg2);color:var(--ink3)}
 .inp{background:var(--bg2);border:1.5px solid transparent;border-radius:10px;padding:11px 14px;font-size:14px;font-weight:500;color:var(--ink);outline:none;width:100%;font-family:'Barlow',sans-serif;transition:all .2s}
 .inp:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(0,87,255,.07)}
 .inp::placeholder{color:var(--ink4)}
 .lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:5px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-
-/* ── BUTTONS ── */
 .btn{padding:10px 22px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.01em}
-.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px var(--glow)}
-.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 6px 20px var(--glow)}
-.btn-dark{background:var(--ink);color:#fff}
-.btn-dark:hover{background:#1a2240}
-.btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--border2)}
-.btn-ghost:hover{background:var(--bg);border-color:rgba(0,87,255,.2)}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px var(--glow)}.btn-blue:hover{background:var(--blue2);transform:translateY(-1px);box-shadow:0 6px 20px var(--glow)}
+.btn-dark{background:var(--ink);color:#fff}.btn-dark:hover{background:#1a2240}
+.btn-ghost{background:var(--bg2);color:var(--ink);border:1px solid var(--border2)}.btn-ghost:hover{background:var(--bg);border-color:rgba(0,87,255,.2)}
 .btn-sm{padding:7px 16px;font-size:13px}
-.btn-success{background:rgba(0,196,122,.1);color:var(--green);border:1px solid rgba(0,196,122,.2)}
-.btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
-.btn-danger{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.15)}
-.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
-.btn-orange{background:rgba(255,149,0,.1);color:var(--orange);border:1px solid rgba(255,149,0,.2)}
-.btn-orange:hover{background:var(--orange);color:#fff}
-
-/* ── MODAL ── */
+.btn-success{background:rgba(0,196,122,.1);color:var(--green);border:1px solid rgba(0,196,122,.2)}.btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-danger{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.15)}.btn-danger:hover{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-orange{background:rgba(255,149,0,.1);color:var(--orange);border:1px solid rgba(255,149,0,.2)}.btn-orange:hover{background:var(--orange);color:#fff}
 .modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.55);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .2s;backdrop-filter:blur(4px)}
 .modal{background:#fff;border-radius:24px;width:100%;max-width:500px;padding:32px;animation:slideUp .25s ease;max-height:90vh;overflow-y:auto}
 .modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;margin-bottom:22px;color:var(--ink)}
 .modal-divider{height:1px;background:var(--border2);margin:16px 0}
-
-/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,.25);transition:all .3s;opacity:0;transform:translateY(10px);pointer-events:none;max-width:320px;border:1px solid rgba(255,255,255,.08)}
 #toast.show{opacity:1;transform:translateY(0)}
 #toast.err{background:var(--red)}
-
-/* ── COMPTA ── */
 .compta-month{background:#fff;border:1px solid var(--border2);border-radius:16px;padding:18px 22px;margin-bottom:10px;transition:all .2s;cursor:pointer}
 .compta-month:hover{border-color:rgba(0,87,255,.2);box-shadow:0 4px 16px var(--glow)}
 .compta-body{margin-top:14px;padding-top:14px;border-top:1px solid var(--border2);display:none}
 .compta-body.open{display:block}
-
-/* ── STATUS SELECT ── */
 .status-select{padding:5px 12px;border-radius:50px;border:1.5px solid var(--border2);font-size:11px;font-weight:700;cursor:pointer;font-family:'Barlow',sans-serif;transition:all .2s;background:#fff;outline:none}
-
-/* ── CHART BAR ── */
 .bar-chart{display:flex;align-items:flex-end;gap:8px;height:80px}
 .bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
 .bar-val{font-size:10px;font-weight:700;color:var(--ink3)}
 .bar-fill{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;min-height:4px}
 .bar-lbl{font-size:10px;font-weight:600;color:var(--ink4)}
-
-/* ── EMPTY STATE ── */
 .empty{text-align:center;padding:60px 24px;color:var(--ink3)}
 .empty-ico{font-size:40px;margin-bottom:14px}
 .empty-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--ink);margin-bottom:6px}
 .empty-sub{font-size:14px;font-weight:500}
-
-/* ── LOADING ── */
 .loading{display:flex;align-items:center;justify-content:center;padding:60px;gap:12px;color:var(--ink3);font-weight:600;font-size:14px}
-
 @media print{.sidebar,.topbar-actions,.btn{display:none!important}.main{margin:0;padding:0}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <div id="toast"></div>
-
 <script>
-// ═══════════════════════════════════════════════════════
-//  CONFIG
-// ═══════════════════════════════════════════════════════
 const BACKEND   = 'https://volt-backend-final.vercel.app';
-const ADMIN_SECRET = 'volt-admin-secret-2025'; // À changer + mettre dans env Vercel
+const ADMIN_SECRET = 'volt-admin-secret-2025';
 const ADMIN_EMAIL  = 'info@volt-energy.ch';
 const ADMIN_PWD    = 'VoltAdmin2026!';
 
-// ── State ────────────────────────────────────────────
 let S = {
   logged:false, page:'dashboard',
   clients:[], payments:[], gyms:[], virements:[],
@@ -212,20 +142,15 @@ let S = {
   loading:false,
 };
 
-// ── API ──────────────────────────────────────────────
 async function adminApi(path, body, method='GET') {
   try {
-    const opts = {
-      method,
-      headers:{ 'Content-Type':'application/json', 'x-admin-secret': ADMIN_SECRET },
-    };
+    const opts = { method, headers:{ 'Content-Type':'application/json', 'x-admin-secret': ADMIN_SECRET } };
     if (body && method !== 'GET') opts.body = JSON.stringify(body);
     const r = await fetch(BACKEND + path, opts);
     return await r.json();
   } catch(e) { return { error: e.message }; }
 }
 
-// ── Helpers ──────────────────────────────────────────
 function toast(msg, ok=true) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -237,14 +162,12 @@ function closeModal() { document.getElementById('modal-bg')?.remove(); }
 function fmtChf(n) { return 'CHF ' + Number(n||0).toFixed(2); }
 function today() { return new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}); }
 function fmtDate(d) { return d ? new Date(d).toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}) : '—'; }
-
 function filterBySearch(arr, keys) {
   if (!S.search) return arr;
   const q = S.search.toLowerCase();
   return arr.filter(item => keys.some(k => (item[k]||'').toString().toLowerCase().includes(q)));
 }
 
-// ── NAV ──────────────────────────────────────────────
 const PAGES = [
   { id:'dashboard', icon:'📊', label:'Dashboard'   },
   { id:'clients',   icon:'👥', label:'Clients'     },
@@ -287,7 +210,6 @@ function bindPage() {
   if (si) si.oninput = e => { S.search = e.target.value; document.getElementById('main-content').innerHTML = renderPage(); bindPage(); };
 }
 
-// ── LOGIN ────────────────────────────────────────────
 function renderLogin() {
   document.getElementById('app').innerHTML = `
   <div class="login-wrap">
@@ -317,7 +239,6 @@ async function doLogin() {
   const btn = document.querySelector('.login-box .btn-blue');
   if (btn) { btn.innerHTML = '<div class="spin"></div> Chargement...'; btn.disabled = true; }
   S.logged = true;
-
   try {
     const [stats, clientsRes, paymentsRes, gymsRes, virementsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
@@ -332,7 +253,6 @@ async function doLogin() {
     if (!gymsRes.error     && gymsRes.gyms?.length)         S.gyms      = gymsRes.gyms;
     if (!virementsRes.error&& virementsRes.virements?.length)S.virements = virementsRes.virements;
   } catch(e) { console.log('Backend indisponible, mode démo'); }
-
   renderApp();
 }
 
@@ -341,7 +261,6 @@ function doLogout() {
   renderLogin();
 }
 
-// ── APP SHELL ────────────────────────────────────────
 function renderApp() {
   const navItems = PAGES.map(p => {
     let badge = '';
@@ -353,7 +272,6 @@ function renderApp() {
       <span class="ni">${p.icon}</span><span class="nl">${p.label}</span>${badge}
     </button>`;
   }).join('');
-
   document.getElementById('app').innerHTML = `
   <div class="layout">
     <div class="sidebar">
@@ -381,7 +299,6 @@ function renderApp() {
   bindPage();
 }
 
-// ── DASHBOARD ────────────────────────────────────────
 function pageDashboard() {
   const rs = S._stats;
   const totalRev    = rs.rev_total   || S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
@@ -389,11 +306,8 @@ function pageDashboard() {
   const activeClients = rs.subscribers || S.clients.filter(c=>c.subscribed).length;
   const totalScans  = rs.scans_month || 0;
   const pendingV    = S.virements.filter(v=>v.status==='pending');
-  const totalPendingNet = pendingV.reduce((s,v)=>s+v.net,0);
   const activeGyms  = S.gyms.filter(g=>g.active).length;
-
   const recentClients = [...S.clients].slice(0,5);
-
   return `
   <div class="topbar">
     <div>
@@ -405,76 +319,37 @@ function pageDashboard() {
       <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 Export CSV</button>
     </div>
   </div>
-
   <div class="kpi-grid">
-    <div class="kpi"><span class="kpi-ico">💰</span>
-      <div class="kpi-val blue">${fmtChf(monthRev)}</div>
-      <div class="kpi-label">Revenus ce mois</div>
-      <div class="kpi-sub">${fmtChf(totalRev)} au total</div>
-    </div>
-    <div class="kpi"><span class="kpi-ico">👥</span>
-      <div class="kpi-val green">${activeClients}</div>
-      <div class="kpi-label">Abonnés actifs</div>
-      <div class="kpi-sub">Sur ${S.clients.length} inscrits</div>
-    </div>
-    <div class="kpi"><span class="kpi-ico">⚡</span>
-      <div class="kpi-val orange">${totalScans}</div>
-      <div class="kpi-label">Scans ce mois</div>
-      <div class="kpi-sub">Boissons distribuées</div>
-    </div>
-    <div class="kpi"><span class="kpi-ico">🏋️</span>
-      <div class="kpi-val">${activeGyms}</div>
-      <div class="kpi-label">Fitness actifs</div>
-      <div class="kpi-sub">Sur ${S.gyms.length} partenaires</div>
-    </div>
+    <div class="kpi"><span class="kpi-ico">💰</span><div class="kpi-val blue">${fmtChf(monthRev)}</div><div class="kpi-label">Revenus ce mois</div><div class="kpi-sub">${fmtChf(totalRev)} au total</div></div>
+    <div class="kpi"><span class="kpi-ico">👥</span><div class="kpi-val green">${activeClients}</div><div class="kpi-label">Abonnés actifs</div><div class="kpi-sub">Sur ${S.clients.length} inscrits</div></div>
+    <div class="kpi"><span class="kpi-ico">⚡</span><div class="kpi-val orange">${totalScans}</div><div class="kpi-label">Scans ce mois</div><div class="kpi-sub">Boissons distribuées</div></div>
+    <div class="kpi"><span class="kpi-ico">🏋️</span><div class="kpi-val">${activeGyms}</div><div class="kpi-label">Fitness actifs</div><div class="kpi-sub">Sur ${S.gyms.length} partenaires</div></div>
   </div>
-
   <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px">
     <div class="card card-pad">
       <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px">Répartition des plans</div>
       ${(() => {
         const planData = [
-          { l:'Mensuel',     id:'month',   c:'#0057FF' },
+          { l:'Mensuel', id:'month', c:'#0057FF' },
           { l:'Trimestriel', id:'quarter', c:'#2979FF' },
-          { l:'Annuel',      id:'year',    c:'#A8C4FF' },
+          { l:'Annuel', id:'year', c:'#A8C4FF' },
         ];
         const total = S.clients.filter(c=>c.subscribed).length || 1;
         return planData.map(p => {
           const n = S.clients.filter(c=>c.subscribed && c.plan===p.id).length;
           const pct = Math.round(n/total*100);
-          return `<div style="margin-bottom:14px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:5px">
-              <span style="font-size:13px;font-weight:600;color:var(--ink)">${p.l}</span>
-              <span style="font-size:13px;font-weight:700;color:var(--ink3)">${n} client${n>1?'s':''} · ${pct}%</span>
-            </div>
-            <div style="height:7px;background:var(--bg2);border-radius:4px">
-              <div style="height:100%;width:${pct||0}%;background:${p.c};border-radius:4px;transition:width .6s ease"></div>
-            </div>
-          </div>`;
+          return `<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;font-weight:600;color:var(--ink)">${p.l}</span><span style="font-size:13px;font-weight:700;color:var(--ink3)">${n} client${n>1?'s':''} · ${pct}%</span></div><div style="height:7px;background:var(--bg2);border-radius:4px"><div style="height:100%;width:${pct||0}%;background:${p.c};border-radius:4px;transition:width .6s ease"></div></div></div>`;
         }).join('');
       })()}
     </div>
     <div class="card card-pad">
       <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:16px">Virements en attente</div>
-      ${pendingV.length === 0 ? `
-        <div style="text-align:center;padding:20px 0">
-          <div style="font-size:28px;margin-bottom:8px">✅</div>
-          <div style="font-size:13px;font-weight:600;color:var(--green)">Tout est à jour !</div>
-        </div>` :
-        pendingV.slice(0,4).map(v=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2)">
-          <div style="font-size:13px;font-weight:700">${v.gym_name}</div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px">${fmtChf(v.net)}</div>
-        </div>`).join('') +
-        `<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:12px;font-weight:600;color:var(--ink3)">${pendingV.length} en attente</span>
-          <button class="btn btn-blue btn-sm" onclick="goTo('virements')">Gérer →</button>
-        </div>`
+      ${pendingV.length === 0 ? `<div style="text-align:center;padding:20px 0"><div style="font-size:28px;margin-bottom:8px">✅</div><div style="font-size:13px;font-weight:600;color:var(--green)">Tout est à jour !</div></div>` :
+        pendingV.slice(0,4).map(v=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border2)"><div style="font-size:13px;font-weight:700">${v.gym_name}</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px">${fmtChf(v.net)}</div></div>`).join('') +
+        `<div style="margin-top:12px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;font-weight:600;color:var(--ink3)">${pendingV.length} en attente</span><button class="btn btn-blue btn-sm" onclick="goTo('virements')">Gérer →</button></div>`
       }
     </div>
   </div>
-
-  <!-- Derniers clients -->
   <div class="card">
     <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--border2)">
       <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase">Derniers inscrits</div>
@@ -496,7 +371,6 @@ function pageDashboard() {
   </div>`;
 }
 
-// ── CLIENTS ──────────────────────────────────────────
 function planBadge(plan) {
   const labels = { month:'Mensuel', quarter:'Trimestriel', year:'Annuel' };
   return `<span class="badge badge-blue">${labels[plan]||plan||'—'}</span>`;
@@ -505,7 +379,6 @@ function planBadge(plan) {
 function pageClients() {
   const filtered = filterBySearch(S.clients, ['name','email','gym','plan']);
   const active   = S.clients.filter(c=>c.subscribed).length;
-
   return `
   <div class="topbar">
     <div><div class="page-title">Clients</div><div class="page-sub">${active} abonnés actifs · ${S.clients.length} inscrits</div></div>
@@ -517,7 +390,7 @@ function pageClients() {
   <div class="card">
     ${filtered.length === 0 ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div><div class="empty-sub">Modifie ta recherche</div></div>' : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Accès</th></tr></thead>
+      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(c=>`<tr>
           <td><div class="td-name">${c.name}</div><div class="td-sub">${c.email}</div></td>
@@ -528,9 +401,12 @@ function pageClients() {
           <td style="font-size:12px;color:var(--ink3)">${c.joined}</td>
           <td>${c.email_verified!==false?'<span class="badge badge-green">✓</span>':'<span class="badge badge-red">✗</span>'}</td>
           <td>${c.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
-          <td>
+          <td style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn btn-sm ${c.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${c.id}',${!c.authorized})">
               ${c.authorized?'🔒 Bloquer':'🔓 Débloquer'}
+            </button>
+            <button class="btn btn-sm ${c.subscribed?'btn-danger':'btn-orange'}" onclick="showSubscribeModal('${c.id}')">
+              ${c.subscribed?'⛔ Résilier':'✅ Activer abo'}
             </button>
           </td>
         </tr>`).join('')}
@@ -548,16 +424,70 @@ async function toggleAccess(userId, authorized) {
   goTo('clients');
 }
 
+function showSubscribeModal(userId) {
+  const c = S.clients.find(x=>x.id==userId);
+  if (!c) return;
+  if (c.subscribed) {
+    document.body.insertAdjacentHTML('beforeend',`
+    <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">⛔ Résilier l'abonnement</div>
+        <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:20px">${c.name} · ${c.email}</div>
+        <div style="background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.15);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--red);font-weight:500;margin-bottom:20px">
+          ⚠️ L'abonnement sera désactivé immédiatement. Le QR code ne fonctionnera plus.
+        </div>
+        <div class="row2">
+          <button class="btn btn-danger" style="justify-content:center" onclick="toggleSubscribe('${userId}',false,'${c.plan||'month'}')"> Résilier ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>`);
+    return;
+  }
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">✅ Activer l'abonnement</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:20px">${c.name} · ${c.email}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div>
+          <label class="lbl">Plan</label>
+          <select class="inp" id="sub-plan">
+            <option value="month">Mensuel — CHF 19.90/mois</option>
+            <option value="quarter" selected>Trimestriel — CHF 49.90/3 mois</option>
+            <option value="year">Annuel — CHF 149.90/an</option>
+          </select>
+        </div>
+        <div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--orange);font-weight:500">
+          ⚠️ Activation manuelle sans paiement Stripe. Pour les tests ou gestes commerciaux.
+        </div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="toggleSubscribe('${userId}',true,document.getElementById('sub-plan').value)">Activer ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function toggleSubscribe(userId, subscribed, plan) {
+  const res = await adminApi('/api/admin?action=subscribe', { user_id: userId, subscribed, plan }, 'POST');
+  closeModal();
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  const c = S.clients.find(x=>x.id==userId);
+  if (c) { c.subscribed = subscribed; if (subscribed) c.plan = plan; }
+  toast(subscribed ? `✅ Abonnement activé (${plan})` : `⛔ Abonnement résilié`);
+  goTo('clients');
+}
+
 function exportClientsCSV() {
   const rows = S.clients.map(c => [c.name, c.email, c.gym, c.plan, c.scans, c.revenue, c.joined, c.subscribed?'Actif':'Inactif'].join(','));
   downloadCSV(['Nom,Email,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
 }
 
-// ── PAIEMENTS ────────────────────────────────────────
 function pagePayments() {
   const filtered = filterBySearch(S.payments, ['client','plan','method']);
   const total    = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount, 0);
-
   return `
   <div class="topbar">
     <div><div class="page-title">Paiements</div><div class="page-sub">Total encaissé : ${fmtChf(total)}</div></div>
@@ -592,7 +522,6 @@ function exportPaymentsCSV() {
   downloadCSV(['Client,Plan,Montant,Méthode,Date,Statut', ...rows].join('\n'), 'volt-paiements.csv');
 }
 
-// ── VIREMENTS ────────────────────────────────────────
 function statusSelect(v) {
   const col = v.status==='paid'?'var(--green)':v.status==='not_paid'?'var(--red)':'var(--orange)';
   return `<select class="status-select virement-status-select" data-id="${v.id}" style="border-color:${col}">
@@ -610,7 +539,6 @@ function pageVirements() {
   if (S.vFilter_gym)   filtered = filtered.filter(v=>v.gym_name===S.vFilter_gym);
   const pending  = filtered.filter(v=>v.status==='pending');
   const totalP   = pending.reduce((s,v)=>s+v.net,0);
-
   return `
   <div class="topbar">
     <div><div class="page-title">Virements</div><div class="page-sub">Reversements aux fitness partenaires</div></div>
@@ -626,7 +554,6 @@ function pageVirements() {
       ${S.vFilter_month||S.vFilter_gym?'<button class="btn btn-ghost btn-sm" onclick="S.vFilter_month=\'\';S.vFilter_gym=\'\';goTo(\'virements\')">✕ Effacer</button>':''}
     </div>
   </div>
-
   ${pending.length > 0 ? `
   <div style="background:linear-gradient(135deg,#003FCC,#0057FF);border-radius:20px;padding:24px 28px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
     <div>
@@ -639,7 +566,6 @@ function pageVirements() {
     <div style="font-size:24px;margin-bottom:6px">✅</div>
     <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:var(--green)">Tous les virements sont à jour !</div>
   </div>`}
-
   <div class="card">
     <div class="table-wrap"><table>
       <thead><tr><th>Fitness</th><th>Mois</th><th>Montant</th><th>Date paiement</th><th>Statut</th></tr></thead>
@@ -668,13 +594,11 @@ function payAllPending() {
   goTo('virements');
 }
 
-// ── COMPTABILITÉ ─────────────────────────────────────
 function pageCompta() {
   const months = [...new Set(S.virements.map(v=>v.month))];
   const totalBrut = S.virements.reduce((s,v)=>s+v.brut,0);
   const totalPaid = S.virements.filter(v=>v.status==='paid').reduce((s,v)=>s+v.net,0);
   const totalPend = S.virements.filter(v=>v.status==='pending').reduce((s,v)=>s+v.net,0);
-
   return `
   <div class="topbar">
     <div><div class="page-title">Comptabilité</div><div class="page-sub">Récapitulatif mensuel VOLT.</div></div>
@@ -683,22 +607,11 @@ function pageCompta() {
       <button class="btn btn-ghost btn-sm" onclick="exportCSV()">📥 CSV</button>
     </div>
   </div>
-
   <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px">
-    <div class="kpi"><span class="kpi-ico">💰</span>
-      <div class="kpi-val blue">${fmtChf(totalBrut)}</div>
-      <div class="kpi-label">CA brut total</div>
-    </div>
-    <div class="kpi"><span class="kpi-ico">✅</span>
-      <div class="kpi-val green">${fmtChf(totalPaid)}</div>
-      <div class="kpi-label">Total reversé</div>
-    </div>
-    <div class="kpi"><span class="kpi-ico">⏳</span>
-      <div class="kpi-val orange">${fmtChf(totalPend)}</div>
-      <div class="kpi-label">Reste à payer</div>
-    </div>
+    <div class="kpi"><span class="kpi-ico">💰</span><div class="kpi-val blue">${fmtChf(totalBrut)}</div><div class="kpi-label">CA brut total</div></div>
+    <div class="kpi"><span class="kpi-ico">✅</span><div class="kpi-val green">${fmtChf(totalPaid)}</div><div class="kpi-label">Total reversé</div></div>
+    <div class="kpi"><span class="kpi-ico">⏳</span><div class="kpi-val orange">${fmtChf(totalPend)}</div><div class="kpi-label">Reste à payer</div></div>
   </div>
-
   ${months.length === 0 ? '<div class="empty"><div class="empty-ico">📋</div><div class="empty-sub">Aucune donnée comptable</div></div>' :
   months.map(month => {
     const mvs   = S.virements.filter(v=>v.month===month);
@@ -715,14 +628,8 @@ function pageCompta() {
           <div style="font-size:12px;color:var(--ink3);margin-top:2px">${mvs.length} fitness · ${paidN}/${mvs.length} payés</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-          <div style="text-align:right">
-            <div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">CA brut</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(brut)}</div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Net fitness</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(net)}</div>
-          </div>
+          <div style="text-align:right"><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">CA brut</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(brut)}</div></div>
+          <div style="text-align:right"><div style="font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase">Net fitness</div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px">${fmtChf(net)}</div></div>
           ${allOk?'<span class="badge badge-green">✓ Tout payé</span>':`<span class="badge badge-orange">⏳ ${mvs.length-paidN} en attente</span>`}
           <span style="color:var(--ink3);font-size:16px">▼</span>
         </div>
@@ -731,27 +638,15 @@ function pageCompta() {
         <table>
           <thead><tr><th>Fitness</th><th>CA brut</th><th>Net à reverser</th><th>Statut</th><th>Date paiement</th></tr></thead>
           <tbody>
-            ${mvs.map(v=>`<tr>
-              <td><strong>${v.gym_name}</strong></td>
-              <td>${fmtChf(v.brut)}</td>
-              <td><strong>${fmtChf(v.net)}</strong></td>
-              <td>${statusSelect(v)}</td>
-              <td style="font-size:12px;color:var(--ink3)">${v.date_paid||'—'}</td>
-            </tr>`).join('')}
+            ${mvs.map(v=>`<tr><td><strong>${v.gym_name}</strong></td><td>${fmtChf(v.brut)}</td><td><strong>${fmtChf(v.net)}</strong></td><td>${statusSelect(v)}</td><td style="font-size:12px;color:var(--ink3)">${v.date_paid||'—'}</td></tr>`).join('')}
           </tbody>
-          <tfoot><tr style="background:var(--bg)">
-            <td><strong>Total ${month}</strong></td>
-            <td><strong>${fmtChf(brut)}</strong></td>
-            <td><strong>${fmtChf(net)}</strong></td>
-            <td colspan="2"></td>
-          </tr></tfoot>
+          <tfoot><tr style="background:var(--bg)"><td><strong>Total ${month}</strong></td><td><strong>${fmtChf(brut)}</strong></td><td><strong>${fmtChf(net)}</strong></td><td colspan="2"></td></tr></tfoot>
         </table>
       </div>
     </div>`;
   }).join('')}`;
 }
 
-// ── GYMS ─────────────────────────────────────────────
 function pageGyms() {
   const filtered = filterBySearch(S.gyms, ['name','filiale','email']);
   return `
@@ -870,7 +765,6 @@ function toggleGym(id) {
   goTo('gyms');
 }
 
-// ── UTILS ────────────────────────────────────────────
 async function refreshData() {
   toast('🔄 Actualisation...');
   try {
@@ -892,7 +786,7 @@ async function refreshData() {
 }
 
 function downloadCSV(content, filename) {
-  const blob = new Blob(['\ufeff'+content], { type:'text/csv;charset=utf-8' });
+  const blob = new Blob(['﻿'+content], { type:'text/csv;charset=utf-8' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href=url; a.download=filename; a.click();
@@ -905,7 +799,6 @@ function exportCSV() {
   downloadCSV(['Fitness,Mois,CA Brut,Net,Statut,Date paiement', ...rows].join('\n'), 'volt-virements.csv');
 }
 
-// ── BOOT ─────────────────────────────────────────────
 renderLogin();
 </script>
 </body>
