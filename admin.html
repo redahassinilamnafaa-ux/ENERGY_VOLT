@@ -137,7 +137,7 @@ const ADMIN_PWD    = 'VoltAdmin2026!';
 
 let S = {
   logged:false, page:'dashboard',
-  clients:[], payments:[], gyms:[], virements:[],
+  clients:[], payments:[], gyms:[], machines:[], virements:[],
   _stats:{}, search:'', vFilter_month:'', vFilter_gym:'',
   loading:false,
 };
@@ -175,6 +175,7 @@ const PAGES = [
   { id:'virements', icon:'💸', label:'Virements'   },
   { id:'compta',    icon:'📋', label:'Comptabilité'},
   { id:'gyms',      icon:'🏋️', label:'Fitness'     },
+  { id:'machines',  icon:'🖥️',  label:'Machines'    },
 ];
 
 function goTo(page) {
@@ -192,6 +193,7 @@ function renderPage() {
   if (S.page === 'virements') return pageVirements();
   if (S.page === 'compta')    return pageCompta();
   if (S.page === 'gyms')      return pageGyms();
+  if (S.page === 'machines')  return pageMachines();
   return '';
 }
 
@@ -240,24 +242,26 @@ async function doLogin() {
   if (btn) { btn.innerHTML = '<div class="spin"></div> Chargement...'; btn.disabled = true; }
   S.logged = true;
   try {
-    const [stats, clientsRes, paymentsRes, gymsRes, virementsRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
       adminApi('/api/admin?action=gyms'),
+      adminApi('/api/admin?action=machines'),
       adminApi('/api/admin?action=virements'),
     ]);
     if (!stats.error) S._stats = stats;
-    if (!clientsRes.error  && clientsRes.clients?.length)   S.clients   = clientsRes.clients;
-    if (!paymentsRes.error && paymentsRes.payments?.length) S.payments  = paymentsRes.payments;
-    if (!gymsRes.error     && gymsRes.gyms?.length)         S.gyms      = gymsRes.gyms;
+    if (!clientsRes.error  && clientsRes.clients?.length)    S.clients   = clientsRes.clients;
+    if (!paymentsRes.error && paymentsRes.payments?.length)  S.payments  = paymentsRes.payments;
+    if (!gymsRes.error     && gymsRes.gyms?.length)          S.gyms      = gymsRes.gyms;
+    if (!machinesRes.error && machinesRes.machines)          S.machines  = machinesRes.machines;
     if (!virementsRes.error&& virementsRes.virements?.length)S.virements = virementsRes.virements;
   } catch(e) { console.log('Backend indisponible, mode démo'); }
   renderApp();
 }
 
 function doLogout() {
-  S.logged = false; S.clients=[]; S.payments=[]; S.gyms=[]; S.virements=[]; S._stats={};
+  S.logged = false; S.clients=[]; S.payments=[]; S.gyms=[]; S.machines=[]; S.virements=[]; S._stats={};
   renderLogin();
 }
 
@@ -765,20 +769,140 @@ function toggleGym(id) {
   goTo('gyms');
 }
 
+function pageMachines() {
+  const filtered = filterBySearch(S.machines, ['machine_id','name','gym_name']);
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Machines CM30</div><div class="page-sub">${S.machines.length} machines · ${S.machines.filter(m=>m.active).length} actives</div></div>
+    <div class="topbar-actions">
+      <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
+      <button class="btn btn-blue btn-sm" onclick="showAddMachine()">+ Ajouter une machine</button>
+    </div>
+  </div>
+  <div class="card">
+    ${filtered.length === 0 ? `<div class="empty"><div class="empty-ico">🖥️</div><div class="empty-title">Aucune machine</div><div class="empty-sub">Ajoute ta première machine CM30</div></div>` : `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Machine ID</th><th>Nom</th><th>Fitness lié</th><th>Secret</th><th>Statut</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${filtered.map(m=>`<tr>
+          <td><div class="td-name" style="font-family:monospace;font-size:13px">${m.machine_id}</div></td>
+          <td>${m.name||'—'}</td>
+          <td>${m.gym_name ? `<span class="badge badge-blue">${m.gym_name}</span>` : '<span class="badge badge-gray">Non lié</span>'}</td>
+          <td><span style="font-family:monospace;font-size:11px;color:var(--ink3)">${m.secret ? m.secret.substring(0,24)+'…' : '—'}</span></td>
+          <td>${m.active?'<span class="badge badge-green">● Active</span>':'<span class="badge badge-gray">● Inactive</span>'}</td>
+          <td style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="showEditMachine('${m.id}')">✏️ Modifier</button>
+            <button class="btn ${m.active?'btn-danger':'btn-success'} btn-sm" onclick="toggleMachine('${m.id}')">${m.active?'Désactiver':'Activer'}</button>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`}
+  </div>`;
+}
+
+function showAddMachine() {
+  const gymOptions = S.gyms.map(g=>`<option value="${g.id}">${g.name}${g.filiale?' ('+g.filiale+')':''}</option>`).join('');
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">➕ Ajouter une machine CM30</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="lbl">Machine ID (identifiant unique)</label><input class="inp" id="m-id" placeholder="volt-machine-02"/></div>
+        <div><label class="lbl">Nom affiché</label><input class="inp" id="m-name" placeholder="Terminal Entrée Principale"/></div>
+        <div><label class="lbl">Fitness lié</label>
+          <select class="inp" id="m-gym"><option value="">— Non lié —</option>${gymOptions}</select>
+        </div>
+        <div><label class="lbl">Secret machine</label><input class="inp" id="m-secret" value="volt-admin-secret-2025"/></div>
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--blue);font-weight:500">
+          ℹ️ Configure Machine ID et Secret dans le menu admin du CM30 (appui long 3s sur VOLT.)
+        </div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="addMachine()">Créer ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+}
+
+function showEditMachine(id) {
+  const m = S.machines.find(x=>x.id==id);
+  if (!m) return;
+  const gymOptions = S.gyms.map(g=>`<option value="${g.id}" ${m.gym_id==g.id?'selected':''}>${g.name}${g.filiale?' ('+g.filiale+')':''}</option>`).join('');
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">✏️ Modifier — ${m.name}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="lbl">Machine ID</label><input class="inp" id="em-id" value="${m.machine_id}"/></div>
+        <div><label class="lbl">Nom affiché</label><input class="inp" id="em-name" value="${m.name}"/></div>
+        <div><label class="lbl">Fitness lié</label>
+          <select class="inp" id="em-gym"><option value="">— Non lié —</option>${gymOptions}</select>
+        </div>
+        <div><label class="lbl">Secret machine</label><input class="inp" id="em-secret" value="${m.secret||''}"/></div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="editMachine('${id}')">Enregistrer ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function addMachine() {
+  const machine_id = document.getElementById('m-id').value.trim();
+  const name       = document.getElementById('m-name').value.trim();
+  const gym_id     = document.getElementById('m-gym').value || null;
+  const secret     = document.getElementById('m-secret').value.trim();
+  if (!machine_id||!name) { toast('Remplis Machine ID et Nom.', false); return; }
+  const res = await adminApi('/api/admin?action=machines', { machine_id, name, gym_id, secret }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  const gym = S.gyms.find(g=>g.id==gym_id);
+  S.machines.push({ id: res.machine?.id || Date.now().toString(), machine_id, name, gym_id, gym_name: gym?.name||null, secret, active:true });
+  closeModal(); toast(`✅ Machine ${machine_id} ajoutée !`); goTo('machines');
+}
+
+async function editMachine(id) {
+  const m = S.machines.find(x=>x.id==id);
+  if (!m) return;
+  const machine_id = document.getElementById('em-id').value.trim()     || m.machine_id;
+  const name       = document.getElementById('em-name').value.trim()   || m.name;
+  const gym_id     = document.getElementById('em-gym').value           || null;
+  const secret     = document.getElementById('em-secret').value.trim() || m.secret;
+  const res = await adminApi('/api/admin?action=machines', { id, machine_id, name, gym_id, secret }, 'PUT');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  const gym = S.gyms.find(g=>g.id==gym_id);
+  Object.assign(m, { machine_id, name, gym_id, gym_name: gym?.name||null, secret });
+  closeModal(); toast(`✅ ${name} mis à jour !`); goTo('machines');
+}
+
+async function toggleMachine(id) {
+  const m = S.machines.find(x=>x.id==id);
+  if (!m) return;
+  const active = !m.active;
+  const res = await adminApi('/api/admin?action=machines', { id, active }, 'PUT');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  m.active = active;
+  toast(active ? `✅ ${m.name} activée` : `⚠️ ${m.name} désactivée`);
+  goTo('machines');
+}
+
 async function refreshData() {
   toast('🔄 Actualisation...');
   try {
-    const [stats, clientsRes, paymentsRes, gymsRes, virementsRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
       adminApi('/api/admin?action=gyms'),
+      adminApi('/api/admin?action=machines'),
       adminApi('/api/admin?action=virements'),
     ]);
     if (!stats.error) S._stats = stats;
-    if (!clientsRes.error  && clientsRes.clients?.length)   S.clients   = clientsRes.clients;
-    if (!paymentsRes.error && paymentsRes.payments?.length) S.payments  = paymentsRes.payments;
-    if (!gymsRes.error     && gymsRes.gyms?.length)         S.gyms      = gymsRes.gyms;
+    if (!clientsRes.error  && clientsRes.clients?.length)    S.clients   = clientsRes.clients;
+    if (!paymentsRes.error && paymentsRes.payments?.length)  S.payments  = paymentsRes.payments;
+    if (!gymsRes.error     && gymsRes.gyms?.length)          S.gyms      = gymsRes.gyms;
+    if (!machinesRes.error && machinesRes.machines)          S.machines  = machinesRes.machines;
     if (!virementsRes.error&& virementsRes.virements?.length)S.virements = virementsRes.virements;
     toast('✅ Données actualisées !');
     goTo(S.page);
