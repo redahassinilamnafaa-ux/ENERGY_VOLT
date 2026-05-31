@@ -142,11 +142,14 @@ let S = {
   loading:false,
 };
 
+function escapeHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
 async function adminApi(path, body, method='GET') {
   try {
     const opts = { method, headers:{ 'Content-Type':'application/json', 'x-admin-secret': ADMIN_SECRET } };
     if (body && method !== 'GET') opts.body = JSON.stringify(body);
     const r = await fetch(BACKEND + path, opts);
+    if (r.status === 401) { S.logged = false; renderLogin(); return { error: 'Session expirée.' }; }
     return await r.json();
   } catch(e) { return { error: e.message }; }
 }
@@ -397,8 +400,8 @@ function pageClients() {
       <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(c=>`<tr>
-          <td><div class="td-name">${c.name}</div><div class="td-sub">${c.email}</div></td>
-          <td style="font-size:12px;color:var(--ink3)">${c.gym||'—'}</td>
+          <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
+          <td style="font-size:12px;color:var(--ink3)">${escapeHtml(c.gym)||'—'}</td>
           <td>${planBadge(c.plan)}</td>
           <td style="font-weight:700">${c.scans}</td>
           <td><strong>${fmtChf(c.revenue)}</strong></td>
@@ -487,7 +490,8 @@ async function toggleSubscribe(userId, subscribed, plan) {
 }
 
 function exportClientsCSV() {
-  const rows = S.clients.map(c => [c.name, c.email, c.gym, c.plan, c.scans, c.revenue, c.joined, c.subscribed?'Actif':'Inactif'].join(','));
+  const q = v => '"' + String(v||'').replace(/"/g,'""') + '"';
+  const rows = S.clients.map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
   downloadCSV(['Nom,Email,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
 }
 
@@ -669,9 +673,9 @@ function pageGyms() {
       <thead><tr><th>Fitness</th><th>Filiale</th><th>Email</th><th>Membres</th><th>CA/mois</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(g=>`<tr>
-          <td><div class="td-name">${g.name}</div>${g.address?`<div class="td-sub">${g.address}</div>`:''}</td>
-          <td><span class="badge badge-blue">${g.filiale}</span></td>
-          <td style="font-size:12px;color:var(--ink3)">${g.email}</td>
+          <td><div class="td-name">${escapeHtml(g.name)}</div>${g.address?`<div class="td-sub">${escapeHtml(g.address)}</div>`:''}</td>
+          <td><span class="badge badge-blue">${escapeHtml(g.filiale)}</span></td>
+          <td style="font-size:12px;color:var(--ink3)">${escapeHtml(g.email)}</td>
           <td>${g.members}</td>
           <td><strong>${fmtChf(g.revenue)}</strong></td>
           <td>${g.active?'<span class="badge badge-green">● Actif</span>':'<span class="badge badge-gray">● Inactif</span>'}</td>
@@ -794,10 +798,10 @@ function pageMachines() {
       <thead><tr><th>Machine ID</th><th>Nom</th><th>Fitness lié</th><th>Secret</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(m=>`<tr>
-          <td><div class="td-name" style="font-family:monospace;font-size:13px">${m.machine_id}</div></td>
-          <td>${m.name||'—'}</td>
-          <td>${m.gym_name ? `<span class="badge badge-blue">${m.gym_name}</span>` : '<span class="badge badge-gray">Non lié</span>'}</td>
-          <td><span style="font-family:monospace;font-size:11px;color:var(--ink3)">${m.secret ? m.secret.substring(0,24)+'…' : '—'}</span></td>
+          <td><div class="td-name" style="font-family:monospace;font-size:13px">${escapeHtml(m.machine_id)}</div></td>
+          <td>${escapeHtml(m.name)||'—'}</td>
+          <td>${m.gym_name ? `<span class="badge badge-blue">${escapeHtml(m.gym_name)}</span>` : '<span class="badge badge-gray">Non lié</span>'}</td>
+          <td><span style="font-family:monospace;font-size:11px;color:var(--ink3)">${m.secret ? escapeHtml(m.secret.substring(0,24))+'…' : '—'}</span></td>
           <td>${m.active?'<span class="badge badge-green">● Active</span>':'<span class="badge badge-gray">● Inactive</span>'}</td>
           <td style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn btn-ghost btn-sm" onclick="showEditMachine('${m.id}')">✏️ Modifier</button>
