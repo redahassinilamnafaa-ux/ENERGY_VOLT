@@ -1,1 +1,470 @@
-PLACEHOLDER_WILL_BE_REPLACED
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>VOLT.</title>
+<meta name="theme-color" content="#060D2E"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="VOLT."/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{display:none}
+:root{
+  --blue:#0057FF;
+  --blue-mid:#2979FF;
+  --blue-dark:#003FCC;
+  --blue-soft:rgba(0,87,255,.07);
+  --blue-soft2:rgba(0,87,255,.12);
+  --blue-glow:rgba(0,87,255,.22);
+  --ink:#060D2E;
+  --ink2:#2D3652;
+  --ink3:#6B7A99;
+  --ink4:#A8B4CC;
+  --bg:#F7F9FF;
+  --bg2:#EDF1FB;
+  --white:#FFFFFF;
+  --border:rgba(0,87,255,.1);
+  --border2:rgba(10,15,30,.07);
+  --green:#00C47A;
+  --red:#FF3B5C;
+  --orange:#FF9500;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{display:none}
+::selection{background:var(--blue);color:#fff}
+#app{height:100%;max-width:430px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:82px}
+.screen-full{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.bc{font-family:'Barlow Condensed',sans-serif}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border2);display:flex;z-index:100;padding:8px 0 max(16px,env(safe-area-inset-bottom))}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px 0;transition:color .15s}
+.bnav-btn .ni{font-size:22px;line-height:1}
+.bnav-btn .nl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.bnav-btn.on{color:var(--blue)}
+.bnav-btn:not(.on){color:var(--ink3)}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px}
+.inp{background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:500;color:var(--ink);outline:none;width:100%;font-family:'Barlow',sans-serif;transition:all .2s}
+.inp:focus{border-color:var(--blue);background:var(--white)}
+.inp::placeholder{color:var(--ink4)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:15px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:900;letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 18px var(--blue-glow)}
+.btn-blue:not(:disabled):hover{background:var(--blue-mid);transform:translateY(-2px);box-shadow:0 8px 32px var(--blue-glow)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink2)}
+.btn-ghost{background:var(--bg2);color:var(--ink)}
+.btn-sm{padding:9px 18px;font-size:16px;width:auto;border-radius:50px}
+.card{background:var(--white);border-radius:20px;border:1px solid var(--border2)}
+.hdr{background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);padding:16px 20px 0}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px}
+.logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px}
+.qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden;animation:fadeIn .35s ease}
+.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 80% 0%,rgba(0,87,255,.85),rgba(0,60,220,.45) 50%,rgba(0,20,120,.2) 80%,transparent);pointer-events:none}
+.qr-inner{position:relative;z-index:1}
+.qr-box{background:var(--white);border-radius:16px;padding:12px;display:inline-block}
+.qr-box.blur{filter:blur(6px);pointer-events:none}
+.qr-overlay{position:absolute;inset:0;border-radius:16px;background:rgba(10,15,30,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;transition:opacity .3s;cursor:pointer}
+.cd-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:8px 0}
+.cd-fill{height:100%;border-radius:2px;transition:width 1s linear,background .5s}
+.toggle{width:44px;height:26px;border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-k{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.row-item{background:var(--white);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;border:1px solid var(--border2);transition:background .12s}
+.row-item:active{background:var(--bg2)}
+.row-ico{width:36px;height:36px;background:var(--bg2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.row-lbl{font-size:15px;font-weight:600;flex:1;color:var(--ink)}
+.row-r{font-size:13px;font-weight:600;color:var(--ink3)}
+.row-chev{font-size:18px;color:var(--ink4)}
+.row-danger .row-lbl{color:var(--red)}
+.row-danger .row-ico{background:#FFF0F2}
+.row-danger .row-chev{color:var(--red)}
+.hist-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border2)}
+.hist-row:last-child{border-bottom:none}
+.hist-ico{width:44px;height:44px;background:var(--blue-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-box{background:var(--white);border-radius:16px;padding:14px 10px;border:1px solid var(--border2);text-align:center}
+.stat-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:var(--ink);line-height:1}
+.stat-l{font-size:10px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.plan-card{border:1.5px solid var(--border2);border-radius:20px;padding:20px;cursor:pointer;transition:all .22s;position:relative;margin-bottom:10px;background:var(--white)}
+.plan-card:hover{border-color:var(--blue);box-shadow:0 8px 28px var(--blue-glow);transform:translateY(-2px)}
+.plan-card.sel{border:2px solid var(--blue);box-shadow:0 8px 28px var(--blue-glow),0 0 0 3px var(--blue-soft)}
+.plan-card.feat{background:linear-gradient(145deg,var(--blue-dark),var(--blue));border-color:transparent;box-shadow:0 12px 32px var(--blue-glow)}
+.plan-card.feat.sel{box-shadow:0 16px 44px rgba(0,87,255,.4),0 0 0 3px rgba(255,255,255,.5);border:2px solid rgba(255,255,255,.6)!important}
+.ref-card{background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:22px;margin-bottom:14px}
+.ref-link-box{background:rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.52);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s}
+.modal{background:var(--white);border-radius:28px 28px 0 0;width:100%;max-width:430px;padding:26px 22px max(40px,env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;animation:slideUp .3s ease}
+.modal-pill{width:36px;height:4px;background:#E0E0DF;border-radius:2px;margin:0 auto 22px}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:20px;color:var(--ink)}
+#notif{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;z-index:990;max-width:390px;width:calc(100% - 40px);box-shadow:0 4px 20px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+#notif.show{transform:translateX(-50%) translateY(0)}
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-60px);background:var(--ink);color:#fff;border-radius:50px;padding:11px 20px;font-size:14px;font-weight:600;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#stripe-el{background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;transition:border-color .2s}
+#stripe-el.StripeElement--focus{border-color:var(--blue);background:var(--white)}
+.spin{width:22px;height:22px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+#install-banner{position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--ink);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:200;max-width:400px;width:calc(100% - 32px);box-shadow:0 4px 30px rgba(0,0,0,.25);border:1px solid var(--border);animation:fadeUp .3s ease}
+</style>
+</head>
+<body>
+<div id="app"><div id="volt-splash" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%)"><div style="font-family:system-ui,sans-serif;font-weight:900;font-size:76px;color:#fff;letter-spacing:-2px;line-height:1">VOLT.</div><div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38);margin-top:12px">Chargement…</div></div></div>
+<div id="toast"></div>
+<div id="notif">
+  <span id="notif-icon" style="font-size:20px;flex-shrink:0"></span>
+  <span id="notif-text" style="font-size:13px;font-weight:700;flex:1"></span>
+  <button onclick="document.getElementById('notif').classList.remove('show')" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:18px;cursor:pointer">✕</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
+<script src="https://js.stripe.com/v3/" async></script>
+<script>
+const CFG = {
+  API: 'https://volt-backend-final.vercel.app',
+  STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
+  DEMO_CODE: 'volt-admin-2025',
+  CD_SECS: 900,
+};
+const PLANS = [
+  { id:'month',   label:'MENSUEL',      chf:'9.90',  per:'/mois',    saving:null,             badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
+  { id:'quarter', label:'TRIMESTRIEL',  chf:'24.90', per:'/3 mois',  saving:'Éco. CHF 4.80',  badge:'⭐ POPULAIRE',    feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Renouvellement auto.'] },
+  { id:'year',    label:'ANNUEL',       chf:'89.90', per:'/an',      saving:'Éco. CHF 28.90', badge:'🏆 MEILLEUR PRIX', feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Tarif le plus bas'] },
+];
+window.getExpiryText = function(u) {
+  if (!u || !u.subscribed) return 'NON ABONNÉ';
+  let d;
+  if (u.sub_expires_at) { d = new Date(u.sub_expires_at); }
+  else {
+    d = u.created_at ? new Date(u.created_at) : new Date();
+    const plan = PLANS.find(p => p.id === u.plan);
+    if (plan) {
+      if (plan.id === 'month') d.setMonth(d.getMonth() + 1);
+      else if (plan.id === 'quarter') d.setMonth(d.getMonth() + 3);
+      else if (plan.id === 'year') d.setFullYear(d.getFullYear() + 1);
+    }
+  }
+  return d.toLocaleDateString('fr-CH');
+};
+const PARAMS = new URLSearchParams(location.search);
+const DEMO = PARAMS.get('access') === CFG.DEMO_CODE;
+if (PARAMS.get('ref')) localStorage.setItem('volt_ref', PARAMS.get('ref'));
+let S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card', notifs:true };
+const DEMO_USER = { id:'demo-00000001', name:'Alex Martin', email:'demo@volt.energy.ch', phone:'+41 79 000 00 00', initials:'AM', plan:'quarter', subscribed:true, authorized:true, gym:'Fitness partenaire', referral_code:'VOLTAM01', referral_count:3, free_months:3 };
+function loadSess() { try { const d = JSON.parse(localStorage.getItem('volt_s') || 'null'); if (d && d.user) { S.user = d.user; S.token = d.token; S.cdEnd = d.cdEnd || 0; S.screen = 'home'; } } catch(e) {} }
+function saveSess() { localStorage.setItem('volt_s', JSON.stringify({ user:S.user, token:S.token, cdEnd:S.cdEnd })); }
+function doLogout() { localStorage.removeItem('volt_s'); S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card' }; render(); }
+window.navPay = function() { nav("pay"); };
+window.toggleQrView = function() { var o = document.getElementById('cd-overlay'); if (!o || o._h) return; o._h = true; o.style.opacity = '0'; o.style.pointerEvents = 'none'; setTimeout(function() { o.style.opacity = '1'; o.style.pointerEvents = ''; o._h = false; }, 4000); };
+window.goToLogin = function() { localStorage.removeItem("volt_s"); S = { screen:"login", user:null, token:null, plan:"quarter", cdEnd:0, history:[], tab:"conn", cgv:false, payMethod:"card", notifs:true }; window.history.replaceState({}, document.title, window.location.pathname); render(); };
+window.copyRef = function() { const code = S.user && S.user.referral_code; if (!code) return; navigator.clipboard.writeText('https://volt.energy.ch/?ref=' + code).then(() => toast('Lien copié !')).catch(() => toast('Code : ' + code)); };
+window.shareRef = function() { const code = S.user && S.user.referral_code; if (!code) return; const url = 'https://volt.energy.ch/?ref=' + code; if (navigator.share) { navigator.share({ title: 'VOLT. – Boissons illimitées', text: 'Rejoins VOLT. avec mon code et profite d\'un mois offert !', url }); } else { navigator.clipboard.writeText(url).then(() => toast('Lien copié !')); } };
+let qrRotateTimer = null;
+const qrCache = { dataUrl: null, expiry: 0 };
+function cdLeft() { return Math.max(0, Math.ceil(S.cdEnd - Date.now()/1000)); }
+let cdTick = null;
+function startCdTick() { if (cdTick) return; cdTick = setInterval(() => { const el = document.getElementById('cd-txt'); const bar = document.getElementById('cd-bar'); const left = cdLeft(); if (el) { if (left <= 0) { el.textContent = 'PRÊT'; if (bar) { bar.style.width = '100%'; bar.style.background = 'var(--green)'; } clearInterval(cdTick); cdTick = null; generateRotatingQR(); } else { const m = Math.floor(left/60), s = left%60; el.textContent = m + ':' + String(s).padStart(2,'0'); const pct = Math.max(0, 1 - left/CFG.CD_SECS); if (bar) { bar.style.width = (pct*100) + '%'; bar.style.background = left < 60 ? 'var(--green)' : left < 300 ? 'var(--orange)' : 'var(--blue)'; } } } else { clearInterval(cdTick); cdTick = null; } }, 1000); }
+async function api(path, body, method) { const m = method || (body ? 'POST' : 'GET'); const opts = { method: m, headers: {} }; if (S.token && S.token !== 'demo') opts.headers['Authorization'] = 'Bearer ' + S.token; if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); } try { const r = await fetch(CFG.API + path, opts); const j = await r.json(); return j; } catch(e) { return { error: 'Réseau indisponible' }; } }
+function toast(msg, success) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.style.background = success === false ? 'var(--red)' : success === true ? 'var(--green)' : 'var(--ink)'; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2400); }
+function showNotif(icon, text) { const n = document.getElementById('notif'); const ni = document.getElementById('notif-icon'); const nt = document.getElementById('notif-text'); if (!n) return; ni.textContent = icon; nt.textContent = text; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 4000); }
+function nav(screen) { S.screen = screen; render(); }
+function render() {
+  const app = document.getElementById('app');
+  if (!app) return;
+  if (S.screen === 'login') { app.innerHTML = renderLogin(); bindLogin(); return; }
+  if (S.screen === 'verify-success') { app.innerHTML = renderVerifySuccess(); return; }
+  if (!S.user) { S.screen = 'login'; app.innerHTML = renderLogin(); bindLogin(); return; }
+  if (S.screen === 'home') { app.innerHTML = renderHome(); bindHome(); return; }
+  if (S.screen === 'pay') { app.innerHTML = renderPay(); bindPay(); return; }
+  if (S.screen === 'account') { app.innerHTML = renderAccount(); bindAccount(); return; }
+  if (S.screen === 'more') { app.innerHTML = renderMore(); bindMore(); return; }
+}
+function bnav(active) {
+  return '<nav class="bnav"><button class="bnav-btn' + (active==='home'?' on':'') + '" onclick="nav(\'home\')"><span class="ni">⚡</span><span class="nl">Accueil</span></button><button class="bnav-btn' + (active==='pay'?' on':'') + '" onclick="nav(\'pay\')"><span class="ni">💳</span><span class="nl">Abonnement</span></button><button class="bnav-btn' + (active==='account'?' on':'') + '" onclick="nav(\'account\')"><span class="ni">👤</span><span class="nl">Compte</span></button><button class="bnav-btn' + (active==='more'?' on':'') + '" onclick="nav(\'more\')"><span class="ni">☰</span><span class="nl">Plus</span></button></nav>';
+}
+function renderVerifySuccess() {
+  return '<div class="screen-full" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;min-height:100%"><div style="font-size:72px;margin-bottom:24px">✅</div><div class="bc" style="font-size:36px;font-weight:900;color:var(--ink);margin-bottom:12px">Email vérifié !</div><div style="font-size:15px;color:var(--ink3);margin-bottom:32px;line-height:1.6">Ton adresse email a été confirmée avec succès. Tu peux maintenant te connecter à VOLT.</div><button class="btn btn-blue" onclick="goToLogin()" style="max-width:280px">Se connecter</button></div>';
+}
+function renderLogin() {
+  return '<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column"><div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px 0"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:80px;color:#fff;letter-spacing:-3px;line-height:1;margin-bottom:8px">VOLT.</div><div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.45);margin-bottom:40px;letter-spacing:.04em">ÉNERGIE SANS LIMITES</div></div><div style="background:var(--white);border-radius:28px 28px 0 0;padding:28px 24px max(40px,env(safe-area-inset-bottom));animation:slideUp .4s ease"><div style="display:flex;gap:0;background:var(--bg2);border-radius:12px;padding:3px;margin-bottom:22px"><button id="tab-conn" onclick="switchTab(\'conn\')" style="flex:1;padding:10px;border:none;border-radius:10px;font-family:\'Barlow\',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;background:var(--white);color:var(--ink);box-shadow:0 1px 6px rgba(0,0,0,.08)">Connexion</button><button id="tab-reg" onclick="switchTab(\'reg\')" style="flex:1;padding:10px;border:none;border-radius:10px;font-family:\'Barlow\',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;background:transparent;color:var(--ink3)">Créer un compte</button></div><div id="login-form"><div id="conn-form"><div style="margin-bottom:14px"><label class="lbl">Email</label><input id="l-email" class="inp" type="email" placeholder="ton@email.ch" autocomplete="email" inputmode="email"/></div><div style="margin-bottom:20px"><label class="lbl">Mot de passe</label><input id="l-pw" class="inp" type="password" placeholder="••••••••" autocomplete="current-password"/></div><button id="l-btn" class="btn btn-blue" style="margin-bottom:12px">SE CONNECTER</button><button onclick="showForgot()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:13px;font-weight:600;cursor:pointer;padding:8px">Mot de passe oublié ?</button></div><div id="reg-form" style="display:none"><div style="margin-bottom:14px"><label class="lbl">Prénom & Nom</label><input id="r-name" class="inp" type="text" placeholder="Alex Martin" autocomplete="name"/></div><div style="margin-bottom:14px"><label class="lbl">Email</label><input id="r-email" class="inp" type="email" placeholder="ton@email.ch" autocomplete="email" inputmode="email"/></div><div style="margin-bottom:14px"><label class="lbl">Mot de passe</label><input id="r-pw" class="inp" type="password" placeholder="8 caractères min." autocomplete="new-password"/></div><div style="margin-bottom:14px"><label class="lbl">Téléphone</label><input id="r-phone" class="inp" type="tel" placeholder="+41 79 000 00 00" autocomplete="tel" inputmode="tel"/></div><div style="margin-bottom:20px"><div style="display:flex;align-items:flex-start;gap:10px"><div id="cgv-box" onclick="toggleCgv()" style="width:22px;height:22px;border-radius:6px;border:2px solid var(--border2);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:var(--bg2)"></div><span style="font-size:13px;color:var(--ink3);line-height:1.5">J\'accepte les <a href="https://volt.energy.ch/cgv" target="_blank" style="color:var(--blue);font-weight:600">Conditions Générales</a> et la <a href="https://volt.energy.ch/privacy" target="_blank" style="color:var(--blue);font-weight:600">Politique de confidentialité</a></span></div></div><button id="r-btn" class="btn btn-blue">CRÉER MON COMPTE</button></div></div></div></div>';
+}
+window.switchTab = function(tab) {
+  S.tab = tab;
+  const conn = document.getElementById('conn-form');
+  const reg = document.getElementById('reg-form');
+  const tc = document.getElementById('tab-conn');
+  const tr = document.getElementById('tab-reg');
+  if (!conn || !reg) return;
+  if (tab === 'conn') {
+    conn.style.display = ''; reg.style.display = 'none';
+    tc.style.background = 'var(--white)'; tc.style.color = 'var(--ink)'; tc.style.boxShadow = '0 1px 6px rgba(0,0,0,.08)';
+    tr.style.background = 'transparent'; tr.style.color = 'var(--ink3)'; tr.style.boxShadow = 'none';
+  } else {
+    conn.style.display = 'none'; reg.style.display = '';
+    tr.style.background = 'var(--white)'; tr.style.color = 'var(--ink)'; tr.style.boxShadow = '0 1px 6px rgba(0,0,0,.08)';
+    tc.style.background = 'transparent'; tc.style.color = 'var(--ink3)'; tc.style.boxShadow = 'none';
+  }
+};
+window.toggleCgv = function() { S.cgv = !S.cgv; const box = document.getElementById('cgv-box'); if (box) { box.style.background = S.cgv ? 'var(--blue)' : 'var(--bg2)'; box.style.borderColor = S.cgv ? 'var(--blue)' : 'var(--border2)'; box.innerHTML = S.cgv ? '<span style="color:#fff;font-size:14px;font-weight:700">✓</span>' : ''; } };
+window.showForgot = function() {
+  const existing = document.getElementById('forgot-modal');
+  if (existing) { existing.remove(); return; }
+  const m = document.createElement('div');
+  m.id = 'forgot-modal';
+  m.className = 'modal-bg';
+  m.innerHTML = '<div class="modal"><div class="modal-pill"></div><div class="modal-title">Mot de passe oublié</div><div style="margin-bottom:14px"><label class="lbl">Ton adresse email</label><input id="forgot-email" class="inp" type="email" placeholder="ton@email.ch" inputmode="email"/></div><button id="forgot-btn" class="btn btn-blue" style="margin-bottom:12px">ENVOYER LE LIEN</button><button onclick="document.getElementById(\'forgot-modal\').remove()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:13px;font-weight:600;cursor:pointer;padding:8px">Annuler</button></div>';
+  document.body.appendChild(m);
+  const btn = document.getElementById('forgot-btn');
+  btn.onclick = async function() {
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email) { toast('Entre ton adresse email', false); return; }
+    btn.disabled = true; btn.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/forgot-password', { email });
+    btn.disabled = false; btn.textContent = 'ENVOYER LE LIEN';
+    if (res.error) { toast(res.error, false); return; }
+    toast('Email envoyé ! Vérifie ta boîte.', true);
+    setTimeout(() => { const m = document.getElementById('forgot-modal'); if (m) m.remove(); }, 1500);
+  };
+};
+function bindLogin() {
+  if (S.tab === 'reg') switchTab('reg');
+  const lBtn = document.getElementById('l-btn');
+  if (lBtn) lBtn.onclick = async function() {
+    const email = document.getElementById('l-email').value.trim();
+    const pw = document.getElementById('l-pw').value;
+    if (!email || !pw) { toast('Remplis tous les champs', false); return; }
+    lBtn.disabled = true; lBtn.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/login', { email, password: pw });
+    lBtn.disabled = false; lBtn.textContent = 'SE CONNECTER';
+    if (res.error) { toast(res.error, false); return; }
+    S.user = res.user; S.token = res.token; S.screen = 'home'; saveSess(); render();
+  };
+  const rBtn = document.getElementById('r-btn');
+  if (rBtn) rBtn.onclick = async function() {
+    const name = document.getElementById('r-name').value.trim();
+    const email = document.getElementById('r-email').value.trim();
+    const pw = document.getElementById('r-pw').value;
+    const phone = document.getElementById('r-phone').value.trim();
+    if (!name || !email || !pw || !phone) { toast('Remplis tous les champs', false); return; }
+    if (!S.cgv) { toast('Accepte les CGV pour continuer', false); return; }
+    if (pw.length < 8) { toast('Mot de passe trop court (8 car. min.)', false); return; }
+    const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const ref = localStorage.getItem('volt_ref') || null;
+    rBtn.disabled = true; rBtn.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/register', { name, email, password: pw, phone, initials, referral_code: ref });
+    rBtn.disabled = false; rBtn.textContent = 'CRÉER MON COMPTE';
+    if (res.error) { toast(res.error, false); return; }
+    if (ref) localStorage.removeItem('volt_ref');
+    toast('Compte créé ! Vérifie ton email pour activer ton compte.', true);
+    switchTab('conn');
+  };
+}
+function daysUntilExpiry(u) {
+  if (!u || !u.subscribed) return null;
+  let d;
+  if (u.sub_expires_at) { d = new Date(u.sub_expires_at); }
+  else {
+    d = u.created_at ? new Date(u.created_at) : new Date();
+    const plan = PLANS.find(p => p.id === u.plan);
+    if (plan) {
+      if (plan.id === 'month') d.setMonth(d.getMonth() + 1);
+      else if (plan.id === 'quarter') d.setMonth(d.getMonth() + 3);
+      else if (plan.id === 'year') d.setFullYear(d.getFullYear() + 1);
+    }
+  }
+  const diff = d - new Date();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+function renderExpiryBanner(u) {
+  const days = daysUntilExpiry(u);
+  if (days === null || days > 7) return '';
+  const urgent = days <= 2;
+  const color = urgent ? 'var(--red)' : 'var(--orange)';
+  const bg = urgent ? 'rgba(255,59,92,.10)' : 'rgba(255,149,0,.10)';
+  const icon = urgent ? '🚨' : '⏰';
+  const msg = days <= 0
+    ? 'Ton abonnement a expiré. Renouvelle-le pour continuer.'
+    : days === 1
+      ? 'Ton abonnement expire demain ! Renouvelle maintenant.'
+      : `Ton abonnement expire dans ${days} jours.`;
+  return `<div style="margin:12px 16px 0;padding:12px 14px;background:${bg};border:1.5px solid ${color};border-radius:14px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="nav('pay')">
+    <span style="font-size:20px;flex-shrink:0">${icon}</span>
+    <span style="flex:1;font-size:13px;font-weight:600;color:${color};line-height:1.4">${msg}</span>
+    <span style="font-size:13px;font-weight:700;color:${color};white-space:nowrap">Renouveler →</span>
+  </div>`;
+}
+function renderHome() {
+  const u = S.user;
+  const left = cdLeft();
+  const subbed = u && u.subscribed;
+  const initials = u ? (u.initials || (u.name||'?')[0]) : '?';
+  const gym = u && u.gym ? u.gym : 'Partenaire VOLT';
+  let qrSection = '';
+  if (subbed) {
+    qrSection = '<div class="qr-card"><div class="qr-inner"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px"><div><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Ton QR Code</div><div style="font-size:19px;font-weight:700;color:#fff">' + (u.name||'Membre') + '</div><div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:2px">' + gym + '</div></div><div style="background:rgba(255,255,255,.12);border-radius:10px;padding:6px 10px;text-align:center"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase">Expire</div><div style="font-size:13px;font-weight:700;color:#fff">' + getExpiryText(u) + '</div></div></div><div style="display:flex;gap:16px;align-items:flex-start"><div style="position:relative"><div class="qr-box" id="qr-el" style="width:180px;height:180px;display:flex;align-items:center;justify-content:center"></div>' + (left>0?'<div class="qr-overlay" id="cd-overlay" onclick="toggleQrView()"><div style="font-size:32px">🔒</div><div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.06em">Cooldown actif</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Appuie pour voir</div></div>':'') + '</div><div style="flex:1;padding-top:4px"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Prochaine boisson</div>' + (left>0?'<div id="cd-txt" style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:32px;color:#fff;line-height:1">--:--</div><div class="cd-track" style="margin-top:8px"><div class="cd-fill" id="cd-bar" style="width:0%;background:var(--blue)"></div></div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px">Patiente encore un peu…</div>':'<div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:32px;color:var(--green);line-height:1">PRÊT</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:6px">Montre ton QR code</div>') + '</div></div></div></div>';
+  } else {
+    qrSection = '<div style="margin:14px 16px 0;background:var(--white);border-radius:20px;border:1px solid var(--border2);padding:24px;text-align:center"><div style="font-size:48px;margin-bottom:12px">⚡</div><div class="bc" style="font-size:24px;font-weight:900;color:var(--ink);margin-bottom:8px">Accède à l\'illimité</div><div style="font-size:14px;color:var(--ink3);margin-bottom:20px;line-height:1.5">Abonne-toi pour scanner dans tous les établissements partenaires VOLT.</div><button class="btn btn-blue" onclick="nav(\'pay\')">VOIR LES ABONNEMENTS</button></div>';
+  }
+  const scanCount = '<span id="scan-count">0</span>';
+  const statToday = '<span id="stat-today">0</span>';
+  const statMonth = '<span id="stat-month">0</span>';
+  return '<div class="screen"><div class="hdr"><div class="hdr-row"><div class="logo-txt">VOLT.</div><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff">' + initials + '</div></div></div></div>' + renderExpiryBanner(u) + qrSection + '<div style="padding:16px"><div class="stat-grid" style="margin-bottom:16px"><div class="stat-box"><div class="stat-v">' + scanCount + '</div><div class="stat-l">Total scans</div></div><div class="stat-box"><div class="stat-v">' + statToday + '</div><div class="stat-l">Aujourd\'hui</div></div><div class="stat-box"><div class="stat-v">' + statMonth + '</div><div class="stat-l">Ce mois</div></div></div><div style="margin-bottom:8px"><div class="lbl" style="margin-bottom:10px">Historique récent</div><div id="hist-list"><div style="text-align:center;padding:20px;color:var(--ink4);font-size:14px">Chargement…</div></div></div></div></div>' + bnav('home');
+}
+function renderAccount() {
+  const u = S.user || {};
+  const initials = u.initials || (u.name||'?')[0] || '?';
+  return '<div class="screen"><div class="hdr" style="padding-bottom:16px"><div class="hdr-row"><div class="logo-txt">Mon Compte</div></div></div><div style="padding:16px"><div style="background:linear-gradient(135deg,#060D2E,#0A1A5C);border-radius:20px;padding:20px;margin-bottom:16px;display:flex;align-items:center;gap:16px"><div style="width:56px;height:56px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;color:#fff;flex-shrink:0">' + initials + '</div><div><div style="font-weight:700;font-size:17px;color:#fff">' + (u.name||'—') + '</div><div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:2px">' + (u.email||'') + '</div><div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:1px">' + (u.phone||'') + '</div></div></div><div style="margin-bottom:8px"><div class="lbl" style="margin-bottom:8px">Abonnement</div><div class="card" style="padding:16px;margin-bottom:4px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Statut</div><div style="font-size:16px;font-weight:700;color:' + (u.subscribed?'var(--green)':'var(--red)') + ';margin-top:2px">' + (u.subscribed?'✅ Actif':'❌ Inactif') + '</div></div><div style="text-align:right"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Plan</div><div style="font-size:16px;font-weight:700;color:var(--ink);margin-top:2px">' + (u.plan?u.plan.toUpperCase():'—') + '</div></div></div>' + (u.subscribed?'<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:13px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em">Expire le</div><div style="font-size:15px;font-weight:700;color:var(--ink)">' + getExpiryText(u) + '</div></div>':'<button class="btn btn-blue" style="margin-top:8px" onclick="nav(\'pay\')">SOUSCRIRE UN ABONNEMENT</button>') + '</div></div><div class="lbl" style="margin-bottom:8px;margin-top:16px">Paramètres</div><div class="row-item" onclick="showEditProfile()"><div class="row-ico">✏️</div><span class="row-lbl">Modifier le profil</span><span class="row-chev">›</span></div><div class="row-item" onclick="showChangePassword()"><div class="row-ico">🔑</div><span class="row-lbl">Changer le mot de passe</span><span class="row-chev">›</span></div><div class="row-item row-danger" onclick="confirmLogout()" style="margin-top:8px"><div class="row-ico">🚪</div><span class="row-lbl">Se déconnecter</span><span class="row-chev">›</span></div></div></div></div>' + bnav('account');
+}
+window.confirmLogout = function() {
+  const m = document.createElement('div'); m.className = 'modal-bg';
+  m.innerHTML = '<div class="modal"><div class="modal-pill"></div><div class="modal-title">Se déconnecter ?</div><p style="color:var(--ink3);font-size:14px;margin-bottom:24px;line-height:1.5">Tu devras te reconnecter avec ton email et ton mot de passe.</p><button class="btn btn-dark" onclick="doLogout()" style="margin-bottom:10px">SE DÉCONNECTER</button><button onclick="this.closest(\'.modal-bg\').remove()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:14px;font-weight:600;cursor:pointer;padding:10px">Annuler</button></div>';
+  document.body.appendChild(m);
+};
+window.showEditProfile = function() {
+  const u = S.user || {};
+  const m = document.createElement('div'); m.className = 'modal-bg';
+  m.innerHTML = '<div class="modal"><div class="modal-pill"></div><div class="modal-title">Modifier le profil</div><div style="margin-bottom:14px"><label class="lbl">Prénom & Nom</label><input id="ep-name" class="inp" type="text" value="' + (u.name||'') + '"/></div><div style="margin-bottom:20px"><label class="lbl">Téléphone</label><input id="ep-phone" class="inp" type="tel" value="' + (u.phone||'') + '" inputmode="tel"/></div><button id="ep-btn" class="btn btn-blue" style="margin-bottom:10px">ENREGISTRER</button><button onclick="this.closest(\'.modal-bg\').remove()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:14px;font-weight:600;cursor:pointer;padding:10px">Annuler</button></div>';
+  document.body.appendChild(m);
+  document.getElementById('ep-btn').onclick = async function() {
+    const name = document.getElementById('ep-name').value.trim();
+    const phone = document.getElementById('ep-phone').value.trim();
+    if (!name) { toast('Entre ton prénom et nom', false); return; }
+    this.disabled = true; this.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/user-update', { name, phone });
+    this.disabled = false; this.textContent = 'ENREGISTRER';
+    if (res.error) { toast(res.error, false); return; }
+    S.user = Object.assign({}, S.user, { name, phone, initials: name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2) });
+    saveSess(); toast('Profil mis à jour !', true);
+    m.remove(); render();
+  };
+};
+window.showChangePassword = function() {
+  const m = document.createElement('div'); m.className = 'modal-bg';
+  m.innerHTML = '<div class="modal"><div class="modal-pill"></div><div class="modal-title">Changer le mot de passe</div><div style="margin-bottom:14px"><label class="lbl">Mot de passe actuel</label><input id="cp-old" class="inp" type="password" placeholder="••••••••"/></div><div style="margin-bottom:14px"><label class="lbl">Nouveau mot de passe</label><input id="cp-new" class="inp" type="password" placeholder="8 car. min."/></div><div style="margin-bottom:20px"><label class="lbl">Confirmer le nouveau</label><input id="cp-conf" class="inp" type="password" placeholder="••••••••"/></div><button id="cp-btn" class="btn btn-blue" style="margin-bottom:10px">MODIFIER</button><button onclick="this.closest(\'.modal-bg\').remove()" style="width:100%;background:none;border:none;color:var(--ink3);font-size:14px;font-weight:600;cursor:pointer;padding:10px">Annuler</button></div>';
+  document.body.appendChild(m);
+  document.getElementById('cp-btn').onclick = async function() {
+    const oldPw = document.getElementById('cp-old').value;
+    const newPw = document.getElementById('cp-new').value;
+    const conf = document.getElementById('cp-conf').value;
+    if (!oldPw || !newPw || !conf) { toast('Remplis tous les champs', false); return; }
+    if (newPw.length < 8) { toast('Nouveau mot de passe trop court', false); return; }
+    if (newPw !== conf) { toast('Les mots de passe ne correspondent pas', false); return; }
+    this.disabled = true; this.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/change-password', { old_password: oldPw, new_password: newPw });
+    this.disabled = false; this.textContent = 'MODIFIER';
+    if (res.error) { toast(res.error, false); return; }
+    toast('Mot de passe modifié !', true); m.remove();
+  };
+};
+function renderMore() {
+  const u = S.user || {};
+  const refCode = u.referral_code || '—';
+  const refCount = u.referral_count || 0;
+  const freeMonths = u.free_months || 0;
+  return '<div class="screen"><div class="hdr" style="padding-bottom:16px"><div class="hdr-row"><div class="logo-txt">Plus</div></div></div><div style="padding:16px"><div class="ref-card" style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Programme de parrainage</div><div style="font-size:22px;font-weight:800;color:#fff;margin-bottom:4px">Offre 1 mois, gagne 1 mois</div><div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.5">Pour chaque ami abonné, vous recevez chacun <strong style="color:#fff">1 mois offert</strong>.</div><div style="display:flex;gap:8px;margin-bottom:12px"><div style="flex:1;background:rgba(255,255,255,.12);border-radius:12px;padding:12px;text-align:center"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:28px;color:#fff">' + refCount + '</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:600">Parrainages</div></div><div style="flex:1;background:rgba(255,255,255,.12);border-radius:12px;padding:12px;text-align:center"><div style="font-family:\'Barlow Condensed\',sans-serif;font-weight:900;font-size:28px;color:#fff">' + freeMonths + '</div><div style="font-size:11px;color:rgba(255,255,255,.5);font-weight:600">Mois offerts</div></div></div><div class="ref-link-box"><span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.9);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">volt.energy.ch/?ref=' + refCode + '</span><button onclick="copyRef()" style="background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">Copier</button></div><button onclick="shareRef()" class="btn" style="background:rgba(255,255,255,.15);color:#fff;margin-top:10px;font-size:16px">PARTAGER MON LIEN</button></div><div class="lbl" style="margin-bottom:8px">Informations</div><div class="row-item" onclick="window.open(\'https://volt.energy.ch/faq\',\'_blank\')"><div class="row-ico">❓</div><span class="row-lbl">FAQ & Aide</span><span class="row-chev">›</span></div><div class="row-item" onclick="window.open(\'https://volt.energy.ch/partenaires\',\'_blank\')"><div class="row-ico">📍</div><span class="row-lbl">Trouver un partenaire</span><span class="row-chev">›</span></div><div class="row-item" onclick="window.open(\'https://volt.energy.ch/cgv\',\'_blank\')"><div class="row-ico">📄</div><span class="row-lbl">Conditions Générales</span><span class="row-chev">›</span></div><div class="row-item" onclick="window.open(\'https://volt.energy.ch/privacy\',\'_blank\')"><div class="row-ico">🔒</div><span class="row-lbl">Politique de confidentialité</span><span class="row-chev">›</span></div><div class="row-item" onclick="window.open(\'mailto:support@volt.energy.ch\',\'_blank\')"><div class="row-ico">✉️</div><span class="row-lbl">Contacter le support</span><span class="row-chev">›</span></div></div></div>' + bnav('more');
+}
+function bindMore() {}
+function bindAccount() {}
+function renderPay() {
+  const u = S.user || {};
+  const plans = PLANS;
+  let plansHtml = plans.map(p => {
+    const isFeat = p.id === 'year';
+    const isSel = S.plan === p.id;
+    let cls = 'plan-card' + (isFeat?' feat':'') + (isSel?' sel':'');
+    const textColor = isFeat ? '#fff' : 'var(--ink)';
+    const subColor = isFeat ? 'rgba(255,255,255,.7)' : 'var(--ink3)';
+    const badgeHtml = p.badge ? `<div style="position:absolute;top:-1px;right:14px;background:${isFeat?'rgba(255,255,255,.22)':'var(--blue)'};color:#fff;font-size:10px;font-weight:800;padding:4px 10px;border-radius:0 0 10px 10px;letter-spacing:.04em">${p.badge}</div>` : '';
+    const savingHtml = p.saving ? `<span style="font-size:12px;font-weight:700;color:${isFeat?'rgba(255,255,255,.7)':'var(--green)'};background:${isFeat?'rgba(255,255,255,.15)':'rgba(0,196,122,.12)'};padding:3px 8px;border-radius:20px">${p.saving}</span>` : '';
+    const featHtml = p.feat.map(f=>`<div style="display:flex;align-items:center;gap:6px;font-size:13px;color:${subColor};margin-bottom:3px"><span style="color:${isFeat?'rgba(255,255,255,.6)':'var(--blue)'};font-size:11px">✓</span>${f}</div>`).join('');
+    return `<div class="${cls}" onclick="selPlan('${p.id}')">${badgeHtml}<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;color:${textColor};letter-spacing:.02em">${p.label}</div>${savingHtml}</div><div style="text-align:right"><div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:${textColor};line-height:1">CHF ${p.chf}</div><div style="font-size:12px;color:${subColor}">${p.per}</div></div></div><div>${featHtml}</div></div>`;
+  }).join('');
+  const hasStripe = typeof Stripe !== 'undefined';
+  let payMethodHtml = '';
+  if (hasStripe) {
+    payMethodHtml = `<div style="display:flex;gap:8px;margin-bottom:14px"><button id="pm-card" onclick="switchPayMethod('card')" class="btn btn-sm" style="flex:1;font-size:14px;background:var(--blue);color:#fff">💳 Carte</button><button id="pm-twint" onclick="switchPayMethod('twint')" class="btn btn-sm" style="flex:1;font-size:14px;background:var(--bg2);color:var(--ink)">TWINT</button></div><div id="card-section"><div style="margin-bottom:10px"><label class="lbl">Carte de crédit / débit</label><div id="stripe-el"></div></div></div><div id="twint-section" style="display:none"><div style="background:var(--bg2);border-radius:12px;padding:16px;text-align:center;margin-bottom:10px"><div style="font-size:32px;margin-bottom:8px">📱</div><div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:4px">Paiement TWINT</div><div style="font-size:13px;color:var(--ink3);line-height:1.5">Tu seras redirigé vers TWINT pour confirmer le paiement.</div></div></div>`;
+  }
+  const alreadySub = u.subscribed;
+  return '<div class="screen"><div class="hdr" style="padding-bottom:16px"><div class="hdr-row"><div class="logo-txt">' + (alreadySub?'Renouveler':'Abonnement') + '</div></div></div><div style="padding:16px">' + (alreadySub?'<div style="background:var(--blue-soft);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:16px;font-size:13px;font-weight:600;color:var(--blue)">✅ Abonnement actif jusqu\'au ' + getExpiryText(u) + '. Tu peux le renouveler ici.</div>':'') + plansHtml + (hasStripe?'<div style="margin-bottom:16px"><div class="lbl" style="margin-bottom:10px">Moyen de paiement</div>' + payMethodHtml + '</div>':'<div style="background:var(--bg2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--ink3);text-align:center">Chargement du module de paiement…</div>') + '<button id="pay-btn" class="btn btn-blue">PAYER CHF ' + (PLANS.find(p=>p.id===S.plan)||PLANS[0]).chf + '</button><div style="text-align:center;margin-top:12px;font-size:11px;color:var(--ink4)">🔒 Paiement sécurisé · Powered by Stripe</div></div></div>' + bnav('pay');
+}
+window.selPlan = function(id) {
+  S.plan = id;
+  const payBtn = document.getElementById('pay-btn');
+  if (payBtn) { const p = PLANS.find(x=>x.id===id)||PLANS[0]; payBtn.textContent = 'PAYER CHF ' + p.chf; }
+  document.querySelectorAll('.plan-card').forEach((el,i) => {
+    const p = PLANS[i];
+    const isFeat = p && p.id === 'year';
+    el.classList.toggle('sel', p && p.id === id);
+    if (isFeat) el.style.border = (p.id === id) ? '2px solid rgba(255,255,255,.6)' : '';
+    else el.style.borderColor = (p && p.id === id) ? 'var(--blue)' : '';
+  });
+};
+window.switchPayMethod = function(method) {
+  S.payMethod = method;
+  const cardSection = document.getElementById('card-section');
+  const twintSection = document.getElementById('twint-section');
+  const pmCard = document.getElementById('pm-card');
+  const pmTwint = document.getElementById('pm-twint');
+  if (!cardSection) return;
+  if (method === 'card') {
+    cardSection.style.display = ''; twintSection.style.display = 'none';
+    if (pmCard) { pmCard.style.background = 'var(--blue)'; pmCard.style.color = '#fff'; }
+    if (pmTwint) { pmTwint.style.background = 'var(--bg2)'; pmTwint.style.color = 'var(--ink)'; }
+  } else {
+    cardSection.style.display = 'none'; twintSection.style.display = '';
+    if (pmTwint) { pmTwint.style.background = 'var(--blue)'; pmTwint.style.color = '#fff'; }
+    if (pmCard) { pmCard.style.background = 'var(--bg2)'; pmCard.style.color = 'var(--ink)'; }
+  }
+};
+let stripeInstance = null, stripeElements = null, cardElement = null;
+function bindPay() {
+  if (typeof Stripe !== 'undefined' && !stripeInstance) {
+    stripeInstance = Stripe(CFG.STRIPE_KEY);
+    stripeElements = stripeInstance.elements();
+    cardElement = stripeElements.create('card', { style: { base: { fontFamily: '\'Barlow\', sans-serif', fontSize: '16px', color: '#060D2E', '::placeholder': { color: '#A8B4CC' } } } });
+    const stripeEl = document.getElementById('stripe-el');
+    if (stripeEl) cardElement.mount('#stripe-el');
+  } else if (stripeInstance && cardElement) {
+    const stripeEl = document.getElementById('stripe-el');
+    if (stripeEl) { try { cardElement.mount('#stripe-el'); } catch(e) {} }
+  }
+  const payBtn = document.getElementById('pay-btn');
+  if (payBtn) payBtn.onclick = async function() {
+    if (typeof Stripe === 'undefined') { toast('Module de paiement non chargé. Recharge la page.', false); return; }
+    if (S.payMethod === 'twint') {
+      payBtn.disabled = true; payBtn.innerHTML = '<div class="spin"></div>';
+      const res = await api('/api/pay-twint', { plan: S.plan });
+      payBtn.disabled = false; payBtn.textContent = 'PAYER CHF ' + (PLANS.find(p=>p.id===S.plan)||PLANS[0]).chf;
+      if (res.error) { toast(res.error, false); return; }
+      if (res.redirect_url) { window.location.href = res.redirect_url; }
+      return;
+    }
+    if (!cardElement) { toast('Carte non initialisée. Recharge la page.', false); return; }
+    payBtn.disabled = true; payBtn.innerHTML = '<div class="spin"></div>';
+    const res = await api('/api/pay', { plan: S.plan });
+    if (res.error) { toast(res.error, false); payBtn.disabled = false; payBtn.textContent = 'PAYER CHF ' + (PLANS.find(p=>p.id===S.plan)||PLANS[0]).chf; return; }
+    const { error: stripeError, paymentIntent } = await stripeInstance.confirmCardPayment(res.client_secret, { payment_method: { card: cardElement } });
+    if (stripeError) { toast(stripeError.message, false); payBtn.disabled = false; payBtn.textContent = 'PAYER CHF ' + (PLANS.find(p=>p.id===S.plan)||PLANS[0]).chf; return; }
+    if (paymentIntent.status === 'succeeded') {
+      const confirm = await api('/api/pay-confirm', { payment_intent_id: paymentIntent.id, method: 'card' });
+      if (confirm.error) { toast(confirm.error, false); payBtn.disabled = false; payBtn.textContent = 'PAYER CHF ' + (PLANS.find(p=>p.id===S.plan)||PLANS[0]).chf; return; }
+      const meRes = await api('/api/user-update?action=me', null, 'GET');
+      if (meRes.user) { S.user = Object.assign({}, S.user, meRes.user); saveSess(); }
+      toast('✅ Abonnement activé ! Bienvenue chez VOLT.', true);
+      nav('home');
+    }
+  };
+}
+function bindHome() { const u = S.user; if (u.subscribed) { generateRotatingQR(); } if (cdLeft() > 0) startCdTick(); api('/api/user-update?action=history', null, 'GET').then(r => { if (r.history) { S.history = r.history; const cnt = document.getElementById('scan-count'); const st = document.getElementById('stat-today'); const sm = document.getElementById('stat-month'); if (cnt) cnt.textContent = r.history.length; if (st) st.textContent = r.history.filter(h=>h.today).length; if (sm) sm.textContent = r.history.length; } else { ['scan-count','stat-today','stat-month'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = '0'; }); } }); }
+async function generateRotatingQR() { const el = document.getElementById('qr-el'); if (!el) return; if (typeof QRCode === 'undefined') { setTimeout(generateRotatingQR, 400); return; } const now = Date.now(); if (qrCache.dataUrl && now < qrCache.expiry) { el.innerHTML = '<img src="' + qrCache.dataUrl + '" style="width:180px;height:180px;display:block;border-radius:4px"/>'; return; } el.style.opacity = '0'; el.style.transition = 'opacity 0.25s'; el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center"><div class="spin" style="border-color:rgba(0,87,255,.3);border-top-color:var(--blue)"></div></div>'; requestAnimationFrame(() => { el.style.opacity = '1'; }); const res = await api('/api/qr-token', null, 'GET'); if (res.error || !res.token) { el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>'; return; } const prevCd = cdLeft(); if (res.cooldown_remaining > 0) { S.cdEnd = Date.now()/1000 + res.cooldown_remaining; saveSess(); if (prevCd === 0) { render(); return; } startCdTick(); } el.style.opacity = '0'; el.innerHTML = ''; try { new QRCode(el, { text: 'volt://' + res.token, width: 180, height: 180, colorDark: '#050A14', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M }); const canvas = el.querySelector('canvas'); if (canvas) { qrCache.dataUrl = canvas.toDataURL(); qrCache.expiry = now + 110_000; } } catch(e) { el.innerHTML = '<div style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;font-size:40px">⚡</div>'; } requestAnimationFrame(() => { el.style.transition = 'opacity 0.4s'; el.style.opacity = '1'; }); if (qrRotateTimer) clearTimeout(qrRotateTimer); qrRotateTimer = setTimeout(generateRotatingQR, 110_000); }
+(function boot() { try { loadSess(); if (DEMO && !S.user) { S.user = DEMO_USER; S.token = 'demo'; S.screen = 'home'; } const VERIFY_STATUS = PARAMS.get('verify'); if (VERIFY_STATUS === 'success') { localStorage.removeItem('volt_s'); S = { screen:'verify-success', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card', notifs:true }; window.history.replaceState({}, document.title, window.location.pathname); } else if (VERIFY_STATUS === 'expired') { window.history.replaceState({}, document.title, window.location.pathname); setTimeout(() => toast('Lien expiré. Reconnecte-toi pour renvoyer un email.', false), 400); } const PAYMENT_STATUS = PARAMS.get('payment'); if (PAYMENT_STATUS === 'twint_success') { const piId = PARAMS.get('payment_intent'); window.history.replaceState({}, document.title, window.location.pathname); setTimeout(async () => { if (S.token) { if (piId) { await api('/api/pay-confirm', { payment_intent_id: piId, method: 'twint' }); } const meRes = await api('/api/user-update?action=me', null, 'GET'); if (meRes.user) { S.user = Object.assign({}, S.user, meRes.user); saveSess(); render(); if (S.user.subscribed) { toast('✅ Abonnement activé ! Bienvenue chez VOLT.', true); } else { toast('Paiement en cours de traitement. Réessaie dans quelques instants.', true); } } } }, 500); } render(); } catch(e) { try { const app = document.getElementById('app'); if (app) { app.innerHTML = renderLogin(); bindLogin(); } } catch(e2) { const app = document.getElementById('app'); if (app) app.innerHTML = '<div style="height:100%;background:#060D2E;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center"><div style="font-family:system-ui,sans-serif;font-weight:900;font-size:60px;color:#fff;letter-spacing:-2px">VOLT.</div><div style="color:rgba(255,255,255,.5);font-size:14px;margin-top:16px">Erreur de chargement.</div><button onclick="location.reload()" style="margin-top:24px;background:#0057FF;color:#fff;border:none;border-radius:50px;padding:14px 32px;font-size:16px;font-weight:700;cursor:pointer">Réessayer</button></div>'; } } })();
+</script></body>
+</html>
