@@ -457,9 +457,9 @@ function showSubscribeModal(userId) {
         <div>
           <label class="lbl">Plan</label>
           <select class="inp" id="sub-plan">
-            <option value="month">Mensuel — CHF 19.90/mois</option>
-            <option value="quarter" selected>Trimestriel — CHF 49.90/3 mois</option>
-            <option value="year">Annuel — CHF 149.90/an</option>
+            <option value="month">Mensuel — CHF 9.90/mois</option>
+            <option value="quarter" selected>Trimestriel — CHF 24.90/3 mois</option>
+            <option value="year">Annuel — CHF 89.90/an</option>
           </select>
         </div>
         <div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--orange);font-weight:500">
@@ -475,9 +475,11 @@ function showSubscribeModal(userId) {
 }
 
 async function toggleSubscribe(userId, subscribed, plan) {
+  const btn = document.querySelector('#modal-bg .btn-blue, #modal-bg .btn-danger');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await adminApi('/api/admin?action=subscribe', { user_id: userId, subscribed, plan }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled = false; btn.innerHTML = subscribed ? 'Activer ✓' : 'Résilier ✓'; } return; }
   closeModal();
-  if (res.error) { toast('Erreur: ' + res.error, false); return; }
   const c = S.clients.find(x=>x.id==userId);
   if (c) { c.subscribed = subscribed; if (subscribed) c.plan = plan; }
   toast(subscribed ? `✅ Abonnement activé (${plan})` : `⛔ Abonnement résilié`);
@@ -738,8 +740,10 @@ async function addGym() {
   const pwd     = document.getElementById('g-pwd').value.trim();
   const address = document.getElementById('g-ville')?.value.trim() || '';
   if (!name||!filiale||!email||!pwd) { toast('Remplis tous les champs.', false); return; }
+  const btn = document.querySelector('#modal-bg .btn-blue');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await adminApi('/api/admin?action=gyms', { name, address, filiale, email, password:pwd }, 'POST');
-  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.innerHTML = 'Créer ✓'; btn.disabled = false; } return; }
   S.gyms.push({ id: res.gym?.id || Date.now().toString(), name, filiale, email, address, members:0, scans:0, revenue:0, active:true });
   closeModal();
   toast(`✅ ${name} ajouté !`);
@@ -753,19 +757,24 @@ async function editGym(id) {
   const filiale = document.getElementById('eg-filiale').value.trim() || g.filiale;
   const email   = document.getElementById('eg-email').value.trim()   || g.email;
   const pwd     = document.getElementById('eg-pwd').value.trim();
+  const btn = document.querySelector('#modal-bg .btn-blue');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await adminApi('/api/admin?action=gyms', { id, name, filiale, email, password:pwd||undefined }, 'PUT');
-  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.innerHTML = 'Enregistrer ✓'; btn.disabled = false; } return; }
   g.name=name; g.filiale=filiale; g.email=email;
   closeModal();
   toast(`✅ ${name} mis à jour !`);
   goTo('gyms');
 }
 
-function toggleGym(id) {
+async function toggleGym(id) {
   const g = S.gyms.find(x=>x.id==id);
   if (!g) return;
-  g.active = !g.active;
-  toast(g.active ? `✅ ${g.name} activé` : `⚠️ ${g.name} désactivé`);
+  const active = !g.active;
+  const res = await adminApi('/api/admin?action=gyms', { id, active }, 'PUT');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  g.active = active;
+  toast(active ? `✅ ${g.name} activé` : `⚠️ ${g.name} désactivé`);
   goTo('gyms');
 }
 
@@ -855,8 +864,10 @@ async function addMachine() {
   const gym_id     = document.getElementById('m-gym').value || null;
   const secret     = document.getElementById('m-secret').value.trim();
   if (!machine_id||!name) { toast('Remplis Machine ID et Nom.', false); return; }
+  const btn = document.querySelector('#modal-bg .btn-blue');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await adminApi('/api/admin?action=machines', { machine_id, name, gym_id, secret }, 'POST');
-  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.innerHTML = 'Créer ✓'; btn.disabled = false; } return; }
   const gym = S.gyms.find(g=>g.id==gym_id);
   S.machines.push({ id: res.machine?.id || Date.now().toString(), machine_id, name, gym_id, gym_name: gym?.name||null, secret, active:true });
   closeModal(); toast(`✅ Machine ${machine_id} ajoutée !`); goTo('machines');
@@ -869,8 +880,10 @@ async function editMachine(id) {
   const name       = document.getElementById('em-name').value.trim()   || m.name;
   const gym_id     = document.getElementById('em-gym').value           || null;
   const secret     = document.getElementById('em-secret').value.trim() || m.secret;
+  const btn = document.querySelector('#modal-bg .btn-blue');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const res = await adminApi('/api/admin?action=machines', { id, machine_id, name, gym_id, secret }, 'PUT');
-  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.innerHTML = 'Enregistrer ✓'; btn.disabled = false; } return; }
   const gym = S.gyms.find(g=>g.id==gym_id);
   Object.assign(m, { machine_id, name, gym_id, gym_name: gym?.name||null, secret });
   closeModal(); toast(`✅ ${name} mis à jour !`); goTo('machines');
