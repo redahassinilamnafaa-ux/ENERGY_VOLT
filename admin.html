@@ -123,6 +123,17 @@ tr:hover td{background:var(--bg);transition:background .1s}
 .empty-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--ink);margin-bottom:6px}
 .empty-sub{font-size:14px;font-weight:500}
 .loading{display:flex;align-items:center;justify-content:center;padding:60px;gap:12px;color:var(--ink3);font-weight:600;font-size:14px}
+@media(max-width:820px){
+  .layout{flex-direction:column}
+  .sidebar{position:sticky;top:0;width:100%;height:auto;flex-direction:row;align-items:center;overflow-x:auto;border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}
+  .sidebar-logo{padding:14px 16px;border-bottom:none;border-right:1px solid rgba(255,255,255,.06);flex-shrink:0}
+  .sidebar-logo-badge{display:none}
+  .sidebar-nav{display:flex;flex-direction:row;padding:8px;gap:6px;flex:1;overflow-x:auto}
+  .nav-item{width:auto;white-space:nowrap;margin-bottom:0}
+  .sidebar-footer{display:none}
+  .main{margin-left:0;padding:18px 14px}
+  .topbar{flex-wrap:wrap;gap:10px}
+}
 @media print{.sidebar,.topbar-actions,.btn{display:none!important}.main{margin:0;padding:0}}
 </style>
 </head>
@@ -179,6 +190,7 @@ const PAGES = [
   { id:'compta',    icon:'📋', label:'Comptabilité'},
   { id:'gyms',      icon:'🏋️', label:'Fitness'     },
   { id:'machines',  icon:'🖥️',  label:'Machines'    },
+  { id:'config',    icon:'⚙️',  label:'Config'      },
 ];
 
 function goTo(page) {
@@ -197,15 +209,18 @@ function renderPage() {
   if (S.page === 'compta')    return pageCompta();
   if (S.page === 'gyms')      return pageGyms();
   if (S.page === 'machines')  return pageMachines();
+  if (S.page === 'config')    return pageConfig();
   return '';
 }
 
 function bindPage() {
   document.querySelectorAll('.virement-status-select').forEach(sel => {
-    sel.onchange = function() {
+    sel.onchange = async function() {
       const id = this.dataset.id; const status = this.value;
       const v = S.virements.find(x => x.id === id);
       if (!v) return;
+      const res = await adminApi('/api/admin?action=virements', { gym_id: v.gym_id, month_date: v.id.split('-').slice(1).join('-'), status }, 'PUT');
+      if (res.error) { toast('Erreur: ' + res.error, false); goTo(S.page); return; }
       v.status = status; v.date_paid = status === 'paid' ? today() : null;
       toast(status === 'paid' ? `✅ Virement ${v.gym_name} marqué PAYÉ` : `🔄 Statut mis à jour`);
       goTo(S.page);
@@ -254,11 +269,11 @@ async function doLogin() {
       adminApi('/api/admin?action=virements'),
     ]);
     if (!stats.error) S._stats = stats;
-    if (!clientsRes.error  && clientsRes.clients?.length)    S.clients   = clientsRes.clients;
-    if (!paymentsRes.error && paymentsRes.payments?.length)  S.payments  = paymentsRes.payments;
-    if (!gymsRes.error     && gymsRes.gyms?.length)          S.gyms      = gymsRes.gyms;
-    if (!machinesRes.error && machinesRes.machines)          S.machines  = machinesRes.machines;
-    if (!virementsRes.error&& virementsRes.virements?.length)S.virements = virementsRes.virements;
+    if (!clientsRes.error  && Array.isArray(clientsRes.clients))      S.clients   = clientsRes.clients;
+    if (!paymentsRes.error && Array.isArray(paymentsRes.payments))    S.payments  = paymentsRes.payments;
+    if (!gymsRes.error     && Array.isArray(gymsRes.gyms))            S.gyms      = gymsRes.gyms;
+    if (!machinesRes.error && Array.isArray(machinesRes.machines))    S.machines  = machinesRes.machines;
+    if (!virementsRes.error&& Array.isArray(virementsRes.virements))  S.virements = virementsRes.virements;
   } catch(e) { console.log('Backend indisponible, mode démo'); }
   renderApp();
 }
@@ -308,7 +323,7 @@ function renderApp() {
 
 function pageDashboard() {
   const rs = S._stats;
-  const totalRev    = rs.rev_total   || S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount,0);
+  const totalRev    = rs.rev_total   || S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+(Number(p.amount)||0),0);
   const monthRev    = rs.rev_month   || 0;
   const activeClients = rs.subscribers || S.clients.filter(c=>c.subscribed).length;
   const totalScans  = rs.scans_month || 0;
@@ -497,7 +512,7 @@ function exportClientsCSV() {
 
 function pagePayments() {
   const filtered = filterBySearch(S.payments, ['client','plan','method']);
-  const total    = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+p.amount, 0);
+  const total    = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+(Number(p.amount)||0), 0);
   return `
   <div class="topbar">
     <div><div class="page-title">Paiements</div><div class="page-sub">Total encaissé : ${fmtChf(total)}</div></div>
@@ -528,7 +543,8 @@ function pagePayments() {
 }
 
 function exportPaymentsCSV() {
-  const rows = S.payments.map(p => [p.client, p.plan, p.amount, p.method, p.date, p.status].join(','));
+  const esc = v => `"${String(v==null?'':v).replace(/"/g,'""')}"`;
+  const rows = S.payments.map(p => [p.client, p.plan, p.amount, p.method, p.date, p.status].map(esc).join(','));
   downloadCSV(['Client,Plan,Montant,Méthode,Date,Statut', ...rows].join('\n'), 'volt-paiements.csv');
 }
 
@@ -597,8 +613,14 @@ function pageVirements() {
   </div>`;
 }
 
-function payAllPending() {
+async function payAllPending() {
+  const pending = S.virements.filter(v => v.status === 'pending');
+  if (pending.length === 0) { toast('Aucun virement en attente.'); return; }
+  if (!confirm(`Marquer ${pending.length} virement(s) en attente comme PAYÉS ?\n\nCette action enregistre les paiements de façon définitive.`)) return;
   const t = today();
+  const items = pending.map(v => ({ gym_id: v.gym_id, month_date: v.id.split('-').slice(1).join('-'), status: 'paid' }));
+  const res = await adminApi('/api/admin?action=virements', { items }, 'PUT');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
   S.virements = S.virements.map(v => v.status==='pending' ? {...v,status:'paid',date_paid:t} : v);
   toast('✅ Tous les virements en attente marqués comme payés !');
   goTo('virements');
@@ -720,12 +742,13 @@ function showEditGym(id) {
   document.body.insertAdjacentHTML('beforeend',`
   <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
-      <div class="modal-title">✏️ Modifier — ${g.name}</div>
+      <div class="modal-title">✏️ Modifier — ${escapeHtml(g.name)}</div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div><label class="lbl">Nom</label><input class="inp" id="eg-name" value="${g.name}"/></div>
+        <div><label class="lbl">Nom</label><input class="inp" id="eg-name" value="${escapeHtml(g.name)}"/></div>
+        <div><label class="lbl">Ville / adresse</label><input class="inp" id="eg-address" value="${escapeHtml(g.address||'')}"/></div>
         <div class="row2">
-          <div><label class="lbl">Filiale</label><input class="inp" id="eg-filiale" value="${g.filiale}"/></div>
-          <div><label class="lbl">Email</label><input class="inp" id="eg-email" type="email" value="${g.email}"/></div>
+          <div><label class="lbl">Filiale</label><input class="inp" id="eg-filiale" value="${escapeHtml(g.filiale||'')}"/></div>
+          <div><label class="lbl">Email</label><input class="inp" id="eg-email" type="email" value="${escapeHtml(g.email||'')}"/></div>
         </div>
         <div><label class="lbl">Nouveau mot de passe (laisser vide = inchangé)</label><input class="inp" id="eg-pwd" type="text" placeholder="Nouveau mot de passe"/></div>
         <div class="row2" style="margin-top:4px">
@@ -758,14 +781,15 @@ async function editGym(id) {
   const g = S.gyms.find(x=>x.id==id);
   if (!g) return;
   const name    = document.getElementById('eg-name').value.trim()    || g.name;
+  const address = document.getElementById('eg-address').value.trim();
   const filiale = document.getElementById('eg-filiale').value.trim() || g.filiale;
   const email   = document.getElementById('eg-email').value.trim()   || g.email;
   const pwd     = document.getElementById('eg-pwd').value.trim();
   const btn = document.querySelector('#modal-bg .btn-blue');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await adminApi('/api/admin?action=gyms', { id, name, filiale, email, password:pwd||undefined }, 'PUT');
+  const res = await adminApi('/api/admin?action=gyms', { id, name, address, filiale, email, password:pwd||undefined }, 'PUT');
   if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.innerHTML = 'Enregistrer ✓'; btn.disabled = false; } return; }
-  g.name=name; g.filiale=filiale; g.email=email;
+  g.name=name; g.address=address; g.filiale=filiale; g.email=email;
   closeModal();
   toast(`✅ ${name} mis à jour !`);
   goTo('gyms');
@@ -775,6 +799,7 @@ async function toggleGym(id) {
   const g = S.gyms.find(x=>x.id==id);
   if (!g) return;
   const active = !g.active;
+  if (!active && !confirm(`Désactiver « ${g.name} » ?\n\nLes scans sur ses machines seront refusés.`)) return;
   const res = await adminApi('/api/admin?action=gyms', { id, active }, 'PUT');
   if (res.error) { toast('Erreur: ' + res.error, false); return; }
   g.active = active;
@@ -841,18 +866,18 @@ function showAddMachine() {
 function showEditMachine(id) {
   const m = S.machines.find(x=>x.id==id);
   if (!m) return;
-  const gymOptions = S.gyms.map(g=>`<option value="${g.id}" ${m.gym_id==g.id?'selected':''}>${g.name}${g.filiale?' ('+g.filiale+')':''}</option>`).join('');
+  const gymOptions = S.gyms.map(g=>`<option value="${g.id}" ${m.gym_id==g.id?'selected':''}>${escapeHtml(g.name)}${g.filiale?' ('+escapeHtml(g.filiale)+')':''}</option>`).join('');
   document.body.insertAdjacentHTML('beforeend',`
   <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
-      <div class="modal-title">✏️ Modifier — ${m.name}</div>
+      <div class="modal-title">✏️ Modifier — ${escapeHtml(m.name)}</div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div><label class="lbl">Machine ID</label><input class="inp" id="em-id" value="${m.machine_id}"/></div>
-        <div><label class="lbl">Nom affiché</label><input class="inp" id="em-name" value="${m.name}"/></div>
+        <div><label class="lbl">Machine ID</label><input class="inp" id="em-id" value="${escapeHtml(m.machine_id)}"/></div>
+        <div><label class="lbl">Nom affiché</label><input class="inp" id="em-name" value="${escapeHtml(m.name)}"/></div>
         <div><label class="lbl">Fitness lié</label>
           <select class="inp" id="em-gym"><option value="">— Non lié —</option>${gymOptions}</select>
         </div>
-        <div><label class="lbl">Secret machine</label><input class="inp" id="em-secret" value="${m.secret||''}"/></div>
+        <div><label class="lbl">Secret machine</label><input class="inp" id="em-secret" value="${escapeHtml(m.secret||'')}"/></div>
         <div class="row2" style="margin-top:4px">
           <button class="btn btn-blue" style="justify-content:center" onclick="editMachine('${id}')">Enregistrer ✓</button>
           <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
@@ -897,11 +922,52 @@ async function toggleMachine(id) {
   const m = S.machines.find(x=>x.id==id);
   if (!m) return;
   const active = !m.active;
+  if (!active && !confirm(`Désactiver la machine « ${m.name} » ?\n\nElle refusera tous les scans.`)) return;
   const res = await adminApi('/api/admin?action=machines', { id, active }, 'PUT');
   if (res.error) { toast('Erreur: ' + res.error, false); return; }
   m.active = active;
   toast(active ? `✅ ${m.name} activée` : `⚠️ ${m.name} désactivée`);
   goTo('machines');
+}
+
+function pageConfig() {
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Configuration</div><div class="page-sub">Outils de maintenance de la base de données</div></div>
+  </div>
+  <div style="max-width:560px;display:flex;flex-direction:column;gap:16px">
+    <div class="card" style="padding:24px">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px">🛠️ Setup / Migration DB</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:16px;line-height:1.6">
+        Crée ou met à jour les tables manquantes : <code>machines</code>, colonnes <code>machine_id</code>, <code>gym_id</code>, <code>authorized</code>, <code>filiale</code>…<br/>
+        À lancer si tu vois une erreur <em>«&nbsp;column does not exist&nbsp;»</em> ou <em>«&nbsp;relation does not exist&nbsp;»</em>.
+      </div>
+      <button class="btn btn-blue" onclick="runDbSetup()" id="btn-dbsetup">⚡ Lancer les migrations</button>
+    </div>
+    <div class="card" id="dbsetup-result" style="padding:20px;display:none"></div>
+  </div>`;
+}
+
+async function runDbSetup() {
+  const btn = document.getElementById('btn-dbsetup');
+  const res_el = document.getElementById('dbsetup-result');
+  if (btn) { btn.innerHTML = '<div class="spin"></div> Migration en cours…'; btn.disabled = true; }
+  if (res_el) res_el.style.display = 'none';
+  const res = await adminApi('/api/admin?action=db-setup', {}, 'POST');
+  if (btn) { btn.innerHTML = '⚡ Lancer les migrations'; btn.disabled = false; }
+  if (!res_el) return;
+  res_el.style.display = 'block';
+  if (res.error) { res_el.innerHTML = `<div style="color:var(--red);font-weight:600">❌ Erreur : ${escapeHtml(res.error)}</div>`; return; }
+  const steps = res.steps || [];
+  const allOk = steps.every(s => s.ok);
+  res_el.innerHTML = `
+    <div style="font-weight:700;margin-bottom:12px;color:${allOk?'#00C47A':'#FF9500'}">${allOk?'✅ Toutes les migrations OK':'⚠️ Certaines étapes ont échoué'}</div>
+    ${steps.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <span>${s.ok?'✅':'❌'}</span>
+      <span style="flex:1;font-family:monospace">${escapeHtml(s.step)}</span>
+      ${s.error?`<span style="color:var(--red);font-size:11px">${escapeHtml(s.error)}</span>`:''}
+    </div>`).join('')}`;
+  if (allOk) { toast('✅ Migrations terminées !'); setTimeout(() => refreshData(), 800); }
 }
 
 async function refreshData() {
@@ -916,11 +982,11 @@ async function refreshData() {
       adminApi('/api/admin?action=virements'),
     ]);
     if (!stats.error) S._stats = stats;
-    if (!clientsRes.error  && clientsRes.clients?.length)    S.clients   = clientsRes.clients;
-    if (!paymentsRes.error && paymentsRes.payments?.length)  S.payments  = paymentsRes.payments;
-    if (!gymsRes.error     && gymsRes.gyms?.length)          S.gyms      = gymsRes.gyms;
-    if (!machinesRes.error && machinesRes.machines)          S.machines  = machinesRes.machines;
-    if (!virementsRes.error&& virementsRes.virements?.length)S.virements = virementsRes.virements;
+    if (!clientsRes.error  && Array.isArray(clientsRes.clients))      S.clients   = clientsRes.clients;
+    if (!paymentsRes.error && Array.isArray(paymentsRes.payments))    S.payments  = paymentsRes.payments;
+    if (!gymsRes.error     && Array.isArray(gymsRes.gyms))            S.gyms      = gymsRes.gyms;
+    if (!machinesRes.error && Array.isArray(machinesRes.machines))    S.machines  = machinesRes.machines;
+    if (!virementsRes.error&& Array.isArray(virementsRes.virements))  S.virements = virementsRes.virements;
     toast('✅ Données actualisées !');
     goTo(S.page);
   } catch(e) { toast('Erreur de connexion', false); }

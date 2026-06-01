@@ -234,6 +234,7 @@ async function doLogin() {
   const email = document.getElementById('l-email').value.trim();
   const pwd   = document.getElementById('l-pwd').value;
   if (!email || !pwd) { showErr('Remplis tous les champs.'); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showErr('Adresse email invalide.'); return; }
   const btn = document.getElementById('login-btn');
   btn.innerHTML = '<div class="spin"></div> Connexion...'; btn.disabled = true;
 
@@ -259,6 +260,9 @@ async function doLogin() {
   if (!virementsRes.error) S.virements = virementsRes.virements || [];
 
   renderApp();
+  if (statsRes.error || membersRes.error || scansRes.error || virementsRes.error) {
+    toast('Certaines données n\'ont pas pu être chargées (problème réseau). Réessaie.', false);
+  }
 }
 
 function showErr(msg) {
@@ -579,8 +583,12 @@ async function refreshData() {
   if (!membersRes.error)   S.members   = membersRes.members   || [];
   if (!scansRes.error)     S.scans     = scansRes.scans       || [];
   if (!virementsRes.error) S.virements = virementsRes.virements || [];
-  toast('✅ Données actualisées !');
   goTo(S.page);
+  if (statsRes.error || membersRes.error || scansRes.error || virementsRes.error) {
+    toast('⚠️ Erreur réseau — données incomplètes.', false);
+  } else {
+    toast('✅ Données actualisées !');
+  }
 }
 
 // ── BOOT ─────────────────────────────────────────────

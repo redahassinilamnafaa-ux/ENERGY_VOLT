@@ -131,7 +131,7 @@ footer{background:var(--ink);padding:32px 40px;text-align:center}
   <div class="section">
     <div class="section-title">Sécurité</div>
     <p>Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, perte ou altération. Les communications entre votre navigateur et nos serveurs sont chiffrées via HTTPS/TLS.</p>
-    <p>Les mots de passe sont hachés avec bcrypt et ne sont jamais stockés en clair. Les tokens d'authentification ont une durée de vie limitée.</p>
+    <p>Les mots de passe sont hachés avec bcrypt et ne sont jamais stockés en clair. L'authentification repose sur un token de session signé, stocké localement sur votre appareil (localStorage) et révocable à tout moment via la déconnexion.</p>
   </div>
 
   <div class="section">
