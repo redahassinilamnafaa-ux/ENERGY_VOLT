@@ -190,6 +190,7 @@ const PAGES = [
   { id:'compta',    icon:'📋', label:'Comptabilité'},
   { id:'gyms',      icon:'🏋️', label:'Fitness'     },
   { id:'machines',  icon:'🖥️',  label:'Machines'    },
+  { id:'config',    icon:'⚙️',  label:'Config'      },
 ];
 
 function goTo(page) {
@@ -208,6 +209,7 @@ function renderPage() {
   if (S.page === 'compta')    return pageCompta();
   if (S.page === 'gyms')      return pageGyms();
   if (S.page === 'machines')  return pageMachines();
+  if (S.page === 'config')    return pageConfig();
   return '';
 }
 
@@ -926,6 +928,46 @@ async function toggleMachine(id) {
   m.active = active;
   toast(active ? `✅ ${m.name} activée` : `⚠️ ${m.name} désactivée`);
   goTo('machines');
+}
+
+function pageConfig() {
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Configuration</div><div class="page-sub">Outils de maintenance de la base de données</div></div>
+  </div>
+  <div style="max-width:560px;display:flex;flex-direction:column;gap:16px">
+    <div class="card" style="padding:24px">
+      <div style="font-size:16px;font-weight:700;margin-bottom:6px">🛠️ Setup / Migration DB</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:16px;line-height:1.6">
+        Crée ou met à jour les tables manquantes : <code>machines</code>, colonnes <code>machine_id</code>, <code>gym_id</code>, <code>authorized</code>, <code>filiale</code>…<br/>
+        À lancer si tu vois une erreur <em>«&nbsp;column does not exist&nbsp;»</em> ou <em>«&nbsp;relation does not exist&nbsp;»</em>.
+      </div>
+      <button class="btn btn-blue" onclick="runDbSetup()" id="btn-dbsetup">⚡ Lancer les migrations</button>
+    </div>
+    <div class="card" id="dbsetup-result" style="padding:20px;display:none"></div>
+  </div>`;
+}
+
+async function runDbSetup() {
+  const btn = document.getElementById('btn-dbsetup');
+  const res_el = document.getElementById('dbsetup-result');
+  if (btn) { btn.innerHTML = '<div class="spin"></div> Migration en cours…'; btn.disabled = true; }
+  if (res_el) res_el.style.display = 'none';
+  const res = await adminApi('/api/admin?action=db-setup', {}, 'POST');
+  if (btn) { btn.innerHTML = '⚡ Lancer les migrations'; btn.disabled = false; }
+  if (!res_el) return;
+  res_el.style.display = 'block';
+  if (res.error) { res_el.innerHTML = `<div style="color:var(--red);font-weight:600">❌ Erreur : ${escapeHtml(res.error)}</div>`; return; }
+  const steps = res.steps || [];
+  const allOk = steps.every(s => s.ok);
+  res_el.innerHTML = `
+    <div style="font-weight:700;margin-bottom:12px;color:${allOk?'#00C47A':'#FF9500'}">${allOk?'✅ Toutes les migrations OK':'⚠️ Certaines étapes ont échoué'}</div>
+    ${steps.map(s=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">
+      <span>${s.ok?'✅':'❌'}</span>
+      <span style="flex:1;font-family:monospace">${escapeHtml(s.step)}</span>
+      ${s.error?`<span style="color:var(--red);font-size:11px">${escapeHtml(s.error)}</span>`:''}
+    </div>`).join('')}`;
+  if (allOk) { toast('✅ Migrations terminées !'); setTimeout(() => refreshData(), 800); }
 }
 
 async function refreshData() {
