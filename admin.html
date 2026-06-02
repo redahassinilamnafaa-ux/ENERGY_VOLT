@@ -141,28 +141,26 @@ tr:hover td{background:var(--bg);transition:background .1s}
 <div id="app"></div>
 <div id="toast"></div>
 <script>
-const BACKEND   = 'https://volt-backend-final.vercel.app';
-const ADMIN_SECRET = 'volt-admin-secret-2025';
-const ADMIN_EMAIL  = 'info@volt-energy.ch';
-const ADMIN_PWD    = 'VoltAdmin2026!';
+const BACKEND = 'https://volt-backend-final.vercel.app';
+let adminToken = null; // JWT stocké en mémoire uniquement (jamais en localStorage)
 
 let S = {
   logged:false, page:'dashboard',
   clients:[], payments:[], gyms:[], machines:[], virements:[],
   _stats:{}, search:'', vFilter_month:'', vFilter_gym:'',
-  loading:false,
+  loading:false, adminEmail:'',
 };
 
 function escapeHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 
 async function adminApi(path, body, method='GET') {
   try {
-    const opts = { method, headers:{ 'Content-Type':'application/json', 'x-admin-secret': ADMIN_SECRET } };
+    const opts = { method, headers:{ 'Content-Type':'application/json', 'Authorization': 'Bearer ' + (adminToken || '') } };
     if (body && method !== 'GET') opts.body = JSON.stringify(body);
     const r = await fetch(BACKEND + path, opts);
-    if (r.status === 401) { S.logged = false; renderLogin(); return { error: 'Session expirée.' }; }
+    if (r.status === 401) { adminToken = null; S.logged = false; renderLogin(); return { error: 'Session expirée.' }; }
     return await r.json();
-  } catch(e) { return { error: e.message }; }
+  } catch(e) { return { error: 'Connexion impossible.' }; }
 }
 
 function toast(msg, ok=true) {
@@ -237,7 +235,7 @@ function renderLogin() {
       <div class="login-logo">VOLT<em>.</em></div>
       <div class="login-tag"><span>⚡ Administration</span></div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div><label class="lbl">Email</label><input class="inp" id="l-email" type="email" value="${ADMIN_EMAIL}" autocomplete="email"/></div>
+        <div><label class="lbl">Email</label><input class="inp" id="l-email" type="email" placeholder="admin@volt-energy.ch" autocomplete="email"/></div>
         <div><label class="lbl">Mot de passe</label><input class="inp" id="l-pwd" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
         <div id="l-err" style="display:none;background:#FFF0F2;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red)"></div>
         <button class="btn btn-blue" style="width:100%;justify-content:center;margin-top:4px" onclick="doLogin()">Accéder au dashboard →</button>
@@ -251,15 +249,31 @@ function renderLogin() {
 async function doLogin() {
   const email = document.getElementById('l-email').value.trim();
   const pwd   = document.getElementById('l-pwd').value;
-  if (email !== ADMIN_EMAIL || pwd !== ADMIN_PWD) {
+  if (!email || !pwd) {
     const err = document.getElementById('l-err');
-    err.textContent = '❌ Email ou mot de passe incorrect.';
+    err.textContent = '❌ Remplis tous les champs.';
     err.style.display = 'block'; return;
   }
   const btn = document.querySelector('.login-box .btn-blue');
   if (btn) { btn.innerHTML = '<div class="spin"></div> Chargement...'; btn.disabled = true; }
-  S.logged = true;
   try {
+    const r = await fetch(BACKEND + '/api/admin?action=login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pwd })
+    });
+    const data = await r.json();
+    if (data.error || !data.token) {
+      const err = document.getElementById('l-err');
+      err.textContent = '❌ ' + (data.error || 'Identifiants incorrects.');
+      err.style.display = 'block';
+      if (btn) { btn.innerHTML = 'Accéder au dashboard →'; btn.disabled = false; }
+      return;
+    }
+    adminToken = data.token;
+    // Extraire l'email du payload JWT (base64, pas de vérification côté client)
+    try { S.adminEmail = JSON.parse(atob(adminToken.split('.')[1])).email || email; } catch(e) { S.adminEmail = email; }
+    S.logged = true;
     const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
@@ -269,17 +283,23 @@ async function doLogin() {
       adminApi('/api/admin?action=virements'),
     ]);
     if (!stats.error) S._stats = stats;
-    if (!clientsRes.error  && Array.isArray(clientsRes.clients))      S.clients   = clientsRes.clients;
-    if (!paymentsRes.error && Array.isArray(paymentsRes.payments))    S.payments  = paymentsRes.payments;
-    if (!gymsRes.error     && Array.isArray(gymsRes.gyms))            S.gyms      = gymsRes.gyms;
-    if (!machinesRes.error && Array.isArray(machinesRes.machines))    S.machines  = machinesRes.machines;
-    if (!virementsRes.error&& Array.isArray(virementsRes.virements))  S.virements = virementsRes.virements;
-  } catch(e) { console.log('Backend indisponible, mode démo'); }
-  renderApp();
+    if (!clientsRes.error  && Array.isArray(clientsRes.clients))     S.clients   = clientsRes.clients;
+    if (!paymentsRes.error && Array.isArray(paymentsRes.payments))   S.payments  = paymentsRes.payments;
+    if (!gymsRes.error     && Array.isArray(gymsRes.gyms))           S.gyms      = gymsRes.gyms;
+    if (!machinesRes.error && Array.isArray(machinesRes.machines))   S.machines  = machinesRes.machines;
+    if (!virementsRes.error && Array.isArray(virementsRes.virements)) S.virements = virementsRes.virements;
+    renderApp();
+  } catch(e) {
+    const err = document.getElementById('l-err');
+    err.textContent = '❌ Connexion impossible. Vérifie ta connexion internet.';
+    err.style.display = 'block';
+    if (btn) { btn.innerHTML = 'Accéder au dashboard →'; btn.disabled = false; }
+  }
 }
 
 function doLogout() {
-  S.logged = false; S.clients=[]; S.payments=[]; S.gyms=[]; S.machines=[]; S.virements=[]; S._stats={};
+  adminToken = null;
+  S.logged = false; S.clients=[]; S.payments=[]; S.gyms=[]; S.machines=[]; S.virements=[]; S._stats={}; S.adminEmail='';
   renderLogin();
 }
 
@@ -307,8 +327,8 @@ function renderApp() {
       </div>
       <div class="sidebar-footer">
         <div class="sidebar-admin">
-          <div class="sidebar-admin-name">Reda Hassini</div>
-          <div class="sidebar-admin-email">${ADMIN_EMAIL}</div>
+          <div class="sidebar-admin-name">Administration</div>
+          <div class="sidebar-admin-email">${escapeHtml(S.adminEmail)}</div>
         </div>
         <button class="nav-item" onclick="doLogout()" style="width:100%">
           <span class="ni">🚪</span>
@@ -850,7 +870,7 @@ function showAddMachine() {
         <div><label class="lbl">Fitness lié</label>
           <select class="inp" id="m-gym"><option value="">— Non lié —</option>${gymOptions}</select>
         </div>
-        <div><label class="lbl">Secret machine</label><input class="inp" id="m-secret" value="volt-admin-secret-2025"/></div>
+        <div><label class="lbl">Secret machine</label><input class="inp" id="m-secret" placeholder="Secret configuré sur la machine CM30"/></div>
         <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--blue);font-weight:500">
           ℹ️ Configure Machine ID et Secret dans le menu admin du CM30 (appui long 3s sur VOLT.)
         </div>

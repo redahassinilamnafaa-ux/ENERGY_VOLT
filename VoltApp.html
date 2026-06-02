@@ -132,7 +132,6 @@ body{overflow:hidden}
 const CFG = {
   API: 'https://volt-backend-final.vercel.app',
   STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
-  DEMO_CODE: 'volt-admin-2025',
   CD_SECS: 900,
 };
 const PLANS = [
@@ -156,7 +155,7 @@ window.getExpiryText = function(u) {
   return d.toLocaleDateString('fr-CH');
 };
 const PARAMS = new URLSearchParams(location.search);
-const DEMO = PARAMS.get('access') === CFG.DEMO_CODE;
+const DEMO = false; // Mode démo désactivé en production
 if (PARAMS.get('ref')) localStorage.setItem('volt_ref', PARAMS.get('ref'));
 let S = { screen:'login', user:null, token:null, plan:'quarter', cdEnd:0, history:[], tab:'conn', cgv:false, payMethod:'card', notifs:true };
 const DEMO_USER = { id:'demo-00000001', name:'Alex Martin', email:'demo@volt.energy.ch', phone:'+41 79 000 00 00', initials:'AM', plan:'quarter', subscribed:true, authorized:true, gym:'Fitness partenaire', referral_code:'VOLTAM01', referral_count:3, free_months:3 };
