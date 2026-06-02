@@ -223,6 +223,7 @@ function renderLogin() {
         <div><label class="lbl">Mot de passe</label><input class="inp" id="l-pwd" type="password" placeholder="••••••••"/></div>
         <div id="l-err" style="display:none;background:#FFF0F2;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red)"></div>
         <button class="btn btn-blue" style="width:100%;justify-content:center;margin-top:4px" id="login-btn" onclick="doLogin()">Accéder →</button>
+        <div style="text-align:center;margin-top:2px"><a href="#" onclick="forgotPwd();return false" style="font-size:13px;font-weight:700;color:var(--blue);text-decoration:none">Mot de passe oublié ?</a></div>
       </div>
       <div style="margin-top:20px;text-align:center;font-size:12px;color:var(--ink4)">Identifiants fournis par VOLT. · <a href="mailto:info@volt-energy.ch" style="color:var(--blue);text-decoration:none">info@volt-energy.ch</a></div>
     </div>
@@ -265,9 +266,18 @@ async function doLogin() {
   }
 }
 
+async function forgotPwd() {
+  const email = (document.getElementById('l-email').value || '').trim();
+  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showErr('Entre d\'abord ton email du fitness ci-dessus.'); return; }
+  const res = await api('/api/login?action=forgot', { email }, 'POST');
+  if (res.error) { showErr(res.error); return; }
+  const err = document.getElementById('l-err');
+  if (err) { err.style.background='#E8FFF4'; err.style.color='#009960'; err.textContent='✅ Si ce compte existe, un email de réinitialisation vient d\'être envoyé. Vérifie ta boîte mail (et les spams).'; err.style.display='block'; }
+}
+
 function showErr(msg) {
   const err = document.getElementById('l-err');
-  if (err) { err.textContent = '❌ ' + msg; err.style.display = 'block'; }
+  if (err) { err.style.background=''; err.style.color=''; err.textContent = '❌ ' + msg; err.style.display = 'block'; }
 }
 
 function doLogout() {
