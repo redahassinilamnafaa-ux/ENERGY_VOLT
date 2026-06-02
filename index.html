@@ -14,6 +14,70 @@
 <meta property="og:url" content="https://volt-energy.ch"/>
 <meta property="og:type" content="website"/>
 <meta name="theme-color" content="#FFFFFF"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://volt-energy.ch/#organization",
+      "name": "VOLT.",
+      "url": "https://volt-energy.ch",
+      "logo": "https://volt-energy.ch/icon-512.png",
+      "email": "info@volt-energy.ch",
+      "description": "VOLT. propose un abonnement mensuel donnant accès aux distributeurs de boissons énergisantes dans les fitness partenaires en Suisse. 1 boisson toutes les 15 minutes, dès CHF 9.90/mois.",
+      "areaServed": {"@type": "Country", "name": "Suisse"},
+      "sameAs": []
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://volt-energy.ch/#website",
+      "url": "https://volt-energy.ch",
+      "name": "VOLT.",
+      "publisher": {"@id": "https://volt-energy.ch/#organization"},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://volt-energy.ch/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://volt-energy.ch/#service",
+      "name": "Abonnement boissons énergisantes VOLT.",
+      "provider": {"@id": "https://volt-energy.ch/#organization"},
+      "serviceType": "Abonnement distributeur boissons énergisantes",
+      "areaServed": {"@type": "Country", "name": "Suisse"},
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Plan Mensuel",
+          "price": "9.90",
+          "priceCurrency": "CHF",
+          "billingIncrement": "P1M",
+          "url": "https://volt-energy.ch/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Plan Trimestriel",
+          "price": "24.90",
+          "priceCurrency": "CHF",
+          "billingIncrement": "P3M",
+          "url": "https://volt-energy.ch/#pricing"
+        },
+        {
+          "@type": "Offer",
+          "name": "Plan Annuel",
+          "price": "89.90",
+          "priceCurrency": "CHF",
+          "billingIncrement": "P1Y",
+          "url": "https://volt-energy.ch/#pricing"
+        }
+      ]
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
 <style>
