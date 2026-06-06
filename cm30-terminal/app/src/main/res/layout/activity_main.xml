@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- Camera preview (always behind everything) -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!-- Top vignette overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="top"
+        android:background="@drawable/bg_vignette_top"
+        android:importantForAccessibility="no"/>
+
+    <!-- Bottom vignette overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_vignette_bottom"
+        android:importantForAccessibility="no"/>
+
+    <!-- SCANNING SCREEN -->
+    <LinearLayout
+        android:id="@+id/layoutScanning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <!-- VOLT. wordmark -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="VOLT."
+            android:textSize="44sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.15"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- MDB status dot + label -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="36dp">
+
+            <View
+                android:id="@+id/viewMdbDot"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@drawable/dot_red"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tvMdbStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connexion..."
+                android:textColor="#80FFFFFF"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif"/>
+
+        </LinearLayout>
+
+        <!-- QR frame 260×260 -->
+        <FrameLayout
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:clipChildren="false">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#0AFFFFFF"
+                android:importantForAccessibility="no"/>
+
+            <!-- Animated scan line -->
+            <View
+                android:id="@+id/viewScanLine"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@drawable/scan_line"
+                android:layout_gravity="top"
+                android:alpha="0.85"
+                android:importantForAccessibility="no"/>
+
+            <!-- L-shaped corner brackets -->
+            <View
+                android:id="@+id/viewQrCorners"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/qr_frame"
+                android:importantForAccessibility="no"/>
+
+        </FrameLayout>
+
+        <!-- Scan instruction text -->
+        <TextView
+            android:id="@+id/tvScanHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connexion MDB..."
+            android:textSize="16sp"
+            android:textColor="#99FFFFFF"
+            android:gravity="center"
+            android:layout_marginTop="28dp"/>
+
+        <!-- Pulsing indicator (visible when reader enabled) -->
+        <View
+            android:id="@+id/viewPulse"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/dot_green"
+            android:alpha="0"
+            android:importantForAccessibility="no"/>
+
+    </LinearLayout>
+
+    <!-- RESULT OVERLAY -->
+    <FrameLayout
+        android:id="@+id/layoutOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layoutResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="48dp">
+
+            <TextView
+                android:id="@+id/tvResultIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="96sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="24dp"/>
+
+            <TextView
+                android:id="@+id/tvResultTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/tvResultSub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="#CCFFFFFF"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- DIAGNOSTIC PANEL (hidden — press VOLT logo 0.5–3s to toggle) -->
+    <LinearLayout
+        android:id="@+id/layoutDiag"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        android:background="#EE000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/tvDiagTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+                android:fontFamily="monospace"
+                android:text="--:--:--  --/--/----"/>
+
+            <TextView
+                android:id="@+id/tvDiagClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ EFFACER ]"
+                android:textColor="#FF888888"
+                android:textSize="12sp"
+                android:padding="4dp"/>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollDiag"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="6dp">
+
+            <TextView
+                android:id="@+id/tvDiagMdb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FF00FF88"
+                android:textSize="12sp"
+                android:fontFamily="monospace"
+                android:text="--- Journal MDB ---"/>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <!-- VOLT LOGO (0.5–3s = toggle diag, 3s+ = admin) -->
+    <TextView
+        android:id="@+id/tvVoltLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:text="VOLT."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#22FFFFFF"
+        android:letterSpacing="0.12"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"/>
+
+</FrameLayout>
