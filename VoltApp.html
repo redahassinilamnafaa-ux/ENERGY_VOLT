@@ -11,3 +11,710 @@
 <link rel="manifest" href="/manifest.json"/>
 <link rel="icon" type="image/png" href="/icon-192.png"/>
 <link rel="apple-touch-icon" href="/icon-192.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:'Barlow',sans-serif;background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+body{overflow:hidden}
+::-webkit-scrollbar{display:none}
+:root{
+  --blue:#0057FF;
+  --blue-mid:#2979FF;
+  --blue-dark:#003FCC;
+  --blue-soft:rgba(0,87,255,.07);
+  --blue-soft2:rgba(0,87,255,.12);
+  --blue-glow:rgba(0,87,255,.22);
+  --ink:#060D2E;
+  --ink2:#2D3652;
+  --ink3:#6B7A99;
+  --ink4:#A8B4CC;
+  --bg:#F7F9FF;
+  --bg2:#EDF1FB;
+  --white:#FFFFFF;
+  --border:rgba(0,87,255,.1);
+  --border2:rgba(10,15,30,.07);
+  --green:#00C47A;
+  --red:#FF3B5C;
+  --orange:#FF9500;
+}
+::selection{background:var(--blue);color:#fff}
+#app{height:100%;max-width:430px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:82px;overscroll-behavior-y:contain}
+.screen-full{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+.bc{font-family:'Barlow Condensed',sans-serif}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border2);display:flex;z-index:100;padding:8px 0 max(16px,env(safe-area-inset-bottom))}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px 0;transition:color .15s}
+.bnav-btn .ni{font-size:22px;line-height:1}
+.bnav-btn .nl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.bnav-btn.on{color:var(--blue)}
+.bnav-btn:not(.on){color:var(--ink3)}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px}
+.inp{background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;font-size:16px;font-weight:500;color:var(--ink);outline:none;width:100%;font-family:'Barlow',sans-serif;transition:all .2s}
+.inp:focus{border-color:var(--blue);background:var(--white)}
+.inp::placeholder{color:var(--ink4)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:15px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:900;letter-spacing:.02em;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 18px var(--blue-glow)}
+.btn-blue:not(:disabled):hover{background:var(--blue-mid);transform:translateY(-2px);box-shadow:0 8px 32px var(--blue-glow)}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink2)}
+.btn-ghost{background:var(--bg2);color:var(--ink)}
+.btn-sm{padding:9px 18px;font-size:16px;width:auto;border-radius:50px}
+.card{background:var(--white);border-radius:20px;border:1px solid var(--border2)}
+.hdr{background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);padding:16px 20px 0}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px}
+.logo-txt{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;letter-spacing:-.5px}
+.qr-card{background:var(--ink);border-radius:24px;margin:14px 16px 0;padding:22px 18px;position:relative;overflow:hidden;animation:fadeIn .35s ease}
+.qr-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 120% 80% at 80% 0%,rgba(0,87,255,.85),rgba(0,60,220,.45) 50%,rgba(0,20,120,.2) 80%,transparent);pointer-events:none}
+.qr-inner{position:relative;z-index:1}
+.qr-box{background:var(--white);border-radius:16px;padding:12px;display:inline-block}
+.qr-box.blur{filter:blur(6px);pointer-events:none}
+.qr-overlay{position:absolute;inset:0;border-radius:16px;background:rgba(6,13,46,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:opacity .3s}
+.qr-cd{filter:grayscale(1) brightness(.35);transition:filter .3s}
+.cd-track{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden;margin:8px 0}
+.cd-fill{height:100%;border-radius:2px;transition:width 1s linear,background .5s}
+.toggle{width:44px;height:26px;border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle-k{position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.row-item{background:var(--white);display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;margin-bottom:4px;cursor:pointer;border:1px solid var(--border2);transition:background .12s}
+.row-item:active{background:var(--bg2)}
+.row-ico{width:36px;height:36px;background:var(--bg2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.row-lbl{font-size:15px;font-weight:600;flex:1;color:var(--ink)}
+.row-r{font-size:13px;font-weight:600;color:var(--ink3)}
+.row-chev{font-size:18px;color:var(--ink4)}
+.row-danger .row-lbl{color:var(--red)}
+.row-danger .row-ico{background:#FFF0F2}
+.row-danger .row-chev{color:var(--red)}
+.hist-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border2)}
+.hist-row:last-child{border-bottom:none}
+.hist-ico{width:44px;height:44px;background:var(--blue-soft);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:1px solid var(--border)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-box{background:var(--white);border-radius:16px;padding:14px 10px;border:1px solid var(--border2);text-align:center}
+.stat-v{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:var(--ink);line-height:1}
+.stat-l{font-size:10px;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
+.plan-card{border:1.5px solid var(--border2);border-radius:20px;padding:20px;cursor:pointer;transition:all .22s;position:relative;margin-bottom:10px;background:var(--white)}
+.plan-card:hover{border-color:var(--blue);box-shadow:0 8px 28px var(--blue-glow);transform:translateY(-2px)}
+.plan-card.sel{border:2px solid var(--blue);box-shadow:0 8px 28px var(--blue-glow),0 0 0 3px var(--blue-soft)}
+.plan-card.feat{background:linear-gradient(145deg,var(--blue-dark),var(--blue));border-color:transparent;box-shadow:0 12px 32px var(--blue-glow)}
+.plan-card.feat.sel{box-shadow:0 16px 44px rgba(0,87,255,.4),0 0 0 3px rgba(255,255,255,.5);border:2px solid rgba(255,255,255,.6)!important}
+.ref-card{background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:20px;padding:22px;margin-bottom:14px}
+.ref-link-box{background:rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-top:12px}
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.52);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s}
+.modal{background:var(--white);border-radius:28px 28px 0 0;width:100%;max-width:430px;padding:26px 22px max(40px,env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;animation:slideUp .3s ease}
+.modal-pill{width:36px;height:4px;background:#E0E0DF;border-radius:2px;margin:0 auto 22px}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:20px;color:var(--ink)}
+#notif{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;z-index:990;max-width:390px;width:calc(100% - 40px);box-shadow:0 4px 20px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+#notif.show{transform:translateX(-50%) translateY(0)}
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-60px);background:var(--ink);color:#fff;border-radius:50px;padding:11px 20px;font-size:14px;font-weight:600;z-index:999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#stripe-el{background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px;transition:border-color .2s}
+#stripe-el.StripeElement--focus{border-color:var(--blue);background:var(--white)}
+.spin{width:22px;height:22px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+#install-banner{position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--ink);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:200;max-width:400px;width:calc(100% - 32px);box-shadow:0 4px 30px rgba(0,0,0,.25);border:1px solid var(--border);animation:fadeUp .3s ease}
+</style>
+</head>
+<body>
+<div id="app"><div id="volt-splash" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%)"><div style="font-family:system-ui,sans-serif;font-weight:900;font-size:76px;color:#fff;letter-spacing:-2px;line-height:1">VOLT.</div><div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.38);margin-top:12px">Chargement…</div></div></div>
+<div id="toast"></div>
+<div id="notif">
+  <span id="notif-icon" style="font-size:20px;flex-shrink:0"></span>
+  <span id="notif-text" style="font-size:13px;font-weight:700;flex:1"></span>
+  <button onclick="document.getElementById('notif').classList.remove('show')" style="background:none;border:none;color:rgba(255,255,255,.35);font-size:18px;cursor:pointer">✕</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
+<script src="https://js.stripe.com/v3/" async></script>
+<script>
+const CFG = {
+  API: 'https://volt-backend-final.vercel.app',
+  STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
+  CD_SECS: 900,
+};
+const PLANS = [
+  { id:'month',   label:'MENSUEL',      chf:'9.90',  per:'/mois',    saving:null,             badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
+  { id:'quarter', label:'TRIMESTRIEL',  chf:'24.90', per:'/trimestre',saving:'-16%',           badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
+  { id:'year',    label:'ANNUEL',       chf:'79.90', per:'/an',      saving:'-33%',           badge:'🔥 MEILLEUR PRIX', feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
+];
+const DRINKS = ['Café express','Cappuccino','Latte','Américano','Eau plate','Eau pétillante','Jus d\'orange','Thé vert','Chocolat chaud','Eau chaude'];
+let S = {
+  user:null, token:null, tab:'home', modal:null,
+  cdEnd:null, cdTick:null,
+  hist:[], plan:null,
+  refCode:null, refCount:0, refEarned:0,
+  notifEnabled:false, autoRenew:true,
+  qrData:null,
+  stripe:null, stripeEl:null, stripeCard:null,
+};
+function $(id){return document.getElementById(id)}
+function api(path,opts={}){return fetch(CFG.API+path,{headers:{'Content-Type':'application/json',...(S.token?{'Authorization':'Bearer '+S.token}:{}),...(opts.headers||{})},method:opts.method||'GET',body:opts.body?JSON.stringify(opts.body):undefined}).then(r=>r.json())}
+function toast(msg,dur=2200){
+  const t=$('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);
+}
+function notify(msg,icon='🔔'){
+  const n=$('notif');
+  $('notif-icon').textContent=icon;
+  $('notif-text').textContent=msg;
+  n.classList.add('show');
+  clearTimeout(n._t);n._t=setTimeout(()=>n.classList.remove('show'),4500);
+}
+function save(){try{localStorage.setItem('volt_s',JSON.stringify({token:S.token,user:S.user,hist:S.hist.slice(0,50),plan:S.plan,refCode:S.refCode,refCount:S.refCount,refEarned:S.refEarned,notifEnabled:S.notifEnabled,autoRenew:S.autoRenew}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('volt_s')||'{}');S.token=d.token||null;S.user=d.user||null;S.hist=d.hist||[];S.plan=d.plan||null;S.refCode=d.refCode||null;S.refCount=d.refCount||0;S.refEarned=d.refEarned||0;S.notifEnabled=d.notifEnabled||false;S.autoRenew=d.autoRenew!==false;}catch(e){}}
+async function initStripe(){
+  if(S.stripe)return;
+  await new Promise(r=>{if(window.Stripe)return r();const i=setInterval(()=>{if(window.Stripe){clearInterval(i);r();}},100);setTimeout(r,8000)});
+  if(!window.Stripe)return;
+  S.stripe=Stripe(CFG.STRIPE_KEY);
+  const elements=S.stripe.elements({locale:'fr'});
+  S.stripeCard=elements.create('card',{style:{base:{fontSize:'16px',fontFamily:"'Barlow',sans-serif",color:'#060D2E','::placeholder':{color:'#A8B4CC'}},invalid:{color:'#FF3B5C'}}});
+}
+function render(){const app=$('app');if(!app)return;app.innerHTML=buildPage();attachEvents();}
+function buildPage(){
+  if(!S.user)return buildAuth();
+  return `
+  ${buildNav()}
+  <div class="screen" id="scr">${buildTab()}</div>
+  `;
+}
+function buildNav(){
+  const tabs=[['home','🟦','Accueil'],['history','📜','Historique'],['refer','🎁','Parrainer'],['profile','⚙️','Profil']];
+  return `<nav class="bnav">${tabs.map(([id,ic,lb])=>`<button class="bnav-btn${S.tab===id?' on':''}" onclick="nav('${id}')" data-tab="${id}"><span class="ni">${ic}</span><span class="nl">${lb}</span></button>`).join('')}</nav>`;
+}
+function buildTab(){
+  if(S.tab==='home')return buildHome();
+  if(S.tab==='history')return buildHistory();
+  if(S.tab==='refer')return buildRefer();
+  if(S.tab==='profile')return buildProfile();
+  return '';
+}
+function buildAuth(){
+  return `<div class="screen-full" style="background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:60px 28px 40px">
+  <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:88px;color:#fff;letter-spacing:-3px;line-height:1;margin-bottom:6px">VOLT.</div>
+  <div style="font-size:15px;color:rgba(255,255,255,.45);font-weight:500;margin-bottom:48px">L\'app café rechargeable</div>
+  <div style="background:rgba(255,255,255,.06);border-radius:24px;padding:28px 22px;width:100%;max-width:400px;border:1px solid rgba(255,255,255,.08)" id="auth-box">
+    <div id="auth-inner">${buildSignInForm()}</div>
+  </div>
+  </div>`;
+}
+function buildSignInForm(){
+  return `<div style="text-align:center;margin-bottom:22px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#fff">Connexion</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:4px">Ou créez votre compte gratuitement</div>
+  </div>
+  <div style="margin-bottom:14px">
+    <label class="lbl" style="color:rgba(255,255,255,.45)">Email</label>
+    <input id="a-email" type="email" class="inp" placeholder="vous@email.com" autocomplete="email"/>
+  </div>
+  <div style="margin-bottom:22px">
+    <label class="lbl" style="color:rgba(255,255,255,.45)">Mot de passe</label>
+    <input id="a-pwd" type="password" class="inp" placeholder="Min. 6 caractères" autocomplete="current-password"/>
+  </div>
+  <button class="btn btn-blue" onclick="doSignIn()" id="btn-signin">Connexion / Inscription</button>
+  <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,.28)">En continuant, vous acceptez nos CGU</div>`;
+}
+function buildHome(){
+  const active = S.plan && S.cdEnd && S.cdEnd > Date.now();
+  const canOrder = active;
+  const expFmt = S.cdEnd ? new Date(S.cdEnd).toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'}) : '';
+  return `
+  <div class="hdr">
+    <div class="hdr-row">
+      <div class="logo-txt">VOLT.</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6)">${S.user?.name||S.user?.email?.split('@')[0]||''}</div>
+        ${S.plan?`<div style="background:var(--blue);color:#fff;border-radius:50px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.05em">${S.plan.toUpperCase()}</div>`:''}
+      </div>
+    </div>
+    ${buildQRCard()}
+  </div>
+  <div style="padding:18px 16px">
+    ${!S.plan?buildSubscribePrompt():''}
+    ${S.plan&&active?`<div style="background:var(--blue-soft);border:1px solid var(--border);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px">
+      <span style="font-size:22px">✅</span>
+      <div><div style="font-size:14px;font-weight:700;color:var(--blue)">Abonnement actif</div><div style="font-size:12px;color:var(--ink3)">Valable jusqu\'au ${expFmt}</div></div>
+    </div>`:''}
+    <div style="margin-bottom:8px"><span class="lbl">Commander une boisson</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px">
+      ${DRINKS.map(d=>`<button class="card" style="padding:14px 10px;font-size:14px;font-weight:600;color:${canOrder?'var(--ink)':'var(--ink4)'};cursor:${canOrder?'pointer':'not-allowed'};border:none;text-align:center;border-radius:14px;transition:background .15s;background:var(--white)" onclick="${canOrder?`orderDrink('${d}')`:'showModal(\'subscribe\')'}" ${!canOrder?'disabled':''} onmouseenter="this.style.background='var(--bg2)'" onmouseleave="this.style.background='var(--white)'">${d}</button>`).join('')}
+    </div>
+    <div style="margin-bottom:8px"><span class="lbl">Vos stats</span></div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-v">${S.hist.filter(h=>h.type==='drink').length}</div><div class="stat-l">Boissons</div></div>
+      <div class="stat-box"><div class="stat-v">${S.refCount}</div><div class="stat-l">Filleuls</div></div>
+      <div class="stat-box"><div class="stat-v">${S.refEarned}</div><div class="stat-l">CHF gagnés</div></div>
+    </div>
+  </div>
+  ${S.modal?buildModal():''}`;
+}
+function buildQRCard(){
+  const active = S.plan && S.cdEnd && S.cdEnd > Date.now();
+  const rem = S.cdEnd ? Math.max(0, Math.floor((S.cdEnd - Date.now())/1000)) : 0;
+  const pct = active ? (rem/CFG.CD_SECS)*100 : 0;
+  const fillColor = pct > 30 ? 'var(--blue)' : pct > 10 ? 'var(--orange)' : 'var(--red)';
+  const mm = String(Math.floor(rem/60)).padStart(2,'0');
+  const ss = String(rem%60).padStart(2,'0');
+  return `<div class="qr-card">
+    <div class="qr-inner">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+        <div style="flex:1">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Votre QR Code</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:32px;color:#fff;line-height:1">${active?`⏱ ${mm}:${ss}`:`${S.plan?'⏸ Recharge':'Aucun abonnement'}`}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:4px">${active?'Temps restant pour commander':'Abonnez-vous pour accéder'}</div>
+          ${active?`<div class="cd-track" style="margin-top:10px"><div class="cd-fill" style="width:${pct}%;background:${fillColor}"></div></div>`:''}
+          ${S.plan&&!active?`<button class="btn btn-blue" style="margin-top:12px;padding:10px 20px;font-size:17px;width:auto" onclick="rechargeCD()">Recharger ⚡</button>`:''}
+          ${!S.plan?`<button class="btn btn-blue" style="margin-top:12px;padding:10px 20px;font-size:17px;width:auto" onclick="showModal('subscribe')">S\'abonner</button>`:''}
+        </div>
+        <div style="position:relative">
+          <div class="qr-box${!active?' blur':''}" id="qr-wrap"></div>
+          ${!active?`<div class="qr-overlay"><span style="font-size:24px">🔒</span><span style="font-size:11px;color:#fff;font-weight:700">${S.plan?'Recharger':'S\'abonner'}</span></div>`:''}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function buildSubscribePrompt(){
+  return `<div class="card" style="padding:20px;margin-bottom:16px;text-align:center;border:1.5px dashed var(--border)">
+    <div style="font-size:32px;margin-bottom:8px">⚡</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;margin-bottom:6px">Activez VOLT.</div>
+    <div style="font-size:14px;color:var(--ink3);margin-bottom:16px">Abonnez-vous pour commander des boissons dans tout le réseau</div>
+    <button class="btn btn-blue" onclick="showModal('subscribe')">Choisir un abonnement</button>
+  </div>`;
+}
+function buildHistory(){
+  const items = S.hist.slice(0,40);
+  return `<div style="padding:20px 16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:20px">Historique</div>
+    ${items.length===0?`<div style="text-align:center;padding:60px 0;color:var(--ink4)"><div style="font-size:48px;margin-bottom:12px">📜</div><div style="font-size:16px;font-weight:600">Aucune activité</div></div>`:''}
+    <div class="card" style="padding:0 16px">
+      ${items.map(h=>{
+        const icon = h.type==='drink'?'☕':h.type==='sub'?'⚡':h.type==='ref'?'🎁':'💳';
+        const clr = h.type==='ref'?'var(--green)':h.type==='drink'?'var(--ink)':'var(--blue)';
+        const amt = h.chf?`<span style="font-weight:800;color:${clr}">${h.type==='ref'?'+':'-'}${h.chf} CHF</span>`:`<span style="font-size:12px;color:var(--ink4)">${h.detail||''}</span>`;
+        return `<div class="hist-row">
+          <div class="hist-ico">${icon}</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700">${h.label}</div>
+            <div style="font-size:12px;color:var(--ink4);margin-top:2px">${new Date(h.ts).toLocaleDateString('fr-CH',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          ${amt}
+        </div>`;
+      }).join('')}
+    </div>
+  </div>`;
+}
+function buildRefer(){
+  const link = `https://volt.app/?ref=${S.refCode||S.user?.id||'XXX'}`;
+  return `<div style="padding:20px 16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:6px">Parrainage</div>
+    <div style="font-size:14px;color:var(--ink3);margin-bottom:20px">Invitez des amis et gagnez 2 CHF par parrainé</div>
+    <div class="ref-card">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:4px">🎁 Invitez, gagnez</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.6)">2 CHF offerts par ami qui s\'abonne</div>
+      <div class="ref-link-box">
+        <span style="font-size:13px;color:rgba(255,255,255,.8);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${link}</span>
+        <button onclick="copyRef('${link}')" style="background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">Copier</button>
+      </div>
+    </div>
+    <div class="stat-grid" style="margin-bottom:20px">
+      <div class="stat-box"><div class="stat-v">${S.refCount}</div><div class="stat-l">Filleuls</div></div>
+      <div class="stat-box"><div class="stat-v">${S.refEarned}</div><div class="stat-l">CHF gagnés</div></div>
+      <div class="stat-box"><div class="stat-v">${(S.refCount*2)}</div><div class="stat-l">CHF total</div></div>
+    </div>
+    <button class="btn btn-blue" onclick="shareRef('${link}')">Partager mon lien 🚀</button>
+  </div>`;
+}
+function buildProfile(){
+  return `<div style="padding:20px 16px">
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;margin-bottom:20px">Profil</div>
+    <div style="background:var(--white);border-radius:20px;padding:20px;border:1px solid var(--border2);margin-bottom:16px;display:flex;align-items:center;gap:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-dark));display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;font-weight:900;flex-shrink:0">${(S.user?.name||S.user?.email||'?')[0].toUpperCase()}</div>
+      <div>
+        <div style="font-size:17px;font-weight:800">${S.user?.name||'Utilisateur'}</div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:2px">${S.user?.email||''}</div>
+        ${S.plan?`<div style="background:var(--blue-soft);color:var(--blue);border-radius:50px;padding:3px 10px;font-size:11px;font-weight:800;display:inline-block;margin-top:6px">${S.plan.toUpperCase()}</div>`:''}
+      </div>
+    </div>
+    <div class="card" style="padding:0 16px;margin-bottom:16px">
+      <div class="row-item" onclick="showModal('plan')">
+        <div class="row-ico">⚡</div><div class="row-lbl">Mon abonnement</div><div class="row-r">${S.plan||'Aucun'}</div><div class="row-chev">›</div>
+      </div>
+      <div class="row-item" onclick="showModal('notif')">
+        <div class="row-ico">🔔</div><div class="row-lbl">Notifications</div><div class="row-r">${S.notifEnabled?'Actif':'Inactif'}</div><div class="row-chev">›</div>
+      </div>
+      <div class="row-item" onclick="showModal('autorenew')">
+        <div class="row-ico">🔄</div><div class="row-lbl">Renouvellement auto</div><div class="row-r">${S.autoRenew?'Actif':'Inactif'}</div><div class="row-chev">›</div>
+      </div>
+      <div class="row-item" onclick="showModal('security')">
+        <div class="row-ico">🔐</div><div class="row-lbl">Sécurité</div><div class="row-r"></div><div class="row-chev">›</div>
+      </div>
+      <div class="row-item" onclick="showModal('help')">
+        <div class="row-ico">❓</div><div class="row-lbl">Aide & Contact</div><div class="row-r"></div><div class="row-chev">›</div>
+      </div>
+    </div>
+    <div class="card" style="padding:0 16px">
+      <div class="row-item row-danger" onclick="doLogout()">
+        <div class="row-ico">🚪</div><div class="row-lbl">Déconnexion</div><div class="row-chev">›</div>
+      </div>
+      <div class="row-item row-danger" onclick="showModal('delete')">
+        <div class="row-ico">🗑️</div><div class="row-lbl">Supprimer le compte</div><div class="row-chev">›</div>
+      </div>
+    </div>
+  </div>`;
+}
+function buildModal(){
+  const m=S.modal;
+  let body='';
+  if(m==='subscribe')body=buildSubModal();
+  else if(m==='plan')body=buildPlanModal();
+  else if(m==='notif')body=buildNotifModal();
+  else if(m==='autorenew')body=buildAutoRenewModal();
+  else if(m==='security')body=buildSecurityModal();
+  else if(m==='help')body=buildHelpModal();
+  else if(m==='delete')body=buildDeleteModal();
+  else if(m==='order')body=buildOrderModal();
+  else if(m==='payment')body=buildPaymentModal();
+  return `<div class="modal-bg" onclick="closeModal(event)"><div class="modal" onclick="event.stopPropagation()">${body}</div></div>`;
+}
+function buildSubModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Choisir un abonnement</div>
+  ${PLANS.map(p=>`<div class="plan-card${p.id==='year'?' feat':''}${S.selectedPlan===p.id?' sel':''}" onclick="selectPlan('${p.id}')">
+    ${p.badge?`<div style="position:absolute;top:-10px;right:16px;background:#FFD700;color:#060D2E;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:800">${p.badge}</div>`:''}
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+      <div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:${p.id==='year'?'#fff':'var(--ink)'}">${p.label}</div>
+        ${p.saving?`<div style="font-size:11px;font-weight:700;color:${p.id==='year'?'rgba(255,255,255,.6)':'var(--green)'};margin-top:2px">${p.saving}</div>`:''}
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:${p.id==='year'?'#fff':'var(--ink)'}">${p.chf} CHF</div>
+        <div style="font-size:12px;color:${p.id==='year'?'rgba(255,255,255,.5)':'var(--ink3)'}">${p.per}</div>
+      </div>
+    </div>
+    ${p.feat.map(f=>`<div style="font-size:13px;color:${p.id==='year'?'rgba(255,255,255,.7)':'var(--ink3)'};padding:2px 0">✓ ${f}</div>`).join('')}
+  </div>`).join('')}
+  <div id="stripe-el"></div>
+  <button class="btn btn-blue" style="margin-top:14px" onclick="doSubscribe()" id="btn-sub">S\'abonner</button>`;
+}
+function buildPlanModal(){
+  const exp = S.cdEnd ? new Date(S.cdEnd).toLocaleDateString('fr-CH',{day:'2-digit',month:'long',year:'numeric'}) : 'N/A';
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Mon abonnement</div>
+  ${S.plan?`<div class="card" style="padding:18px;margin-bottom:14px">
+    <div style="font-size:14px;color:var(--ink3)">Plan actuel</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--blue)">${S.plan.toUpperCase()}</div>
+    <div style="font-size:13px;color:var(--ink3)">Valable jusqu\'au ${exp}</div>
+  </div>
+  <button class="btn btn-ghost" style="margin-bottom:10px" onclick="showModal('subscribe')">Changer de plan</button>
+  <button class="btn" style="background:#FFF0F2;color:var(--red)" onclick="cancelSub()">Annuler l\'abonnement</button>`:`<div style="text-align:center;padding:20px 0">
+    <div style="font-size:48px;margin-bottom:12px">⚡</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px">Aucun abonnement actif</div>
+    <button class="btn btn-blue" onclick="showModal('subscribe')">Choisir un plan</button>
+  </div>`}`;
+}
+function buildNotifModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Notifications</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border2)">
+    <div><div style="font-size:15px;font-weight:700">Alertes recharge</div><div style="font-size:13px;color:var(--ink3);margin-top:2px">Rappel avant expiration du QR</div></div>
+    <div class="toggle" id="tog-notif" style="background:${S.notifEnabled?'var(--blue)':'var(--bg2)'}" onclick="toggleNotif()">
+      <div class="toggle-k" style="left:${S.notifEnabled?'21px':'3px'}"></div>
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <button class="btn btn-blue" onclick="closeModal()">Fermer</button>
+  </div>`;
+}
+function buildAutoRenewModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Renouvellement auto</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border2)">
+    <div><div style="font-size:15px;font-weight:700">Renouvellement automatique</div><div style="font-size:13px;color:var(--ink3);margin-top:2px">Rechargez auto à expiration</div></div>
+    <div class="toggle" id="tog-ar" style="background:${S.autoRenew?'var(--blue)':'var(--bg2)'}" onclick="toggleAutoRenew()">
+      <div class="toggle-k" style="left:${S.autoRenew?'21px':'3px'}"></div>
+    </div>
+  </div>
+  <div style="margin-top:20px">
+    <button class="btn btn-blue" onclick="closeModal()">Fermer</button>
+  </div>`;
+}
+function buildSecurityModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Sécurité</div>
+  <div style="margin-bottom:16px">
+    <label class="lbl">Nouveau mot de passe</label>
+    <input id="new-pwd" type="password" class="inp" placeholder="Min. 6 caractères"/>
+  </div>
+  <div style="margin-bottom:20px">
+    <label class="lbl">Confirmer le mot de passe</label>
+    <input id="conf-pwd" type="password" class="inp" placeholder="Confirmez"/>
+  </div>
+  <button class="btn btn-blue" onclick="changePwd()">Changer le mot de passe</button>`;
+}
+function buildHelpModal(){
+  const faqs=[
+    ['Comment commander ?','S\'abonnez, puis cliquez sur une boisson. Un QR code actif pendant 15 min apparaît.'],
+    ['Puis-je changer de plan ?','Oui, à tout moment depuis Profil > Mon abonnement.'],
+    ['Comment fonctionne le parrainage ?','Partagez votre lien. Pour chaque ami abonné, vous gagnez 2 CHF.'],
+    ['Problème de paiement ?','Contactez support@volt.app — réponse sous 24h.'],
+  ];
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Aide & Contact</div>
+  ${faqs.map(([q,a])=>`<div style="margin-bottom:16px"><div style="font-size:14px;font-weight:800;margin-bottom:4px">${q}</div><div style="font-size:13px;color:var(--ink3);line-height:1.5">${a}</div></div>`).join('')}
+  <a href="mailto:support@volt.app" style="display:block;margin-top:8px">
+    <button class="btn btn-dark">Contacter le support</button>
+  </a>`;
+}
+function buildDeleteModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title" style="color:var(--red)">Supprimer le compte</div>
+  <div style="font-size:15px;color:var(--ink3);margin-bottom:24px">Cette action est irréversible. Toutes vos données seront supprimées.</div>
+  <button class="btn" style="background:var(--red);color:#fff;margin-bottom:10px" onclick="doDelete()">Supprimer définitivement</button>
+  <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>`;
+}
+function buildOrderModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Commande en cours</div>
+  <div style="text-align:center;padding:20px 0">
+    <div style="font-size:48px;margin-bottom:16px">☕</div>
+    <div style="font-size:16px;font-weight:700;margin-bottom:8px" id="order-status">Traitement...</div>
+    <div class="spin" style="margin:0 auto"></div>
+  </div>`;
+}
+function buildPaymentModal(){
+  return `<div class="modal-pill"></div>
+  <div class="modal-title">Paiement</div>
+  <div style="margin-bottom:14px">
+    <label class="lbl">Carte bancaire</label>
+    <div id="stripe-el-modal" style="background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:14px 16px"></div>
+  </div>
+  <button class="btn btn-blue" onclick="confirmPayment()" id="btn-pay">Payer</button>`;
+}
+function nav(tab){S.tab=tab;S.modal=null;render();const scr=$('scr');if(scr)scr.scrollTop=0;}
+function showModal(m){S.modal=m;if(m==='subscribe')S.selectedPlan=S.selectedPlan||'year';render();if(m==='subscribe')setTimeout(initStripeEl,100);}
+function closeModal(e){if(e&&e.target!==e.currentTarget)return;S.modal=null;render();}
+function selectPlan(id){S.selectedPlan=id;document.querySelectorAll('.plan-card').forEach(el=>{el.classList.toggle('sel',el.getAttribute('onclick').includes(id));});}
+function attachEvents(){}
+async function doSignIn(){
+  const email=$('a-email')?.value?.trim();
+  const pwd=$('a-pwd')?.value;
+  if(!email||!pwd){toast('Remplissez tous les champs');return;}
+  const btn=$('btn-signin');
+  btn.disabled=true;btn.innerHTML='<div class="spin"></div>';
+  try{
+    const r=await api('/auth/login-or-register',{method:'POST',body:{email,password:pwd}});
+    if(r.token){
+      S.token=r.token;S.user=r.user;
+      if(r.subscription){S.plan=r.subscription.plan;S.cdEnd=r.subscription.cdEnd;}
+      if(r.refCode)S.refCode=r.refCode;
+      save();render();
+    } else {
+      toast(r.error||'Erreur de connexion');
+      btn.disabled=false;btn.innerHTML='Connexion / Inscription';
+    }
+  }catch(e){toast('Erreur réseau');btn.disabled=false;btn.innerHTML='Connexion / Inscription';}
+}
+async function initStripeEl(){
+  await initStripe();
+  if(!S.stripe)return;
+  if(!S.stripeCard){
+    const elements=S.stripe.elements({locale:'fr'});
+    S.stripeCard=elements.create('card',{style:{base:{fontSize:'16px',fontFamily:"'Barlow',sans-serif",color:'#060D2E','::placeholder':{color:'#A8B4CC'}},invalid:{color:'#FF3B5C'}}});
+  }
+  const el=$('stripe-el');
+  if(el&&!el.children.length)S.stripeCard.mount('#stripe-el');
+}
+async function doSubscribe(){
+  if(!S.selectedPlan){toast('Choisissez un plan');return;}
+  await initStripe();
+  if(!S.stripe||!S.stripeCard){toast('Chargement du paiement...');return;}
+  const btn=$('btn-sub');btn.disabled=true;btn.innerHTML='<div class="spin"></div>';
+  try{
+    const pm=await S.stripe.createPaymentMethod({type:'card',card:S.stripeCard});
+    if(pm.error){toast(pm.error.message);btn.disabled=false;btn.innerHTML="S'abonner";return;}
+    const r=await api('/subscriptions/create',{method:'POST',body:{plan:S.selectedPlan,paymentMethodId:pm.paymentMethod.id}});
+    if(r.status==='active'||r.status==='trialing'){
+      S.plan=S.selectedPlan;S.cdEnd=r.cdEnd||null;
+      save();S.modal=null;render();
+      toast('⚡ Abonnement activé !');
+    } else if(r.clientSecret){
+      const confirm=await S.stripe.confirmCardPayment(r.clientSecret);
+      if(confirm.error){toast(confirm.error.message);}
+      else{
+        S.plan=S.selectedPlan;S.cdEnd=r.cdEnd||null;
+        save();S.modal=null;render();
+        toast('⚡ Abonnement activé !');
+      }
+    } else if(r.requiresAction&&r.clientSecret){
+      const result=await S.stripe.handleCardAction(r.clientSecret);
+      if(result.error){toast(result.error.message);}
+      else{
+        const r2=await api('/subscriptions/confirm',{method:'POST',body:{paymentIntentId:result.paymentIntent.id}});
+        if(r2.status==='active'){S.plan=S.selectedPlan;S.cdEnd=r2.cdEnd||null;save();S.modal=null;render();toast('⚡ Abonnement activé !');}
+        else toast(r2.error||'Erreur de confirmation');
+      }
+    } else {
+      toast(r.error||'Erreur paiement');
+    }
+  }catch(e){toast('Erreur réseau');}
+  if($('btn-sub')){$('btn-sub').disabled=false;$('btn-sub').innerHTML="S'abonner";}
+}
+async function rechargeCD(){
+  const btn=document.querySelector('.qr-card .btn-blue');
+  if(btn){btn.disabled=true;btn.innerHTML='<div class="spin"></div>';}
+  try{
+    const r=await api('/drinks/recharge',{method:'POST'});
+    if(r.cdEnd){S.cdEnd=r.cdEnd;startCDTick();save();render();toast('⚡ Rechargé !');}
+    else toast(r.error||'Erreur');
+  }catch(e){toast('Erreur réseau');}
+}
+async function orderDrink(name){
+  if(!S.plan||!(S.cdEnd&&S.cdEnd>Date.now())){toast('Rechargez d\'abord');return;}
+  showModal('order');
+  try{
+    const r=await api('/drinks/order',{method:'POST',body:{drink:name}});
+    const status=$('order-status');
+    if(r.ok){
+      if(status)status.textContent=`${name} commandé !`;
+      S.hist.unshift({type:'drink',label:name,ts:Date.now(),detail:'confirmé'});
+      save();
+      setTimeout(()=>{S.modal=null;render();},1800);
+    } else {
+      if(status)status.textContent=r.error||'Erreur';
+      setTimeout(()=>{S.modal=null;render();},2000);
+    }
+  }catch(e){
+    const status=$('order-status');
+    if(status)status.textContent='Erreur réseau';
+    setTimeout(()=>{S.modal=null;render();},2000);
+  }
+}
+function copyRef(link){
+  navigator.clipboard?.writeText(link).then(()=>toast('Lien copié !')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=link;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Lien copié !');
+  });
+}
+function shareRef(link){
+  if(navigator.share){navigator.share({title:'VOLT.',text:'Rejoins VOLT. et profite de boissons illimitées !',url:link}).catch(()=>{});}
+  else copyRef(link);
+}
+async function changePwd(){
+  const p=$('new-pwd')?.value;
+  const c=$('conf-pwd')?.value;
+  if(!p||p.length<6){toast('Min. 6 caractères');return;}
+  if(p!==c){toast('Mots de passe différents');return;}
+  try{
+    const r=await api('/auth/change-password',{method:'POST',body:{password:p}});
+    if(r.ok){toast('Mot de passe modifié');closeModal();}
+    else toast(r.error||'Erreur');
+  }catch(e){toast('Erreur réseau');}
+}
+async function cancelSub(){
+  if(!confirm('Annuler l\'abonnement ?'))return;
+  try{
+    const r=await api('/subscriptions/cancel',{method:'POST'});
+    if(r.ok){S.plan=null;S.cdEnd=null;save();S.modal=null;render();toast('Abonnement annulé');}
+    else toast(r.error||'Erreur');
+  }catch(e){toast('Erreur réseau');}
+}
+async function doDelete(){
+  if(!confirm('Supprimer définitivement votre compte ?'))return;
+  try{
+    const r=await api('/auth/delete',{method:'DELETE'});
+    if(r.ok){localStorage.clear();S.user=null;S.token=null;render();}
+    else toast(r.error||'Erreur');
+  }catch(e){toast('Erreur réseau');}
+}
+function doLogout(){if(!confirm('Déconnexion ?'))return;localStorage.clear();S.user=null;S.token=null;S.plan=null;S.cdEnd=null;render();}
+function toggleNotif(){
+  S.notifEnabled=!S.notifEnabled;
+  if(S.notifEnabled&&'Notification' in window)Notification.requestPermission();
+  save();
+  const tog=$('tog-notif');
+  if(tog){tog.style.background=S.notifEnabled?'var(--blue)':'var(--bg2)';tog.querySelector('.toggle-k').style.left=S.notifEnabled?'21px':'3px';}
+}
+function toggleAutoRenew(){
+  S.autoRenew=!S.autoRenew;save();
+  const tog=$('tog-ar');
+  if(tog){tog.style.background=S.autoRenew?'var(--blue)':'var(--bg2)';tog.querySelector('.toggle-k').style.left=S.autoRenew?'21px':'3px';}
+}
+function startCDTick(){
+  clearInterval(S.cdTick);
+  if(!S.cdEnd||S.cdEnd<=Date.now())return;
+  S.cdTick=setInterval(()=>{
+    if(!S.cdEnd||S.cdEnd<=Date.now()){clearInterval(S.cdTick);render();return;}
+    const rem=Math.max(0,Math.floor((S.cdEnd-Date.now())/1000));
+    const mm=String(Math.floor(rem/60)).padStart(2,'0');
+    const ss=String(rem%60).padStart(2,'0');
+    const tEl=document.querySelector('.qr-card .bc');
+    if(tEl)tEl.textContent=`⏱ ${mm}:${ss}`;
+    const pct=(rem/CFG.CD_SECS)*100;
+    const fill=document.querySelector('.cd-fill');
+    if(fill){fill.style.width=pct+'%';fill.style.background=pct>30?'var(--blue)':pct>10?'var(--orange)':'var(--red)';}
+  },1000);
+}
+function generateQR(){
+  const wrap=$('qr-wrap');
+  if(!wrap)return;
+  if(wrap._qr){try{wrap._qr.clear();wrap._qr.makeCode(S.qrData||S.user?.id||'VOLT');}catch(e){}return;}
+  if(!window.QRCode){setTimeout(generateQR,500);return;}
+  wrap._qr=new QRCode(wrap,{text:S.qrData||S.user?.id||'VOLT',width:128,height:128,colorDark:'#060D2E',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+}
+function checkInstallBanner(){
+  if(window.matchMedia('(display-mode: standalone)').matches)return;
+  const dismissed=localStorage.getItem('volt_install_dismissed');
+  if(dismissed)return;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isAndroid=/android/i.test(navigator.userAgent);
+  if(!isIOS&&!isAndroid)return;
+  const banner=document.createElement('div');
+  banner.id='install-banner';
+  banner.innerHTML=`<span style="font-size:28px">📥</span><div style="flex:1"><div style="font-size:13px;font-weight:800;color:#fff">Installer VOLT.</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">${isIOS?"Appuyez sur Partager puis 'Sur l'écran d'accueil'":'Appuyez sur le menu du navigateur …'}</div></div><button onclick="this.parentElement.remove();localStorage.setItem('volt_install_dismissed','1')" style="background:none;border:none;color:rgba(255,255,255,.4);font-size:20px;cursor:pointer">✕</button>`;
+  document.body.appendChild(banner);
+}
+async function handleBankRedirect(){
+  const params=new URLSearchParams(window.location.search);
+  const redirect_status=params.get('redirect_status');
+  const payment_intent=params.get('payment_intent');
+  if(!redirect_status)return;
+  history.replaceState({},'',window.location.pathname);
+  if(redirect_status==='succeeded'){
+    try{
+      const r=await api('/subscriptions/confirm-redirect',{method:'POST',body:{paymentIntentId:payment_intent}});
+      if(r.status==='active'){S.plan=r.plan||S.selectedPlan;S.cdEnd=r.cdEnd||null;save();toast('⚡ Abonnement activé !');render();}
+      else toast(r.error||'Erreur confirmation');
+    }catch(e){toast('Erreur réseau');}
+  } else if(redirect_status==='requires_action'){
+    toast('Authentification requise. Veuillez réessayer.');
+    showModal('subscribe');
+  } else {
+    toast('Paiement échoué. Veuillez réessayer.');
+    showModal('subscribe');
+  }
+}
+async function init(){
+  load();
+  await handleBankRedirect();
+  if(S.token){
+    render();
+    try{
+      const r=await api('/auth/me');
+      if(r.user){S.user=r.user;if(r.subscription){S.plan=r.subscription.plan;S.cdEnd=r.subscription.cdEnd;}save();render();}
+    }catch(e){}
+    startCDTick();
+    setTimeout(generateQR,400);
+  } else {
+    render();
+  }
+  setTimeout(checkInstallBanner,3000);
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js').catch(()=>{});
+  }
+  $('volt-splash')?.remove();
+}
+init();
+</script></body>
+</html>
