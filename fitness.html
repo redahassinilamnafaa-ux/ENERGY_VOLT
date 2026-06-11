@@ -443,22 +443,27 @@ function pageMembers() {
     ${filtered.length === 0
       ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div></div>'
       : `<div class="table-wrap"><table>
-          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Total scans</th><th>CA total</th><th>Inscrit</th><th>Statut</th><th>Accès</th></tr></thead>
+          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Total scans</th><th>CA total</th><th>Inscrit</th><th>Expire le</th><th>Statut</th><th>Accès</th></tr></thead>
           <tbody>
-            ${filtered.map(m=>`<tr>
+            ${filtered.map(m=>{
+              const expDate = m.sub_expires_at ? new Date(m.sub_expires_at) : null;
+              const isExpired = expDate && expDate < new Date();
+              const expStr = expDate ? expDate.toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}) : '—';
+              return `<tr>
               <td><div class="td-name">${m.name}</div><div class="td-sub">${m.email}</div></td>
               <td>${planBadge(m.plan)}</td>
               <td style="font-weight:700">${m.scans_month}</td>
               <td style="color:var(--ink3)">${m.scans_total}</td>
               <td><strong>${fmtChf(m.revenue)}</strong></td>
               <td style="font-size:12px;color:var(--ink3)">${m.joined}</td>
-              <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
+              <td style="font-size:12px;color:${isExpired?'var(--red)':'var(--ink3)'}">${expStr}</td>
+              <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':isExpired?'<span class="badge badge-orange">Expiré</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
               <td>
                 <button class="btn btn-sm ${m.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${m.id}',${!m.authorized})">
                   ${m.authorized?'🔒 Bloquer':'🔓 Débloquer'}
                 </button>
               </td>
-            </tr>`).join('')}
+            </tr>`;}).join('')}
           </tbody>
         </table></div>`
     }
