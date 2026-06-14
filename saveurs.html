@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VOLT. — Saveurs</title>
+<meta name="description" content="Les 4 eaux vitaminées VOLT. : Performance, Antioxidant, Immune Support et Reload. Zéro sucre ajouté, arômes 100% naturels, vitamines et minéraux essentiels."/>
+<link rel="icon" href="icon-192.png"/>
+<meta name="theme-color" content="#FFFFFF"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+<link rel="stylesheet" href="volt.css"/>
+<style>
+/* ── Saveurs : intro lineup ── */
+.lineup{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:54px}
+.lu{display:block;background:var(--white);border:1.5px solid var(--border2);border-radius:20px;padding:18px;text-align:center;transition:transform .3s,box-shadow .3s,border-color .3s;--acc:#0057FF}
+.lu:hover{transform:translateY(-6px);box-shadow:0 18px 44px var(--blue-glow);border-color:var(--acc)}
+.lu .dot{width:14px;height:14px;border-radius:50%;background:var(--acc);margin:0 auto 12px;box-shadow:0 0 0 5px color-mix(in srgb,var(--acc) 18%,transparent)}
+.lu .n{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:19px;text-transform:uppercase;color:var(--ink);line-height:1}
+.lu .a{font-size:12px;color:var(--ink3);font-weight:600;margin-top:5px}
+.lineup-more{margin-top:24px;font-size:14.5px;font-weight:600;color:var(--ink4);letter-spacing:.01em}
+
+/* ── Product card ── */
+.pcard{padding:0 0 28px}
+.pcard + .pcard{margin-top:18px;border-top:1px solid var(--border2);padding-top:46px}
+.pcard-in{display:grid;grid-template-columns:.92fr 1.08fr;gap:56px;align-items:center;max-width:1100px;margin:0 auto;padding:0 24px}
+.pcard-media{position:relative;border-radius:26px;overflow:hidden;border:1.5px solid var(--border2);box-shadow:0 36px 70px -38px rgba(10,15,30,.4);background:linear-gradient(180deg,#fff,var(--bg))}
+.pcard-in.rev .pcard-media{order:2}
+.pc-strip{position:absolute;top:0;left:0;right:0;height:5px;background:var(--acc);z-index:3}
+.pcard-media img{width:100%;height:480px;object-fit:cover}
+.pc-arome{position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border:1px solid var(--border2);border-radius:50px;padding:7px 16px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.pc-arome::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--acc);margin-right:8px;vertical-align:middle}
+.pc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.pc-name{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(40px,5.4vw,60px);line-height:.92;letter-spacing:-1.5px;color:var(--ink)}
+.pc-name em{font-style:normal;color:var(--acc)}
+.pc-rate{display:flex;align-items:center;gap:10px;margin-top:12px}
+.pc-rate .stars{color:#FFB400;font-size:15px;letter-spacing:1px}
+.pc-rate b{font-weight:800;color:var(--ink);font-size:14px}
+.pc-rate i{font-style:normal;color:var(--ink4);font-size:13px;font-weight:600}
+.pc-tag-line{font-size:17px;color:var(--ink3);line-height:1.65;margin-top:14px;max-width:46ch}
+.pc-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pc-tag{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--acc);background:color-mix(in srgb,var(--acc) 9%,transparent);border:1px solid color-mix(in srgb,var(--acc) 22%,transparent);border-radius:50px;padding:6px 13px}
+.pc-bullets{list-style:none;display:flex;flex-direction:column;gap:11px;margin:22px 0 0}
+.pc-bullets li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--ink2);line-height:1.5}
+.pc-bullets b{color:var(--ink);font-weight:700}
+.pc-ic{width:24px;height:24px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--acc) 11%,transparent)}
+.pc-ic svg{width:14px;height:14px;color:var(--acc)}
+.pc-caf{margin-top:18px;font-size:13px;font-weight:600;color:var(--ink2);background:rgba(242,183,5,.1);border:1px solid rgba(242,183,5,.3);border-radius:12px;padding:11px 14px}
+
+/* accordions */
+.pc-acc{margin-top:22px;border-top:1px solid var(--border2)}
+.pc-det{border-bottom:1px solid var(--border2)}
+.pc-det summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:16px 2px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+.pc-det summary::-webkit-details-marker{display:none}
+.pc-det .chev{width:26px;height:26px;border-radius:50%;background:var(--blue-soft);color:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;transition:transform .25s}
+.pc-det[open] .chev{transform:rotate(45deg)}
+.pc-ing{font-size:13.5px;color:var(--ink3);line-height:1.7;padding:0 2px 18px}
+.pc-tables{padding:0 0 18px}
+.pc-tbl{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:13.5px}
+.pc-tbl th{text-align:left;font-family:'Barlow Condensed',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:12px;color:var(--ink4);padding:8px 10px;border-bottom:1.5px solid var(--border2)}
+.pc-tbl th:not(:first-child){text-align:right}
+.pc-tbl td{padding:8px 10px;border-bottom:1px solid var(--border2);color:var(--ink2);font-weight:600}
+.pc-tbl td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums}
+.pc-tbl tr.sub td:first-child{padding-left:24px;color:var(--ink4);font-weight:500}
+.pc-tbl.micro td.nrv{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+.pc-tbl.micro .bar{width:60px;height:6px;border-radius:4px;background:var(--bg2);overflow:hidden}
+.pc-tbl.micro .bar i{display:block;height:100%;background:var(--acc);border-radius:4px}
+.pc-tbl.micro .nrv span{min-width:46px;color:var(--acc);font-weight:800}
+.pc-foot{font-size:11.5px;color:var(--ink4);line-height:1.5}
+.pc-link{display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:.03em;color:var(--acc)}
+.pc-link:hover{gap:13px;transition:gap .2s}
+
+/* avertissements */
+.warn{background:var(--bg);border-radius:20px;border:1px solid var(--border2);padding:30px 32px;max-width:1052px;margin:60px auto 0}
+.warn h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:17px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);margin-bottom:12px}
+.warn p{font-size:12.5px;color:var(--ink3);line-height:1.7;margin-bottom:8px}
+.warn b{color:var(--ink2)}
+
+@media(max-width:920px){
+  .lineup{grid-template-columns:repeat(2,1fr)}
+  .pcard-in{grid-template-columns:1fr;gap:30px}
+  .pcard-in.rev .pcard-media{order:0}
+  .pcard-media img{height:360px}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">VOLT<span class="nav-logo-dot">.</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="index.html">Accueil</a>
+    <a href="saveurs.html" class="active">Saveurs</a>
+    <a href="comment-ca-marche.html">Comment ça marche</a>
+    <a href="avantages.html">Avantages</a>
+    <a href="index.html#pricing">Abonnements</a>
+    <a href="a-propos.html">À propos</a>
+    <a href="le-test.html">Le test</a>
+    <a href="fitness.html" class="nav-fitness"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-5h4v5"/></svg>Espace fitness</a>
+    <a href="VoltApp.html" class="nav-cta">Se connecter →</a>
+  </div>
+  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<header class="page-hero">
+  <div class="page-hero-mesh"></div>
+  <div class="page-hero-dots"></div>
+  <div class="page-hero-inner">
+    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Saveurs</span></div>
+    <div class="page-badge"><span class="page-badge-dot"></span><span>4 eaux vitaminées</span></div>
+    <h1>DES GOÛTS <em>INTENSES.</em><br/>ZÉRO SUCRE AJOUTÉ.</h1>
+    <p class="lead">Quatre eaux vitaminées fonctionnelles, enrichies en vitamines et minéraux essentiels. <strong>Sans sucre ajouté</strong>, arômes 100% naturels, édulcorées à la stévia.</p>
+    <div class="hero-actions">
+      <a href="le-test.html" class="btn-primary">Trouver ma saveur ⚡</a>
+      <a href="#performance" class="btn-outline">Voir la gamme</a>
+    </div>
+    <div class="lineup">
+      <a class="lu" href="#performance" style="--acc:#0057FF"><div class="dot"></div><div class="n">Performance</div><div class="a">Ananas · Guarana</div></a>
+      <a class="lu" href="#antioxidant" style="--acc:#F0922B"><div class="dot"></div><div class="n">Antioxidant</div><div class="a">Citron · Orange</div></a>
+      <a class="lu" href="#immune" style="--acc:#E5484D"><div class="dot"></div><div class="n">Immune</div><div class="a">Fraise · Sureau</div></a>
+      <a class="lu" href="#reload" style="--acc:#F2B705"><div class="dot"></div><div class="n">Reload</div><div class="a">Mangue · Magnésium</div></a>
+    </div>
+    <p class="lineup-more">⚡ Et bien plus à venir — de nouvelles saveurs arrivent.</p>
+  </div>
+</header>
+
+<!-- PRODUITS -->
+<section class="blk" style="padding-top:72px">
+  <div id="produits"></div>
+
+  <div class="warn reveal">
+    <h3>Informations & avertissements</h3>
+    <p>Ce produit ne remplace pas une alimentation équilibrée et variée ni un mode de vie sain. Les apports journaliers recommandés ne doivent pas être dépassés.</p>
+    <p>En raison des variations naturelles des propriétés des ingrédients actifs, la couleur, le goût et l'odeur peuvent légèrement varier d'un lot à l'autre, sans affecter la qualité ni l'efficacité du produit.</p>
+    <p><b>Conservation :</b> à conserver dans un endroit frais et sec, à l'abri de la lumière. Tenir hors de portée des jeunes enfants.</p>
+    <p><b>Allergènes & régimes :</b> convient aux régimes végétariens et végétaliens. Sans gluten, sans lactose, sans OGM, sans colorant ni conservateur artificiel. Fabriqué dans un atelier susceptible de manipuler d'autres arômes — voir l'étiquette du produit pour la déclaration complète des allergènes.</p>
+    <p><b>PERFORMANCE</b> contient de la caféine (guarana) : déconseillé aux enfants, aux femmes enceintes ou allaitantes et aux personnes sensibles à la caféine.</p>
+    <p style="color:var(--ink4)">*VNR = Valeur Nutritionnelle de Référence. Valeurs indicatives par portion de 5 g dilueé dans 350 mL d'eau. « Sans sucre ajouté » : contient une quantité minime de sucres naturellement présents. Les valeurs définitives figurent sur l'emballage et doivent être validées selon l'Ordonnance suisse sur les denrées alimentaires (ODAlOUs / OIDAl) avant commercialisation.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-box reveal">
+    <h2 class="cta-title">PAS ENCORE SÛR<br/>DE TA SAVEUR ?</h2>
+    <p class="cta-sub">Réponds à 4 questions et découvre l'eau vitaminée VOLT. qui te correspond le mieux.</p>
+    <a href="le-test.html" class="btn-white">Faire le test ⚡</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">VOLT<em>.</em></div>
+        <div class="footer-desc">Eaux vitaminées fonctionnelles et distributeurs connectés pour les fitness partenaires en Suisse.</div>
+      </div>
+      <div>
+        <div class="footer-col-h">Navigation</div>
+        <div class="footer-links">
+          <a href="saveurs.html">Saveurs</a>
+          <a href="comment-ca-marche.html">Comment ça marche</a>
+          <a href="avantages.html">Avantages</a>
+          <a href="le-test.html">Le test</a>
+          <a href="a-propos.html">À propos</a>
+          <a href="index.html#pricing">Abonnements</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-h">Contact</div>
+        <div class="footer-links">
+          <a href="fitness.html">Espace fitness</a>
+          <a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a>
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="confidentialite.html">Politique de confidentialité</a>
+          <a href="cgv.html">Conditions d'utilisation</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 VOLT. — Tous droits réservés</div>
+      <div class="footer-legal">
+        <a href="cgv.html">CGV</a>
+        <a href="confidentialite.html">Politique de confidentialité</a>
+        <a href="cookies.html">Cookies</a>
+        <a href="mailto:info@volt-energy.ch">Support</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="saveurs.js"></script>
+<script src="volt.js"></script>
+</body>
+</html>
