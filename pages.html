@@ -10,12 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
 <style>
-/* ============================================================
-   VOLT. — Feuille de style partagée
-   Reprend exactement la charte de volt-energy.ch
-   Bleu #0057FF · Noir #0A0F1E · Blanc · Barlow / Barlow Condensed
-   ============================================================ */
-
 :root{
   --blue:#0057FF;
   --blue-mid:#2979FF;
@@ -275,26 +269,7 @@ footer{background:var(--ink);padding:64px 24px 36px}
 .footer-legal a{font-size:12px;color:rgba(255,255,255,.2);transition:color .2s}
 .footer-legal a:hover{color:rgba(255,255,255,.5)}
 
-/* ── IMAGE PLACEHOLDER (en attente des visuels) ── */
-.img-ph{
-  width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-  background:
-    radial-gradient(circle, rgba(0,87,255,.10) 1px, transparent 1px) 0 0/22px 22px,
-    linear-gradient(180deg,#fff,var(--bg));
-  color:var(--ink4);text-align:center;padding:24px;
-}
-.img-ph .ph-bolt{width:46px;height:46px;border-radius:14px;background:var(--blue-soft);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center}
-.img-ph .ph-bolt svg{width:24px;height:24px;color:var(--blue)}
-.img-ph span{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
-.img-ph.fill{position:absolute;inset:0;height:100%}
-.img-ph.on-dark{background:
-    radial-gradient(circle, rgba(255,255,255,.10) 1px, transparent 1px) 0 0/22px 22px,
-    rgba(255,255,255,.03);color:rgba(255,255,255,.5)}
-.img-ph.on-dark .ph-bolt{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
-.img-ph.on-dark .ph-bolt svg{color:var(--blue-mid)}
-.img-ph.on-dark span{color:rgba(255,255,255,.45)}
-
-/* ── VOLT. CAN — visuel produit vectoriel (par saveur) ── */
+/* ── VOLT. CAN ── */
 .vcan{position:relative;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;
   background:radial-gradient(circle at 50% 40%, color-mix(in srgb,var(--acc) 14%,#fff) 0%, var(--bg) 72%)}
 .vcan .b{position:absolute;border-radius:50%;background:var(--acc);opacity:.16;pointer-events:none}
@@ -316,11 +291,9 @@ footer{background:var(--ink);padding:64px 24px 36px}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .float{animation:floatY 4s ease-in-out infinite}
 
-/* ── BLOCKS spacing ── */
 .blk{padding:96px 0}
 .blk.bg{background:var(--bg)}
 
-/* ── NAV responsive (menu dense : on resserre puis on bascule en burger) ── */
 @media(max-width:1200px){
   nav{padding:0 26px}
   .nav-links{gap:17px}
@@ -334,8 +307,6 @@ footer{background:var(--ink);padding:64px 24px 36px}
   .nav-fitness{align-self:stretch;justify-content:center}
   .hamburger{display:flex}
 }
-
-/* ── MOBILE ── */
 @media(max-width:920px){
   .split{grid-template-columns:1fr;gap:36px}
   .split-media img{height:380px}
@@ -405,21 +376,11 @@ footer{background:var(--ink);padding:64px 24px 36px}
         <a href="index.html#pricing" class="btn-outline">Voir les tarifs</a>
       </div>
       <div class="hero-stats">
-        <div class="hero-stat">
-          <div class="hero-stat-val">1<em>/15</em></div>
-          <div class="hero-stat-lbl">min par boisson</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-val">9<em>.90</em></div>
-          <div class="hero-stat-lbl">CHF par mois</div>
-        </div>
-        <div class="hero-stat">
-          <div class="hero-stat-val">100<em>%</em></div>
-          <div class="hero-stat-lbl">Sans App Store</div>
-        </div>
+        <div class="hero-stat"><div class="hero-stat-val">1<em>/15</em></div><div class="hero-stat-lbl">min par boisson</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">9<em>.90</em></div><div class="hero-stat-lbl">CHF par mois</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">100<em>%</em></div><div class="hero-stat-lbl">Sans App Store</div></div>
       </div>
     </div>
-    <!-- Mockup phone -->
     <div class="hero-right">
       <div class="mockup float">
         <div class="mockup-notch"></div>
@@ -437,38 +398,7 @@ footer{background:var(--ink);padding:64px 24px 36px}
             <rect x="8" y="88" width="34" height="34" rx="3" fill="#0A0F1E"/>
             <rect x="13" y="93" width="24" height="24" rx="1" fill="white"/>
             <rect x="18" y="98" width="14" height="14" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="12" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="58" y="12" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="68" y="12" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="78" y="12" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="12" y="48" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="12" y="58" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="12" y="68" width="5" height="5" rx="1" fill="#0A0F1E"/>
-            <rect x="12" y="78" width="5" height="5" rx="1" fill="#0A0F1E"/>
             <rect x="48" y="48" width="6" height="6" rx="1" fill="#0057FF"/>
-            <rect x="60" y="48" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="72" y="48" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="84" y="48" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="96" y="48" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="108" y="48" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="60" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="72" y="60" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="96" y="60" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="72" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="60" y="72" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="84" y="72" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="108" y="72" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="84" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="60" y="84" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="84" y="84" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="96" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="72" y="96" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="96" y="96" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="108" y="96" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="48" y="108" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="60" y="108" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="84" y="108" width="6" height="6" rx="1" fill="#0A0F1E"/>
-            <rect x="108" y="108" width="6" height="6" rx="1" fill="#0A0F1E"/>
           </svg>
         </div>
         <div class="mockup-badge"><span>● Prêt à scanner</span></div>
@@ -486,1087 +416,101 @@ footer{background:var(--ink);padding:64px 24px 36px}
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
 <div class="how-wrap" id="how">
   <div class="section">
-    <div class="reveal">
-      <div class="sec-label">Comment ça marche</div>
-      <h2 class="sec-title">TROIS ÉTAPES,<br/><em>UNE BOISSON</em></h2>
-      <p class="sec-sub">Pas d'App Store. Pas de configuration. Juste ton QR et ton fitness.</p>
-    </div>
+    <div class="reveal"><div class="sec-label">Comment ça marche</div><h2 class="sec-title">TROIS ÉTAPES,<br/><em>UNE BOISSON</em></h2><p class="sec-sub">Pas d'App Store. Pas de configuration. Juste ton QR et ton fitness.</p></div>
     <div class="steps">
-      <div class="step reveal d1">
-        <div class="step-num-label">01</div>
-        <div class="step-num">01</div>
-        <div class="step-icon-wrap">📲</div>
-        <div class="step-title">TU T'ABONNES EN LIGNE</div>
-        <div class="step-desc">Crée ton compte en 60 secondes. Choisis ton plan et paie via Stripe ou TWINT — 100% sécurisé, 0% prise de tête.</div>
-      </div>
-      <div class="step reveal d2">
-        <div class="step-num-label">02</div>
-        <div class="step-num">02</div>
-        <div class="step-icon-wrap">⚡</div>
-        <div class="step-title">TON QR EST PRÊT</div>
-        <div class="step-desc">Un QR code unique et permanent est généré instantanément. Il t'appartient. Personne d'autre ne peut l'utiliser.</div>
-      </div>
-      <div class="step reveal d3">
-        <div class="step-num-label">03</div>
-        <div class="step-num">03</div>
-        <div class="step-icon-wrap">🥤</div>
-        <div class="step-title">SCAN. BOIS. RÉPÈTE.</div>
-        <div class="step-desc">Présente ton QR au terminal VOLT dans ton fitness. La machine distribue en moins d'une seconde. Toutes les 15 min.</div>
-      </div>
+      <div class="step reveal d1"><div class="step-num-label">01</div><div class="step-num">01</div><div class="step-icon-wrap">📲</div><div class="step-title">TU T'ABONNES EN LIGNE</div><div class="step-desc">Crée ton compte en 60 secondes. Choisis ton plan et paie via Stripe ou TWINT — 100% sécurisé, 0% prise de tête.</div></div>
+      <div class="step reveal d2"><div class="step-num-label">02</div><div class="step-num">02</div><div class="step-icon-wrap">⚡</div><div class="step-title">TON QR EST PRÊT</div><div class="step-desc">Un QR code unique et permanent est généré instantanément. Il t'appartient. Personne d'autre ne peut l'utiliser.</div></div>
+      <div class="step reveal d3"><div class="step-num-label">03</div><div class="step-num">03</div><div class="step-icon-wrap">🥤</div><div class="step-title">SCAN. BOIS. RÉPÈTE.</div><div class="step-desc">Présente ton QR au terminal VOLT dans ton fitness. La machine distribue en moins d'une seconde. Toutes les 15 min.</div></div>
     </div>
   </div>
 </div>
 
-<!-- PRICING -->
 <div class="pricing-wrap" id="pricing">
   <div class="section">
-    <div class="pricing-hdr reveal">
-      <div class="sec-label">Abonnements</div>
-      <h2 class="sec-title">SIMPLE ET <em>TRANSPARENT</em></h2>
-      <p class="sec-sub">Sans engagement caché. Annulable à tout moment depuis ton compte.</p>
-      <div class="pricing-pill">
-        <span>⚡ 1 boisson maximum toutes les 15 minutes · valable dans tout le réseau de la même filiale</span>
-      </div>
-    </div>
+    <div class="pricing-hdr reveal"><div class="sec-label">Abonnements</div><h2 class="sec-title">SIMPLE ET <em>TRANSPARENT</em></h2><p class="sec-sub">Sans engagement caché. Annulable à tout moment depuis ton compte.</p><div class="pricing-pill"><span>⚡ 1 boisson maximum toutes les 15 minutes · valable dans tout le réseau de la même filiale</span></div></div>
     <div class="plans">
-      <div class="plan reveal d1">
-        <div class="plan-tag">Mensuel</div>
-        <div class="plan-price"><sup>CHF</sup>9<sub>.90</sub></div>
-        <div class="plan-period">par mois · sans engagement</div>
-        <div class="plan-sep"></div>
-        <div class="plan-feats">
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Annulable à tout moment</div>
-        </div>
-        <a href="VoltApp.html?plan=month&tab=signup" class="plan-cta plan-cta-ghost">Choisir →</a>
-      </div>
-      <div class="plan featured reveal d2">
-        <div class="plan-badge">⭐ Le plus populaire</div>
-        <div class="plan-tag" style="margin-top:18px">Trimestriel</div>
-        <div class="plan-price"><sup>CHF</sup>24<sub>.90</sub></div>
-        <div class="plan-period">pour 3 mois · CHF 8.30/mois</div>
-        <div class="plan-saving"><span>💰 Économise CHF 4.80 vs mensuel</span></div>
-        <div class="plan-sep"></div>
-        <div class="plan-feats">
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Renouvellement auto.</div>
-        </div>
-        <a href="VoltApp.html?plan=quarter&tab=signup" class="plan-cta plan-cta-white">Choisir →</a>
-      </div>
-      <div class="plan reveal d3">
-        <div class="plan-tag">Annuel</div>
-        <div class="plan-price"><sup>CHF</sup>89<sub>.90</sub></div>
-        <div class="plan-period">pour 12 mois · CHF 7.49/mois</div>
-        <div class="plan-saving"><span>🏆 Économise CHF 28.90 vs mensuel</span></div>
-        <div class="plan-sep"></div>
-        <div class="plan-feats">
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div>
-          <div class="plan-feat"><div class="plan-feat-dot">✓</div>Meilleur tarif garanti</div>
-        </div>
-        <a href="VoltApp.html?plan=year&tab=signup" class="plan-cta plan-cta-blue">Choisir →</a>
-      </div>
+      <div class="plan reveal d1"><div class="plan-tag">Mensuel</div><div class="plan-price"><sup>CHF</sup>9<sub>.90</sub></div><div class="plan-period">par mois · sans engagement</div><div class="plan-sep"></div><div class="plan-feats"><div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Annulable à tout moment</div></div><a href="VoltApp.html?plan=month&tab=signup" class="plan-cta plan-cta-ghost">Choisir →</a></div>
+      <div class="plan featured reveal d2"><div class="plan-badge">⭐ Le plus populaire</div><div class="plan-tag" style="margin-top:18px">Trimestriel</div><div class="plan-price"><sup>CHF</sup>24<sub>.90</sub></div><div class="plan-period">pour 3 mois · CHF 8.30/mois</div><div class="plan-saving"><span>💰 Économise CHF 4.80 vs mensuel</span></div><div class="plan-sep"></div><div class="plan-feats"><div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Renouvellement auto.</div></div><a href="VoltApp.html?plan=quarter&tab=signup" class="plan-cta plan-cta-white">Choisir →</a></div>
+      <div class="plan reveal d3"><div class="plan-tag">Annuel</div><div class="plan-price"><sup>CHF</sup>89<sub>.90</sub></div><div class="plan-period">pour 12 mois · CHF 7.49/mois</div><div class="plan-saving"><span>🏆 Économise CHF 28.90 vs mensuel</span></div><div class="plan-sep"></div><div class="plan-feats"><div class="plan-feat"><div class="plan-feat-dot">✓</div>1 boisson / 15 min</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>QR code permanent</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Réseau partenaires</div><div class="plan-feat"><div class="plan-feat-dot">✓</div>Meilleur tarif garanti</div></div><a href="VoltApp.html?plan=year&tab=signup" class="plan-cta plan-cta-blue">Choisir →</a></div>
     </div>
   </div>
 </div>
 
-<!-- BENEFITS -->
 <div class="benefits-wrap">
   <div class="section">
-    <div class="reveal">
-      <div class="sec-label">Pourquoi VOLT.</div>
-      <h2 class="sec-title">CONÇU POUR<br/><em>TON QUOTIDIEN</em></h2>
-    </div>
+    <div class="reveal"><div class="sec-label">Pourquoi VOLT.</div><h2 class="sec-title">CONÇU POUR<br/><em>TON QUOTIDIEN</em></h2></div>
     <div class="benefits">
-      <div class="benefit reveal d1">
-        <div class="benefit-icon">🔐</div>
-        <div>
-          <div class="benefit-title">TON CODE QR, TON ACCÈS</div>
-          <div class="benefit-desc">Ton Code QR ne peut pas être partagé ou copié. À chaque scan, le système vérifie que c'est bien toi. Simple, rapide, fiable.</div>
-        </div>
-      </div>
-      <div class="benefit reveal d2">
-        <div class="benefit-icon">⏱️</div>
-        <div>
-          <div class="benefit-title">UNE BOISSON, UN DÉLAI</div>
-          <div class="benefit-desc">Une boisson toutes les 15 minutes — ni plus, ni moins. Le système gère tout automatiquement. Équitable pour tout le monde.</div>
-        </div>
-      </div>
-      <div class="benefit reveal d1">
-        <div class="benefit-icon">🏋️</div>
-        <div>
-          <div class="benefit-title">PARTOUT DANS LE RÉSEAU</div>
-          <div class="benefit-desc">Un seul abonnement te donne accès à tous les fitness du réseau partenaire. Pas besoin de changer quoi que ce soit si tu changes de salle.</div>
-        </div>
-      </div>
-      <div class="benefit reveal d2">
-        <div class="benefit-icon">📱</div>
-        <div>
-          <div class="benefit-title">PRÊT EN 30 SECONDES</div>
-          <div class="benefit-desc">Pas d'App Store, pas de téléchargement. Tu ouvres le lien dans ton navigateur et tu ajoutes l'app à ton écran d'accueil. C'est tout.</div>
-        </div>
-      </div>
+      <div class="benefit reveal d1"><div class="benefit-icon">🔐</div><div><div class="benefit-title">TON CODE QR, TON ACCÈS</div><div class="benefit-desc">Ton Code QR ne peut pas être partagé ou copié. À chaque scan, le système vérifie que c'est bien toi. Simple, rapide, fiable.</div></div></div>
+      <div class="benefit reveal d2"><div class="benefit-icon">⏱️</div><div><div class="benefit-title">UNE BOISSON, UN DÉLAI</div><div class="benefit-desc">Une boisson toutes les 15 minutes — ni plus, ni moins. Le système gère tout automatiquement. Équitable pour tout le monde.</div></div></div>
+      <div class="benefit reveal d1"><div class="benefit-icon">🏋️</div><div><div class="benefit-title">PARTOUT DANS LE RÉSEAU</div><div class="benefit-desc">Un seul abonnement te donne accès à tous les fitness du réseau partenaire. Pas besoin de changer quoi que ce soit si tu changes de salle.</div></div></div>
+      <div class="benefit reveal d2"><div class="benefit-icon">📱</div><div><div class="benefit-title">PRÊT EN 30 SECONDES</div><div class="benefit-desc">Pas d'App Store, pas de téléchargement. Tu ouvres le lien dans ton navigateur et tu ajoutes l'app à ton écran d'accueil. C'est tout.</div></div></div>
     </div>
   </div>
 </div>
 
-<!-- CTA BOX -->
-<div class="cta-wrap">
-  <div class="cta-box reveal">
-    <h2 class="cta-title">PRÊT À BOOSTER<br/>TES ENTRAÎNEMENTS ?</h2>
-    <p class="cta-sub">Rejoins le réseau VOLT. dès aujourd'hui. Activation immédiate.</p>
-    <a href="VoltApp.html?tab=signup" class="btn-white">Créer mon compte ⚡</a>
-  </div>
-</div>
+<div class="cta-wrap"><div class="cta-box reveal"><h2 class="cta-title">PRÊT À BOOSTER<br/>TES ENTRAÎNEMENTS ?</h2><p class="cta-sub">Rejoins le réseau VOLT. dès aujourd'hui. Activation immédiate.</p><a href="VoltApp.html?tab=signup" class="btn-white">Créer mon compte ⚡</a></div></div>
 
-<!-- FAQ -->
-<div class="faq-wrap" id="faq">
-  <div class="faq-inner">
-    <div class="faq-hdr reveal">
-      <div class="sec-label">FAQ</div>
-      <h2 class="sec-title">QUESTIONS FRÉQUENTES</h2>
-    </div>
-    <div id="faq-list"></div>
-  </div>
-</div>
-
-<!-- FOOTER -->
+<div class="faq-wrap" id="faq"><div class="faq-inner"><div class="faq-hdr reveal"><div class="sec-label">FAQ</div><h2 class="sec-title">QUESTIONS FRÉQUENTES</h2></div><div id="faq-list"></div></div></div>
 </div>
 
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
-      <div>
-        <div class="footer-logo">VOLT<em>.</em></div>
-        <div class="footer-desc">Eaux vitaminées fonctionnelles et distributeurs connectés pour les fitness partenaires en Suisse.</div>
-      </div>
-      <div>
-        <div class="footer-col-h">Navigation</div>
-        <div class="footer-links">
-          <a href="#saveurs" data-page="saveurs">Saveurs</a>
-          <a href="#comment" data-page="comment">Comment ça marche</a>
-          <a href="#avantages" data-page="avantages">Avantages</a>
-          <a href="#pricing">Abonnements</a>
-          <a href="#apropos" data-page="apropos">À propos</a>
-          <a href="#letest" data-page="letest">Le test</a>
-          <a href="/VoltApp.html">Espace client</a>
-        </div>
-      </div>
-      <div>
-        <div class="footer-col-h">Contact</div>
-        <div class="footer-links">
-          <a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a>
-          <a href="/mentions-legales.html">Mentions légales</a>
-          <a href="/confidentialite.html">Politique de confidentialité</a>
-          <a href="/cgv.html">Conditions d'utilisation</a>
-        </div>
-      </div>
+      <div><div class="footer-logo">VOLT<em>.</em></div><div class="footer-desc">Eaux vitaminées fonctionnelles et distributeurs connectés pour les fitness partenaires en Suisse.</div></div>
+      <div><div class="footer-col-h">Navigation</div><div class="footer-links"><a href="#saveurs" data-page="saveurs">Saveurs</a><a href="#comment" data-page="comment">Comment ça marche</a><a href="#avantages" data-page="avantages">Avantages</a><a href="#pricing">Abonnements</a><a href="#apropos" data-page="apropos">À propos</a><a href="#letest" data-page="letest">Le test</a><a href="/VoltApp.html">Espace client</a></div></div>
+      <div><div class="footer-col-h">Contact</div><div class="footer-links"><a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a><a href="/mentions-legales.html">Mentions légales</a><a href="/confidentialite.html">Politique de confidentialité</a><a href="/cgv.html">Conditions d'utilisation</a></div></div>
     </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2026 VOLT. — Tous droits réservés</div>
-      <div class="footer-legal">
-        <a href="/cgv.html">CGV</a>
-        <a href="/confidentialite.html">Politique de confidentialité</a>
-        <a href="mailto:info@volt-energy.ch">Support</a>
-      </div>
-    </div>
+    <div class="footer-bottom"><div class="footer-copy">© 2026 VOLT. — Tous droits réservés</div><div class="footer-legal"><a href="/cgv.html">CGV</a><a href="/confidentialite.html">Politique de confidentialité</a><a href="mailto:info@volt-energy.ch">Support</a></div></div>
   </div>
 </footer>
 
 <script>
-/* VOLT. — comportements partagés (nav, menu mobile, reveal au scroll) */
 (function(){
-  // Nav scroll shadow
-  var nav = document.getElementById('nav');
-  if(nav){
-    window.addEventListener('scroll', function(){
-      nav.classList.toggle('scrolled', window.scrollY > 30);
-    }, { passive:true });
-  }
-  // Menu mobile
-  var ham = document.getElementById('hamburger');
-  var links = document.getElementById('navLinks');
-  if(ham && links){
-    ham.addEventListener('click', function(){ links.classList.toggle('open'); });
-    links.querySelectorAll('a').forEach(function(a){
-      a.addEventListener('click', function(){ links.classList.remove('open'); });
-    });
-  }
-  // Reveal au scroll
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('in'); });
-  }, { threshold:.1, rootMargin:'0px 0px -50px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el){ obs.observe(el); });
-  // Effets tactiles (cartes)
-  document.querySelectorAll('.step, .ben, .flav').forEach(function(el){
-    el.addEventListener('touchstart', function(){ el.classList.add('touched'); }, { passive:true });
-    el.addEventListener('touchend', function(){ setTimeout(function(){ el.classList.remove('touched'); }, 300); }, { passive:true });
-  });
+  var nav=document.getElementById('nav');
+  if(nav){window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>30);},{passive:true});}
+  var ham=document.getElementById('hamburger');
+  var links=document.getElementById('navLinks');
+  if(ham&&links){ham.addEventListener('click',function(){links.classList.toggle('open');});links.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){links.classList.remove('open');});});}
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+  document.querySelectorAll('.step,.ben,.flav').forEach(function(el){el.addEventListener('touchstart',function(){el.classList.add('touched');},{passive:true});el.addEventListener('touchend',function(){setTimeout(function(){el.classList.remove('touched');},300);},{passive:true});});
 })();
 
-/* ============================================================
-   VOLT. — Données produits "Saveurs" + rendu
-   4 eaux vitaminées : PERFORMANCE · ANTIOXIDANT · IMMUNE · RELOAD
-   ============================================================ */
-window.VOLT_PRODUITS = [
-  {
-    id:"performance",
-    nom:"PERFORMANCE",
-    arome:"Ananas",
-    accent:"#0057FF",
-    img:"images/tropical-twist.webp",
-    pos:"50% 22%",
-    tagline:"Revigorez votre corps à chaque gorgée — riche en vitamines et minéraux essentiels, boostée au guarana.",
-    tags:["Guarana naturel","0 sucre ajouté","Calcium + Magnésium"],
-    bienfaits:[
-      "Le <b>magnésium</b> et la <b>vitamine C</b> contribuent à réduire la fatigue et l'épuisement",
-      "Contribue au fonctionnement normal du système immunitaire",
-      "Contribue à la libération d'énergie dans le métabolisme",
-      "Le <b>calcium</b> contribue au fonctionnement normal des muscles",
-      "Aide à protéger les cellules contre le stress oxydatif",
-      "Sans sucre ajouté — contient des sucres naturellement présents",
-      "Arôme 100% naturel d'ananas"
-    ],
-    ingredients:"Inuline, vitamine C (acide ascorbique), calcium (citrate de calcium, lactate de calcium), citrate de magnésium, stabilisant : cellulose, arôme d'ananas (2 %), extrait de guarana (Paullinia cupana Kunth), édulcorant : glycosides de stéviol de stévia, mélange de vitamines B (thiamine, riboflavine, B6, B12, acide folique, D-pantothénate de calcium, nicotinamide).",
-    nutrition:[
-      ["Énergie","17 kcal / 72 kJ"],
-      ["Matières grasses","0,004 g"],
-      ["dont saturés","0,0025 g"],
-      ["Glucides","3,7 g"],
-      ["dont sucres","0,65 g"],
-      ["Protéines","0,015 g"],
-      ["Sel","0,001 g"]
-    ],
-    micros:[
-      ["Vitamine C","500 mg","625%"],
-      ["Vitamine B1","0,08 mg","7,5%"],
-      ["Vitamine B2","0,1 mg","7,5%"],
-      ["Vitamine B3","1,2 mg","7,5%"],
-      ["Vitamine B5","0,45 mg","7,5%"],
-      ["Vitamine B6","0,1 mg","7,5%"],
-      ["Vitamine B9","15 µg","7,5%"],
-      ["Vitamine B12","0,19 µg","7,5%"],
-      ["Magnésium","28 mg","7,5%"],
-      ["Calcium","72 mg","9%"]
-    ],
-    cafeine:true
-  },
-  {
-    id:"antioxidant",
-    nom:"ANTIOXIDANT",
-    arome:"Citron & Orange",
-    accent:"#F0922B",
-    img:"images/citrus-burst.webp",
-    pos:"50% 45%",
-    tagline:"Profitez de la fraîcheur à chaque gorgée — pleine d'antioxydants, vitamine E, zinc et sélénium.",
-    tags:["Antioxydants","Vitamine E + Zinc","0 sucre ajouté"],
-    bienfaits:[
-      "La <b>vitamine C</b> contribue à réduire la fatigue et l'épuisement",
-      "Contribue au fonctionnement normal du système immunitaire",
-      "Contribue à protéger les cellules contre le stress oxydatif",
-      "Sans sucre ajouté — contient des sucres naturellement présents",
-      "Uniquement des arômes naturels de citron et d'orange"
-    ],
-    ingredients:"Inuline, vitamine C (acide ascorbique), stabilisant : cellulose, arôme de citron (2 %), arôme d'orange (1 %), édulcorant : glycosides de stéviol issus de la stévia, gluconate de zinc, sélénite de sodium.",
-    nutrition:[
-      ["Énergie","13 kcal / 50 kJ"],
-      ["Matières grasses","0,005 g"],
-      ["dont saturés","0,003 g"],
-      ["Glucides","0,3 g"],
-      ["dont sucres","0,3 g"],
-      ["Protéines","0,015 g"],
-      ["Sel","0,001 g"],
-      ["Fibres","4 g"]
-    ],
-    micros:[
-      ["Vitamine C","250 mg","312%"],
-      ["Vitamine E","0,9 mg","7%"],
-      ["Zinc","0,7 mg","7%"],
-      ["Sélénium","7,5 µg","14%"]
-    ],
-    cafeine:false
-  },
-  {
-    id:"immune",
-    nom:"IMMUNE SUPPORT",
-    arome:"Fraise",
-    accent:"#E5484D",
-    img:"images/berry-boost.webp",
-    pos:"50% 38%",
-    tagline:"Soutenez votre système immunitaire à chaque gorgée — fraise, sureau, complexe B, zinc et sélénium.",
-    tags:["Extrait de sureau","Complexe B + Zinc","0 sucre ajouté"],
-    bienfaits:[
-      "Contribue au fonctionnement normal du système immunitaire",
-      "La <b>vitamine C</b> contribue à réduire la fatigue et l'épuisement",
-      "Aide à protéger les cellules contre le stress oxydatif",
-      "Sans sucre ajouté — contient des sucres naturellement présents",
-      "Uniquement l'arôme naturel de fraise"
-    ],
-    ingredients:"Inuline, vitamine C (acide ascorbique), stabilisant : cellulose, arôme fraise (3 %), extrait de sureau (Sambucus nigra L.), édulcorant : glycosides de stéviol de stévia, complexe de vitamines B (B1, B2, B3, B5, B6, B9, B12), gluconate de zinc, sélénite de sodium.",
-    nutrition:[
-      ["Énergie","13 kcal / 51 kJ"],
-      ["Matières grasses","0 g"],
-      ["dont saturés","0 g"],
-      ["Glucides","0,3 g"],
-      ["dont sucres","0,3 g"],
-      ["Protéines","0 g"],
-      ["Sel","0,002 g"],
-      ["Fibres","4 g"]
-    ],
-    micros:[
-      ["Vitamine C","250 mg","312%"],
-      ["Vitamine B1","0,1 mg","7,5%"],
-      ["Vitamine B2","0,1 mg","7,5%"],
-      ["Vitamine B3","1,2 mg","7,5%"],
-      ["Vitamine B5","0,5 mg","7,5%"],
-      ["Vitamine B6","0,1 mg","7,5%"],
-      ["Vitamine B9","15 µg","7,5%"],
-      ["Vitamine B12","0,19 µg","7,5%"],
-      ["Zinc","0,7 mg","7%"],
-      ["Sélénium","7,5 µg","14%"]
-    ],
-    cafeine:false
-  },
-  {
-    id:"reload",
-    nom:"RELOAD",
-    arome:"Mangue",
-    accent:"#F2B705",
-    img:"images/tropical-twist.webp",
-    pos:"30% 80%",
-    tagline:"Découvrez la fraîcheur et savourez chaque gorgée — mangue, magnésium et zinc pour la récupération.",
-    tags:["Magnésium + Zinc","Récupération","0 sucre ajouté"],
-    bienfaits:[
-      "Le <b>magnésium</b> et la <b>vitamine C</b> participent au fonctionnement du système immunitaire",
-      "La <b>vitamine C</b> contribue au métabolisme énergétique normal",
-      "Contribue à protéger les cellules contre le stress oxydatif",
-      "Le <b>zinc</b> et la <b>vitamine C</b> contribuent au système immunitaire",
-      "Sans sucre ajouté — contient des sucres naturellement présents",
-      "Avec un arôme naturel de mangue"
-    ],
-    ingredients:"Inuline, vitamine C (acide ascorbique), citrate de magnésium, stabilisant : cellulose, arôme mangue (3 %), édulcorant : glycosides de stéviol de stévia, gluconate de zinc, complexe B (thiamine, riboflavine, B6, B12, acide folique, D-pantothénate de calcium, nicotinamide).",
-    nutrition:[
-      ["Énergie","18 kcal / 75 kJ"],
-      ["Matières grasses","0,003 g"],
-      ["dont saturés","0,003 g"],
-      ["Glucides","4 g"],
-      ["dont sucres","0,7 g"],
-      ["Protéines","0,015 g"],
-      ["Sel","0,001 g"]
-    ],
-    micros:[
-      ["Vitamine C","500 mg","625%"],
-      ["Vitamine B1","0,08 mg","7,5%"],
-      ["Vitamine B2","0,1 mg","7,5%"],
-      ["Vitamine B3","1,2 mg","7,5%"],
-      ["Vitamine B5","0,45 mg","7,5%"],
-      ["Vitamine B6","0,1 mg","7,5%"],
-      ["Vitamine B9","15 µg","7,5%"],
-      ["Vitamine B12","0,19 µg","7,5%"],
-      ["Magnésium","28 mg","7,5%"],
-      ["Zinc","0,7 mg","7%"]
-    ],
-    cafeine:false
-  }
-];
-
-(function(){
-  var wrap = document.getElementById('produits');
-  if(!wrap) return;
-
-  function vmix(hex,t,amt){hex=hex.replace('#','');var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);var tr=(t>>16)&255,tg=(t>>8)&255,tb=t&255;r=Math.round(r+(tr-r)*amt);g=Math.round(g+(tg-g)*amt);b=Math.round(b+(tb-b)*amt);return '#'+[r,g,b].map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('');}
-
-  function voltCan(p,h){
-    var a=p.accent, id=p.id||(p.nom||'').toLowerCase().replace(/[^a-z]/g,''), nom=p.nom;
-    var bt=vmix(a,0xffffff,0.20), bb=vmix(a,0x000000,0.06);
-    var FR={performance:'pineapple',antioxidant:'citrus',immune:'strawberry',reload:'mango'};
-    var fr=FR[id]||'citrus';
-    function fruit(t,x,y,s,r){
-      var g='<g transform="translate('+x+' '+y+') scale('+s+') rotate('+(r||0)+')">';
-      if(t==='pineapple'){g+='<path d="M0 -30 L-6 -13 L-13 -23 L-9 -9 L-19 -15 L-10 -3 Z" fill="#36A85B"/><path d="M0 -30 L6 -13 L13 -23 L9 -9 L19 -15 L10 -3 Z" fill="#36A85B"/><path d="M0 -33 L-4 -7 L4 -7 Z" fill="#43C977"/><ellipse cx="0" cy="7" rx="16" ry="22" fill="#F4C234"/><path d="M-13 -3 L1 7 M-14 7 L2 19 M-3 -11 L13 1 M-5 3 L11 15" stroke="#D79A1F" stroke-width="1.3" fill="none" opacity=".55"/><ellipse cx="0" cy="7" rx="16" ry="22" fill="none" stroke="#D79A1F" stroke-width="1.4" opacity=".5"/>';}
-      else if(t==='citrus'){g+='<circle r="20" fill="#EE8E2E"/><circle r="15.5" fill="#FFD79A"/><path d="M0 0 L0 -14 M0 0 L9.9 -9.9 M0 0 L14 0 M0 0 L9.9 9.9 M0 0 L0 14 M0 0 L-9.9 9.9 M0 0 L-14 0 M0 0 L-9.9 -9.9" stroke="#F2A94D" stroke-width="1.5"/><circle r="3" fill="#FFEAC6"/>';}
-      else if(t==='strawberry'){g+='<path d="M0 17 C-14 8 -18 -5 -10 -12 C-4 -18 4 -18 10 -12 C18 -5 14 8 0 17 Z" fill="#E5484D"/><g fill="#FBD46B"><ellipse cx="-6" cy="-4" rx="1.5" ry="2.2"/><ellipse cx="2" cy="-6" rx="1.5" ry="2.2"/><ellipse cx="7" cy="-1" rx="1.5" ry="2.2"/><ellipse cx="-2" cy="2" rx="1.5" ry="2.2"/><ellipse cx="-8" cy="4" rx="1.5" ry="2.2"/><ellipse cx="4" cy="5" rx="1.5" ry="2.2"/><ellipse cx="0" cy="9" rx="1.5" ry="2.2"/></g><path d="M0 -10 L-9 -17 L-3 -11 L-10 -8 L-2 -8 L0 -16 L2 -8 L10 -8 L3 -11 L9 -17 Z" fill="#36A85B"/>';}
-      else{g+='<path d="M-5 -16 C12 -19 21 -3 16 11 C12 22 -5 23 -13 12 C-21 1 -18 -13 -5 -16 Z" fill="#F4A93C"/><ellipse cx="-4" cy="-5" rx="11" ry="12" fill="#E8612C" opacity=".45"/><path d="M-5 -16 C-11 -23 -1 -26 4 -21 C0 -19 -3 -17 -5 -16 Z" fill="#36A85B"/>';}
-      return g+'</g>';
-    }
-    return '<div class="vcan" style="height:'+h+'px;--acc:'+a+'">'+
-      '<span class="b b1"></span><span class="b b2"></span><span class="b b3"></span>'+
-      '<svg class="vcan-svg" viewBox="0 0 300 470" xmlns="http://www.w3.org/2000/svg">'+
-        '<defs>'+
-          '<linearGradient id="bd-'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+bt+'"/><stop offset="1" stop-color="'+bb+'"/></linearGradient>'+
-          '<clipPath id="bc-'+id+'"><rect x="96" y="104" width="108" height="296" rx="34"/></clipPath>'+
-        '</defs>'+
-        '<ellipse cx="150" cy="432" rx="66" ry="12" fill="rgba(10,15,30,.10)"/>'+
-        fruit(fr,66,254,1.4,-12)+
-        '<rect x="132" y="84" width="36" height="26" rx="4" fill="#1B2236"/>'+
-        '<rect x="126" y="62" width="48" height="26" rx="9" fill="#26314C"/>'+
-        '<rect x="145" y="48" width="10" height="16" rx="3" fill="#26314C"/>'+
-        '<rect x="96" y="104" width="108" height="296" rx="34" fill="url(#bd-'+id+')" stroke="rgba(10,15,30,.08)"/>'+
-        '<g clip-path="url(#bc-'+id+')"><rect x="110" y="126" width="14" height="250" rx="7" fill="rgba(255,255,255,.30)"/><rect x="128" y="126" width="6" height="250" rx="3" fill="rgba(255,255,255,.18)"/></g>'+
-        '<rect x="100" y="202" width="100" height="86" rx="9" fill="#ffffff" opacity="0.96"/>'+
-        fruit(fr,150,221,0.44,0)+
-        '<text x="150" y="251" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="23" letter-spacing="-0.5" fill="#0A0F1E">VOLT<tspan fill="'+a+'">.</tspan></text>'+
-        '<rect x="126" y="259" width="48" height="3.5" rx="1.75" fill="'+a+'"/>'+
-        '<text x="150" y="278" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="13" letter-spacing="0.4" fill="'+a+'" textLength="80" lengthAdjust="spacingAndGlyphs">'+nom+'</text>'+
-        fruit(fr,232,150,1.15,10)+
-        fruit(fr,226,356,1.0,16)+
-      '</svg>'+
-    '</div>';
-  }
-
-  var html = window.VOLT_PRODUITS.map(function(p,i){
-    var rev = i % 2 === 1;
-    var bullets = p.bienfaits.map(function(b){
-      return '<li><span class="pc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>'+b+'</span></li>';
-    }).join('');
-    var tags = p.tags.map(function(t){ return '<span class="pc-tag">'+t+'</span>'; }).join('');
-    var note = p.note ? '<div class="pc-rate"><span class="stars">★★★★★</span><b>'+p.note+'</b><i>'+p.avis+'</i></div>' : '';
-    var nutri = p.nutrition.map(function(r){
-      var sub = r[0].indexOf('dont')===0;
-      return '<tr'+(sub?' class="sub"':'')+'><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';
-    }).join('');
-    var micros = p.micros.map(function(r){
-      var pct = parseFloat(String(r[2]).replace(',','.'));
-      var w = Math.min(100, pct);
-      return '<tr><td>'+r[0]+'</td><td class="amt">'+r[1]+'</td><td class="nrv"><div class="bar"><i style="width:'+w+'%"></i></div><span>'+r[2]+'</span></td></tr>';
-    }).join('');
-    var cafeine = p.cafeine ? '<div class="pc-caf">⚡ Contient de la caféine (guarana) — déconseillé aux enfants et aux femmes enceintes ou allaitantes. À consommer avec modération ; ne pas dépasser la dose journalière recommandée. Une consommation excessive peut avoir un effet laxatif (inuline). À tenir hors de portée des jeunes enfants.</div>' : '';
-    return ''+
-    '<article class="pcard reveal" id="'+p.id+'" style="--acc:'+p.accent+'">'+
-      '<div class="pcard-in'+(rev?' rev':'')+'">'+
-        '<div class="pcard-media">'+
-          '<div class="pc-strip"></div>'+
-          voltCan(p,480)+
-          '<div class="pc-arome">'+p.arome+'</div>'+
-        '</div>'+
-        '<div class="pcard-body">'+
-          '<div class="pc-eyebrow">Eau vitaminée</div>'+
-          '<h2 class="pc-name">VOLT. <em>'+p.nom+'</em></h2>'+
-          note+
-          '<p class="pc-tag-line">'+p.tagline+'</p>'+
-          '<div class="pc-tags">'+tags+'</div>'+
-          '<ul class="pc-bullets">'+bullets+'</ul>'+
-          cafeine+
-          '<div class="pc-acc">'+
-            '<details class="pc-det"><summary><span>Ingrédients</span><span class="chev">+</span></summary><p class="pc-ing">'+p.ingredients+'</p></details>'+
-            '<details class="pc-det"><summary><span>Valeurs nutritionnelles</span><span class="chev">+</span></summary>'+
-              '<div class="pc-tables">'+
-                '<table class="pc-tbl"><thead><tr><th>Pour une portion</th><th>5 g / 350 mL</th></tr></thead><tbody>'+nutri+'</tbody></table>'+
-                '<table class="pc-tbl micro"><thead><tr><th>Vitamines & minéraux</th><th>Quantité</th><th>% VNR*</th></tr></thead><tbody>'+micros+'</tbody></table>'+
-                '<p class="pc-foot">*VNR = Valeur Nutritionnelle de Référence. Édulcoré aux glycosides de stéviol (stévia).</p>'+
-              '</div>'+
-            '</details>'+
-          '</div>'+
-          '<a href="le-test.html" class="pc-link">Cette saveur est-elle faite pour toi ? Fais le test →</a>'+
-        '</div>'+
-      '</div>'+
-    '</article>';
-  }).join('');
-  wrap.innerHTML = html;
-})();
-
-/* ============================================================
-   VOLT. — "Le test" : quiz 4 questions → 1 produit recommandé
-   Produits : performance · antioxidant · immune · reload
-   ============================================================ */
-(function(){
-  var PRODUITS = {
-    performance:{nom:"PERFORMANCE",arome:"Ananas · Guarana",accent:"#0057FF",img:"images/tropical-twist.webp",pos:"50% 22%",
-      desc:"Ton carburant avant l'effort. Boostée au guarana, au calcium et au magnésium pour révéler ta pleine puissance.",
-      tags:["Guarana naturel","Énergie","Calcium + Magnésium"]},
-    antioxidant:{nom:"ANTIOXIDANT",arome:"Citron · Orange",accent:"#F0922B",img:"images/citrus-burst.webp",pos:"50% 45%",
-      desc:"La fraîcheur acidulée au quotidien. Pleine d'antioxydants, de vitamine E, de zinc et de sélénium.",
-      tags:["Antioxydants","Vitamine E","Fraîcheur"]},
-    immune:{nom:"IMMUNE SUPPORT",arome:"Fraise · Sureau",accent:"#E5484D",img:"images/berry-boost.webp",pos:"50% 38%",
-      desc:"Ton bouclier au fil des saisons. Fraise et sureau, complexe B, zinc et sélénium pour soutenir l'immunité.",
-      tags:["Sureau","Complexe B","Immunité"]},
-    reload:{nom:"RELOAD",arome:"Mangue · Magnésium",accent:"#F2B705",img:"images/tropical-twist.webp",pos:"30% 80%",
-      desc:"La récupération en douceur. Mangue, magnésium et zinc pour recharger les batteries après l'effort.",
-      tags:["Magnésium","Récupération","Zinc"]}
-  };
-
-  var QUESTIONS = [
-    { q:"Ton objectif n°1 avec VOLT. ?", w:2, opts:[
-      {t:"Un boost d'énergie avant l'effort", e:"⚡", p:"performance"},
-      {t:"Bien récupérer après ma séance", e:"🔋", p:"reload"},
-      {t:"Renforcer mes défenses naturelles", e:"🛡️", p:"immune"},
-      {t:"M'hydrater fraîchement, sans sucre", e:"💧", p:"antioxidant"}
-    ]},
-    { q:"Quel profil de goût te tente le plus ?", w:2, opts:[
-      {t:"Ananas exotique", e:"🍍", p:"performance"},
-      {t:"Agrumes acidulés — citron & orange", e:"🍋", p:"antioxidant"},
-      {t:"Fraise gourmande", e:"🍓", p:"immune"},
-      {t:"Mangue douce & ensoleillée", e:"🥭", p:"reload"}
-    ]},
-    { q:"À quel moment bois-tu ton eau vitaminée ?", w:1, opts:[
-      {t:"Juste avant de m'entraîner", e:"🏋️", p:"performance"},
-      {t:"Après l'effort, pour récupérer", e:"🧊", p:"reload"},
-      {t:"En période de fatigue ou en hiver", e:"❄️", p:"immune"},
-      {t:"Tout au long de la journée", e:"☀️", p:"antioxidant"}
-    ]},
-    { q:"Ce qui compte le plus pour toi ?", w:1, opts:[
-      {t:"Un vrai coup de fouet (caféine/guarana)", e:"🚀", p:"performance"},
-      {t:"Du magnésium pour mes muscles", e:"💪", p:"reload"},
-      {t:"Vitamine C, zinc & sureau", e:"🍊", p:"immune"},
-      {t:"Antioxydants & légèreté", e:"🌿", p:"antioxidant"}
-    ]}
-  ];
-
-  var root = document.getElementById('quiz');
-  if(!root) return;
-
-  function vmix(hex,t,amt){hex=hex.replace('#','');var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);var tr=(t>>16)&255,tg=(t>>8)&255,tb=t&255;r=Math.round(r+(tr-r)*amt);g=Math.round(g+(tg-g)*amt);b=Math.round(b+(tb-b)*amt);return '#'+[r,g,b].map(function(x){return ('0'+x.toString(16)).slice(-2)}).join('');}
-
-  function voltCan(p,h){
-    var a=p.accent, id=p.id||p.nom.toLowerCase().replace(/[^a-z]/g,''), nom=p.nom;
-    var bt=vmix(a,0xffffff,0.20), bb=vmix(a,0x000000,0.06);
-    var FR={performance:'pineapple',antioxidant:'citrus',immune:'strawberry',reload:'mango'};
-    var fr=FR[id]||'citrus';
-    function fruit(t,x,y,s,r){
-      var g='<g transform="translate('+x+' '+y+') scale('+s+') rotate('+(r||0)+')">';
-      if(t==='pineapple'){g+='<path d="M0 -30 L-6 -13 L-13 -23 L-9 -9 L-19 -15 L-10 -3 Z" fill="#36A85B"/><path d="M0 -30 L6 -13 L13 -23 L9 -9 L19 -15 L10 -3 Z" fill="#36A85B"/><path d="M0 -33 L-4 -7 L4 -7 Z" fill="#43C977"/><ellipse cx="0" cy="7" rx="16" ry="22" fill="#F4C234"/><path d="M-13 -3 L1 7 M-14 7 L2 19 M-3 -11 L13 1 M-5 3 L11 15" stroke="#D79A1F" stroke-width="1.3" fill="none" opacity=".55"/><ellipse cx="0" cy="7" rx="16" ry="22" fill="none" stroke="#D79A1F" stroke-width="1.4" opacity=".5"/>';}
-      else if(t==='citrus'){g+='<circle r="20" fill="#EE8E2E"/><circle r="15.5" fill="#FFD79A"/><path d="M0 0 L0 -14 M0 0 L9.9 -9.9 M0 0 L14 0 M0 0 L9.9 9.9 M0 0 L0 14 M0 0 L-9.9 9.9 M0 0 L-14 0 M0 0 L-9.9 -9.9" stroke="#F2A94D" stroke-width="1.5"/><circle r="3" fill="#FFEAC6"/>';}
-      else if(t==='strawberry'){g+='<path d="M0 17 C-14 8 -18 -5 -10 -12 C-4 -18 4 -18 10 -12 C18 -5 14 8 0 17 Z" fill="#E5484D"/><g fill="#FBD46B"><ellipse cx="-6" cy="-4" rx="1.5" ry="2.2"/><ellipse cx="2" cy="-6" rx="1.5" ry="2.2"/><ellipse cx="7" cy="-1" rx="1.5" ry="2.2"/><ellipse cx="-2" cy="2" rx="1.5" ry="2.2"/><ellipse cx="-8" cy="4" rx="1.5" ry="2.2"/><ellipse cx="4" cy="5" rx="1.5" ry="2.2"/><ellipse cx="0" cy="9" rx="1.5" ry="2.2"/></g><path d="M0 -10 L-9 -17 L-3 -11 L-10 -8 L-2 -8 L0 -16 L2 -8 L10 -8 L3 -11 L9 -17 Z" fill="#36A85B"/>';}
-      else{g+='<path d="M-5 -16 C12 -19 21 -3 16 11 C12 22 -5 23 -13 12 C-21 1 -18 -13 -5 -16 Z" fill="#F4A93C"/><ellipse cx="-4" cy="-5" rx="11" ry="12" fill="#E8612C" opacity=".45"/><path d="M-5 -16 C-11 -23 -1 -26 4 -21 C0 -19 -3 -17 -5 -16 Z" fill="#36A85B"/>';}
-      return g+'</g>';
-    }
-    return '<div class="vcan" style="height:'+h+'px;--acc:'+a+'">'+
-      '<span class="b b1"></span><span class="b b2"></span><span class="b b3"></span>'+
-      '<svg class="vcan-svg" viewBox="0 0 300 470" xmlns="http://www.w3.org/2000/svg">'+
-        '<defs>'+
-          '<linearGradient id="bd-'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+bt+'"/><stop offset="1" stop-color="'+bb+'"/></linearGradient>'+
-          '<clipPath id="bc-'+id+'"><rect x="96" y="104" width="108" height="296" rx="34"/></clipPath>'+
-        '</defs>'+
-        '<ellipse cx="150" cy="432" rx="66" ry="12" fill="rgba(10,15,30,.10)"/>'+
-        fruit(fr,66,254,1.4,-12)+
-        '<rect x="132" y="84" width="36" height="26" rx="4" fill="#1B2236"/>'+
-        '<rect x="126" y="62" width="48" height="26" rx="9" fill="#26314C"/>'+
-        '<rect x="145" y="48" width="10" height="16" rx="3" fill="#26314C"/>'+
-        '<rect x="96" y="104" width="108" height="296" rx="34" fill="url(#bd-'+id+')" stroke="rgba(10,15,30,.08)"/>'+
-        '<g clip-path="url(#bc-'+id+')"><rect x="110" y="126" width="14" height="250" rx="7" fill="rgba(255,255,255,.30)"/><rect x="128" y="126" width="6" height="250" rx="3" fill="rgba(255,255,255,.18)"/></g>'+
-        '<rect x="100" y="202" width="100" height="86" rx="9" fill="#ffffff" opacity="0.96"/>'+
-        fruit(fr,150,221,0.44,0)+
-        '<text x="150" y="251" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="900" font-size="23" letter-spacing="-0.5" fill="#0A0F1E">VOLT<tspan fill="'+a+'">.</tspan></text>'+
-        '<rect x="126" y="259" width="48" height="3.5" rx="1.75" fill="'+a+'"/>'+
-        '<text x="150" y="278" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="800" font-size="13" letter-spacing="0.4" fill="'+a+'" textLength="80" lengthAdjust="spacingAndGlyphs">'+nom+'</text>'+
-        fruit(fr,232,150,1.15,10)+
-        fruit(fr,226,356,1.0,16)+
-      '</svg>'+
-    '</div>';
-  }
-  var step = 0;            // 0..3 questions, 4 = résultat
-  var answers = [];        // produit choisi par question
-  var order = ["performance","antioxidant","immune","reload"];
-
-  function progress(){
-    var pct = Math.round((step/QUESTIONS.length)*100);
-    return '<div class="qz-prog"><div class="qz-prog-bar"><i style="width:'+pct+'%"></i></div>'+
-           '<div class="qz-prog-lbl">'+(step<QUESTIONS.length?('Question '+(step+1)+' / '+QUESTIONS.length):'Résultat')+'</div></div>';
-  }
-
-  function renderQuestion(){
-    var Q = QUESTIONS[step];
-    var opts = Q.opts.map(function(o,i){
-      return '<button class="qz-opt" data-p="'+o.p+'" style="--d:'+(i*0.05)+'s">'+
-        '<span class="qz-emo">'+o.e+'</span><span class="qz-opt-t">'+o.t+'</span>'+
-        '<span class="qz-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>'+
-      '</button>';
-    }).join('');
-    root.innerHTML =
-      progress()+
-      '<div class="qz-card" key="'+step+'">'+
-        '<div class="qz-step">0'+(step+1)+'</div>'+
-        '<h2 class="qz-q">'+Q.q+'</h2>'+
-        '<div class="qz-opts">'+opts+'</div>'+
-        (step>0?'<button class="qz-back">← Précédent</button>':'')+
-      '</div>';
-    root.querySelectorAll('.qz-opt').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        answers[step] = btn.getAttribute('data-p');
-        root.querySelectorAll('.qz-opt').forEach(function(b){b.classList.remove('on')});
-        btn.classList.add('on');
-        setTimeout(function(){ step++; (step<QUESTIONS.length)?renderQuestion():renderResult(); window.scrollTo({top:0,behavior:'smooth'}); }, 260);
-      });
-    });
-    var back = root.querySelector('.qz-back');
-    if(back) back.addEventListener('click', function(){ step--; renderQuestion(); });
-  }
-
-  function compute(){
-    var score = {performance:0,antioxidant:0,immune:0,reload:0};
-    answers.forEach(function(p,i){ if(p) score[p]+= QUESTIONS[i].w; });
-    var best=order[0];
-    order.forEach(function(k){ if(score[k]>score[best]) best=k; });
-    return best;
-  }
-
-  function renderResult(){
-    var key = compute();
-    var p = PRODUITS[key];
-    try{ localStorage.setItem('volt_test', key); }catch(e){}
-    var tags = p.tags.map(function(t){return '<span class="rs-tag">'+t+'</span>';}).join('');
-    root.innerHTML =
-      progress()+
-      '<div class="qz-result" style="--acc:'+p.accent+'">'+
-        '<div class="rs-media"><div class="rs-strip"></div>'+voltCan(p,360)+'<div class="rs-arome">'+p.arome+'</div></div>'+
-        '<div class="rs-body">'+
-          '<div class="rs-eyebrow">⚡ Ton match VOLT.</div>'+
-          '<h2 class="rs-name">VOLT. <em>'+p.nom+'</em></h2>'+
-          '<p class="rs-desc">'+p.desc+'</p>'+
-          '<div class="rs-tags">'+tags+'</div>'+
-          '<div class="rs-actions">'+
-            '<a href="saveurs.html#'+key+'" class="btn-primary">Voir la fiche produit →</a>'+
-            '<a href="index.html#pricing" class="btn-outline">S\'abonner</a>'+
-          '</div>'+
-          '<button class="rs-redo">↻ Refaire le test</button>'+
-        '</div>'+
-      '</div>';
-    var redo = root.querySelector('.rs-redo');
-    if(redo) redo.addEventListener('click', function(){ step=0; answers=[]; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); });
-  }
-
-  renderQuestion();
-})();
-
-
-const pages = {
-  saveurs: `<!-- HERO -->
-<header class="page-hero">
-  <div class="page-hero-mesh"></div>
-  <div class="page-hero-dots"></div>
-  <div class="page-hero-inner">
-    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Saveurs</span></div>
-    <div class="page-badge"><span class="page-badge-dot"></span><span>4 eaux vitaminées</span></div>
-    <h1>DES GOÛTS <em>INTENSES.</em><br/>ZÉRO SUCRE AJOUTÉ.</h1>
-    <p class="lead">Quatre eaux vitaminées fonctionnelles, enrichies en vitamines et minéraux essentiels. <strong>Sans sucre ajouté</strong>, arômes 100% naturels, édulcorées à la stévia.</p>
-    <div class="hero-actions">
-      <a href="le-test.html" class="btn-primary">Trouver ma saveur ⚡</a>
-      <a href="#performance" class="btn-outline">Voir la gamme</a>
-    </div>
-    <div class="lineup">
-      <a class="lu" href="#performance" style="--acc:#0057FF"><div class="dot"></div><div class="n">Performance</div><div class="a">Ananas · Guarana</div></a>
-      <a class="lu" href="#antioxidant" style="--acc:#F0922B"><div class="dot"></div><div class="n">Antioxidant</div><div class="a">Citron · Orange</div></a>
-      <a class="lu" href="#immune" style="--acc:#E5484D"><div class="dot"></div><div class="n">Immune</div><div class="a">Fraise · Sureau</div></a>
-      <a class="lu" href="#reload" style="--acc:#F2B705"><div class="dot"></div><div class="n">Reload</div><div class="a">Mangue · Magnésium</div></a>
-    </div>
-    <p class="lineup-more">⚡ Et bien plus à venir — de nouvelles saveurs arrivent.</p>
-  </div>
-</header>
-
-<!-- PRODUITS -->
-<section class="blk" style="padding-top:72px">
-  <div id="produits"></div>
-
-  <div class="warn reveal">
-    <h3>Informations & avertissements</h3>
-    <p>Ce produit ne remplace pas une alimentation équilibrée et variée ni un mode de vie sain. Les apports journaliers recommandés ne doivent pas être dépassés.</p>
-    <p>En raison des variations naturelles des propriétés des ingrédients actifs, la couleur, le goût et l'odeur peuvent légèrement varier d'un lot à l'autre, sans affecter la qualité ni l'efficacité du produit.</p>
-    <p><b>Conservation :</b> à conserver dans un endroit frais et sec, à l'abri de la lumière. Tenir hors de portée des jeunes enfants.</p>
-    <p><b>Allergènes & régimes :</b> convient aux régimes végétariens et végétaliens. Sans gluten, sans lactose, sans OGM, sans colorant ni conservateur artificiel. Fabriqué dans un atelier susceptible de manipuler d'autres arômes — voir l'étiquette du produit pour la déclaration complète des allergènes.</p>
-    <p><b>PERFORMANCE</b> contient de la caféine (guarana) : déconseillé aux enfants, aux femmes enceintes ou allaitantes et aux personnes sensibles à la caféine.</p>
-    <p style="color:var(--ink4)">*VNR = Valeur Nutritionnelle de Référence. Valeurs indicatives par portion de 5 g diluée dans 350 mL d'eau. « Sans sucre ajouté » : contient une quantité minime de sucres naturellement présents. Les valeurs définitives figurent sur l'emballage et doivent être validées selon l'Ordonnance suisse sur les denrées alimentaires (ODAlOUs / OIDAl) avant commercialisation.</p>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta-box reveal">
-    <h2 class="cta-title">PAS ENCORE SÛR<br/>DE TA SAVEUR ?</h2>
-    <p class="cta-sub">Réponds à 4 questions et découvre l'eau vitaminée VOLT. qui te correspond le mieux.</p>
-    <a href="le-test.html" class="btn-white">Faire le test ⚡</a>
-  </div>
-</div>
-
-<!-- FOOTER -->`,
-  letest: `<!-- HERO -->
-<header class="page-hero" style="padding-bottom:36px">
-  <div class="page-hero-mesh"></div>
-  <div class="page-hero-dots"></div>
-  <div class="page-hero-inner">
-    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Le test</span></div>
-    <div class="page-badge"><span class="page-badge-dot"></span><span>4 questions · 30 secondes</span></div>
-    <h1>QUELLE SAVEUR<br/>EST <em>FAITE POUR TOI</em> ?</h1>
-    <p class="lead">Réponds à 4 questions rapides. On te recommande l'eau vitaminée VOLT. qui colle le mieux à ton énergie, tes goûts et tes objectifs.</p>
-  </div>
-</header>
-
-<!-- QUIZ -->
-<section style="padding:8px 0 96px">
-  <div class="quiz-wrap">
-    <div id="quiz"></div>
-  </div>
-</section>
-
-<!-- FOOTER -->`,
-  comment: `<!-- HERO -->
-<header class="page-hero">
-  <div class="page-hero-mesh"></div>
-  <div class="page-hero-dots"></div>
-  <div class="page-hero-inner">
-    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Comment ça marche</span></div>
-    <div class="page-badge"><span class="page-badge-dot"></span><span>Service suisse · Sans App Store</span></div>
-    <h1>UN QR CODE.<br/>UNE <em>GORGÉE.</em> C'EST TOUT.</h1>
-    <p class="lead">Pas de téléchargement, pas de configuration. <strong>1 boisson toutes les 15 minutes</strong> dans ton fitness — et un service clé en main pour les clubs.</p>
-    <div class="toggle-tabs">
-      <a href="#membres" class="on">Pour les membres</a>
-      <a href="#clubs">Pour les clubs</a>
-    </div>
-  </div>
-</header>
-
-<!-- MEMBRES -->
-<section class="blk" id="membres" style="padding-top:64px">
-  <div class="section">
-    <div class="reveal sec-center">
-      <div class="sec-label">Pour les membres</div>
-      <h2 class="sec-title">TROIS ÉTAPES,<br/><em>UNE BOISSON</em></h2>
-      <p class="sec-sub">Ton abonnement, ton QR code, ton fitness. Le reste est automatique.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal d1">
-        <div class="step-num-label">01</div>
-        <div class="step-num">01</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M11 18h2"/></svg></div>
-        <div class="step-title">Tu t'abonnes en ligne</div>
-        <div class="step-desc">Crée ton compte en 60 secondes. Choisis ton plan et paie via Stripe ou TWINT — 100% sécurisé, 0% prise de tête.</div>
-      </div>
-      <div class="step reveal d2">
-        <div class="step-num-label">02</div>
-        <div class="step-num">02</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 21v.01M17 21h.01M21 17h.01"/></svg></div>
-        <div class="step-title">Ton QR est prêt</div>
-        <div class="step-desc">Un QR code unique et permanent est généré instantanément. Il t'appartient — personne d'autre ne peut l'utiliser.</div>
-      </div>
-      <div class="step reveal d3">
-        <div class="step-num-label">03</div>
-        <div class="step-num">03</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg></div>
-        <div class="step-title">Scan. Bois. Répète.</div>
-        <div class="step-desc">Présente ton QR au terminal VOLT. dans ton fitness. La machine distribue en moins d'une seconde. Toutes les 15 min.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SPLIT machine highlights -->
-<section class="blk bg">
-  <div class="section">
-    <div class="split">
-      <div class="split-media reveal"><img src="images/volt-crystals.webp" alt="Distributeur VOLT. dans une scène énergétique"/></div>
-      <div class="reveal">
-        <div class="sec-label">Le remplissage</div>
-        <h2 class="sec-title" style="font-size:clamp(32px,4.4vw,48px)">RAPIDE COMME<br/><em>L'ÉCLAIR.</em></h2>
-        <p class="sec-sub" style="margin-bottom:24px">Tu poses ton verre ou ta gourde, tu scannes, c'est servi. Pas de file d'attente, pas de monnaie, pas d'attente entre deux séries.</p>
-        <div class="hl-stats">
-          <div class="hl-stat"><div class="n">9<small>&nbsp;sec</small></div><div class="l">Par boisson</div></div>
-          <div class="hl-stat"><div class="n">15<small>&nbsp;min</small></div><div class="l">Entre 2 boissons</div></div>
-          <div class="hl-stat"><div class="n">0<small>&nbsp;g</small></div><div class="l">Sucre ajouté</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CLUBS -->
-<section class="blk" id="clubs">
-  <div class="section">
-    <div class="reveal sec-center">
-      <div class="sec-label">Pour les clubs de fitness</div>
-      <h2 class="sec-title">UN SERVICE<br/><em>CLÉ EN MAIN</em></h2>
-      <p class="sec-sub">On installe, on entretient, on alimente. Vous fidélisez vos membres et générez un revenu récurrent.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal d1">
-        <div class="step-num-label">01</div>
-        <div class="step-num">01</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></div>
-        <div class="step-title">On installe la station</div>
-        <div class="step-desc">Une station VOLT. autonome et connectée, posée dans votre club. Installation, branchement et mise en service gérés par nos équipes.</div>
-      </div>
-      <div class="step reveal d2">
-        <div class="step-num-label">02</div>
-        <div class="step-num">02</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="step-title">Vos membres se servent</div>
-        <div class="step-desc">Ils scannent leur QR et obtiennent leur eau vitaminée en quelques secondes. Le système gère l'accès, le délai et les droits, tout seul.</div>
-      </div>
-      <div class="step reveal d3">
-        <div class="step-num-label">03</div>
-        <div class="step-num">03</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg></div>
-        <div class="step-title">Vous pilotez depuis l'espace fitness</div>
-        <div class="step-desc">Suivi des consommations, état des stocks, abonnés actifs et revenus : tout est centralisé dans votre espace fitness VOLT., en temps réel.</div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:40px" class="reveal">
-      <a href="fitness.html" class="btn-primary">Accéder à l'espace fitness →</a>
-      <div class="clubs-reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sans engagement de durée — vos membres s'abonnent et résilient à tout moment.</div>
-    </div>
-  </div>
-</section>
-
-<!-- DARK BAND -->
-<section class="blk bg" style="padding-top:0">
-  <div class="section">
-    <div class="band reveal">
-      <div class="band-grid" style="grid-template-columns:1fr">
-        <div class="txt">
-          <div class="sec-label">La station VOLT.</div>
-          <h2>INSTALLEZ VOLT.<br/>DANS VOTRE <em>CLUB</em></h2>
-          <p>Une station autonome, connectée et rentable. Vos membres scannent, boivent, repartent — vous fidélisez et générez un revenu récurrent, sans gestion quotidienne.</p>
-          <a href="mailto:info@volt-energy.ch?subject=Demande%20d'offre%20VOLT.%20pour%20mon%20club" class="btn-white">Demander une offre</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta-box reveal">
-    <h2 class="cta-title">PRÊT À BOOSTER<br/>TES ENTRAÎNEMENTS ?</h2>
-    <p class="cta-sub">Rejoins le réseau VOLT. dès aujourd'hui. Activation immédiate, sans engagement.</p>
-    <a href="VoltApp.html?tab=signup" class="btn-white">Créer mon compte ⚡</a>
-  </div>
-</div>
-
-<!-- FOOTER -->`,
-  avantages: `<!-- HERO -->
-<header class="page-hero">
-  <div class="page-hero-mesh"></div>
-  <div class="page-hero-dots"></div>
-  <div class="page-hero-inner">
-    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Avantages</span></div>
-    <div class="page-badge"><span class="page-badge-dot"></span><span>Sain · Naturel · Sans compromis</span></div>
-    <h1>ACTIVEZ VOTRE<br/>PLEIN <em>POTENTIEL.</em></h1>
-    <p class="lead">Des boissons fonctionnelles <strong>sans sucre ajouté</strong>, enrichies en vitamines et minéraux essentiels — et un accès aussi simple qu'un scan de QR code.</p>
-    <div class="hero-actions">
-      <a href="saveurs.html" class="btn-primary">Découvrir les saveurs</a>
-      <a href="le-test.html" class="btn-outline">Faire le test ⚡</a>
-    </div>
-  </div>
-</header>
-
-<!-- NUTRITION BENEFITS -->
-<section class="blk" style="padding-top:64px">
-  <div class="section">
-    <div class="reveal sec-center">
-      <div class="sec-label">Dans le verre</div>
-      <h2 class="sec-title">UNE FORMULE <em>PROPRE</em></h2>
-      <p class="sec-sub">Ce qu'on met dedans compte autant que ce qu'on laisse de côté.</p>
-    </div>
-    <div class="ben-grid" id="bengrid"></div>
-  </div>
-</section>
-
-<!-- SPLIT performance -->
-<section class="blk bg">
-  <div class="section">
-    <div class="split">
-      <div class="reveal">
-        <div class="sec-label">Pensé pour l'effort</div>
-        <h2 class="sec-title" style="font-size:clamp(32px,4.4vw,48px)">L'HYDRATATION<br/><em>QUI TRAVAILLE</em><br/>POUR TOI.</h2>
-        <ul class="checks">
-          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Remplissage éclair (9 secondes) :</b> ne perds plus une minute entre tes séries.</span></li>
-          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>100% performance :</b> des formules enrichies en vitamines B, C, E et en minéraux essentiels.</span></li>
-          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Zéro sucre ajouté :</b> une hydratation saine, édulcorée naturellement à la stévia.</span></li>
-          <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span><b>Illimité dans le réseau :</b> un abonnement simple, valable dans tous les fitness partenaires.</span></li>
-        </ul>
-        <a href="saveurs.html" class="link-arrow">Voir les 4 saveurs →</a>
-      </div>
-      <div class="split-media reveal"><img src="images/volt-portrait.webp" alt="Station VOLT. en club"/></div>
-    </div>
-    <div class="statband reveal">
-      <div class="s"><div class="n">0<small>&nbsp;g</small></div><div class="l">Sucre ajouté</div></div>
-      <div class="s"><div class="n">≈13<small>&nbsp;kcal</small></div><div class="l">Par portion</div></div>
-      <div class="s"><div class="n">9<small>&nbsp;sec</small></div><div class="l">Par boisson</div></div>
-      <div class="s"><div class="n">100<small>%</small></div><div class="l">Arômes naturels</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- SERVICE BENEFITS -->
-<section class="blk">
-  <div class="section">
-    <div class="reveal sec-center">
-      <div class="sec-label">Au quotidien</div>
-      <h2 class="sec-title">CONÇU POUR <em>TON QUOTIDIEN</em></h2>
-      <p class="sec-sub">L'accès le plus simple à ta boisson : pas d'app à installer, pas de monnaie, pas d'attente.</p>
-    </div>
-    <div class="svc">
-      <div class="svc-card reveal d1">
-        <div class="svc-ic">🔐</div>
-        <div><h3>Ton QR code, ton accès</h3><p>Ton Code QR ne peut être ni partagé ni copié. À chaque scan, le système vérifie que c'est bien toi. Simple, rapide, fiable.</p></div>
-      </div>
-      <div class="svc-card reveal d2">
-        <div class="svc-ic">⏱️</div>
-        <div><h3>Une boisson, un délai</h3><p>Une boisson toutes les 15 minutes — ni plus, ni moins. Le système gère tout automatiquement. Équitable pour tout le monde.</p></div>
-      </div>
-      <div class="svc-card reveal d1">
-        <div class="svc-ic">🏋️</div>
-        <div><h3>Partout dans le réseau</h3><p>Un seul abonnement donne accès à tous les fitness du réseau partenaire. Tu changes de salle ? Rien à faire.</p></div>
-      </div>
-      <div class="svc-card reveal d2">
-        <div class="svc-ic">📱</div>
-        <div><h3>Prêt en 30 secondes</h3><p>Pas d'App Store, pas de téléchargement. Tu ouvres le lien dans ton navigateur, tu l'ajoutes à ton écran d'accueil. C'est tout.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta-box reveal">
-    <h2 class="cta-title">L'ÉNERGIE SAINE,<br/>À PORTÉE DE SCAN.</h2>
-    <p class="cta-sub">Trouve la saveur qui te correspond et rejoins le réseau VOLT. dès aujourd'hui.</p>
-    <a href="le-test.html" class="btn-white">Faire le test ⚡</a>
-  </div>
-</div>
-
-<!-- FOOTER -->`,
-  apropos: `<!-- HERO -->
-<header class="page-hero">
-  <div class="page-hero-mesh"></div>
-  <div class="page-hero-dots"></div>
-  <div class="page-hero-inner">
-    <div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>À propos</span></div>
-    <div class="page-badge"><span class="page-badge-dot"></span><span>Née en Suisse</span></div>
-    <h1>L'ÉNERGIE AU SERVICE<br/>DE LA <em>PERFORMANCE.</em></h1>
-    <p class="lead">VOLT. réinvente l'hydratation dans les salles de sport : des eaux vitaminées fonctionnelles, <strong>sans sucre ajouté</strong>, accessibles d'un simple scan, là où vous vous entraînez.</p>
-  </div>
-</header>
-
-<!-- STORY -->
-<section class="blk" style="padding-top:64px">
-  <div class="section">
-    <div class="split">
-      <div class="split-media reveal"><img src="images/volt-station.webp" alt="Station VOLT."/></div>
-      <div class="reveal">
-        <div class="sec-label">Notre histoire</div>
-        <h2 class="sec-title" style="font-size:clamp(32px,4.4vw,48px)">RÉVÉLER VOTRE<br/><em>PLEIN POTENTIEL.</em></h2>
-        <p class="sec-sub" style="margin-bottom:18px">VOLT. est né d'un constat simple : entre deux séries, trouver une boisson saine, rapide et sans sucre relève souvent du parcours du combattant. Distributeurs vieillissants, sodas sucrés, files d'attente…</p>
-        <p class="sec-sub" style="margin-bottom:18px">Nous avons imaginé une alternative : des <b style="color:var(--ink)">eaux vitaminées fonctionnelles</b> distribuées par une station connectée, directement dans votre club. Un QR code, neuf secondes, et c'est servi.</p>
-        <p class="sec-sub">Pensé pour les athlètes et les passionnés de fitness, VOLT. est un service suisse qui allie performance, naturalité et simplicité — sans compromis.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MISSION BAND -->
-<section class="blk bg" style="padding-top:0">
-  <div class="section">
-    <div class="band reveal">
-      <div class="band-grid">
-        <div class="txt">
-          <div class="sec-label">Notre mission</div>
-          <h2>RENDRE L'ÉNERGIE<br/>SAINE <em>ÉVIDENTE.</em></h2>
-          <p>Mettre à portée de main une hydratation qui travaille pour vous — vitaminée, sans sucre ajouté, savoureuse — et la rendre aussi simple à obtenir qu'un scan de téléphone. Pour les membres comme pour les clubs.</p>
-          <a href="comment-ca-marche.html" class="btn-white">Comment ça marche →</a>
-        </div>
-        <div class="media"><img src="images/volt-crystals.webp" alt="Station VOLT. en club"/></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VALUES -->
-<section class="blk">
-  <div class="section">
-    <div class="reveal sec-center">
-      <div class="sec-label">Nos valeurs</div>
-      <h2 class="sec-title">CE QUI NOUS <em>ANIME</em></h2>
-    </div>
-    <div class="values">
-      <div class="val reveal d1">
-        <div class="num">01</div>
-        <h3>Performance d'abord</h3>
-        <p>Des formules pensées pour l'effort : vitamines, minéraux et actifs ciblés pour soutenir énergie, récupération et immunité.</p>
-      </div>
-      <div class="val reveal d2">
-        <div class="num">02</div>
-        <h3>Naturel, sans compromis</h3>
-        <p>Zéro sucre ajouté, arômes 100% naturels, stévia plutôt qu'édulcorants artificiels. Sans OGM, sans gluten, sans lactose.</p>
-      </div>
-      <div class="val reveal d3">
-        <div class="num">03</div>
-        <h3>Simplicité radicale</h3>
-        <p>Pas d'App Store, pas de monnaie, pas d'attente. Un QR code permanent et neuf secondes suffisent.</p>
-      </div>
-      <div class="val reveal d4">
-        <div class="num">04</div>
-        <h3>Ancrée en Suisse</h3>
-        <p>Pensée et opérée depuis la Suisse romande, au plus près des clubs et des membres de son réseau partenaire.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="blk bg">
-  <div class="section">
-    <div class="contact">
-      <div class="info reveal">
-        <div class="sec-label">Nous trouver</div>
-        <h2 class="sec-title" style="font-size:clamp(30px,4vw,44px);margin-bottom:18px">PARLONS-EN.</h2>
-        <p><b>VOLT.</b></p>
-        <p>Rue de la Baumettaz 12<br/>1023 Crissier · Suisse</p>
-        <p style="margin-top:14px">Écris-nous : <a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a></p>
-        <p>Vous gérez un club ? <a href="mailto:info@volt-energy.ch?subject=Demande%20d'offre%20VOLT.%20pour%20mon%20club">Demander une offre</a> ou <a href="fitness.html">accéder à l'espace fitness</a>.</p>
-      </div>
-      <div class="map reveal">
-        <div class="pin">📍 Crissier<small>Rue de la Baumettaz 12, 1023 — Suisse</small></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta-box reveal">
-    <h2 class="cta-title">REJOINS LE<br/>RÉSEAU VOLT.</h2>
-    <p class="cta-sub">Membre ou club de fitness — l'énergie saine commence ici.</p>
-    <a href="le-test.html" class="btn-white">Trouver ma saveur ⚡</a>
-  </div>
-</div>
-
-<!-- FOOTER -->"
+const pages={
+  saveurs:`<header class="page-hero"><div class="page-hero-mesh"></div><div class="page-hero-dots"></div><div class="page-hero-inner"><div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Saveurs</span></div><div class="page-badge"><span class="page-badge-dot"></span><span>4 eaux vitaminées</span></div><h1>DES GOÛTS <em>INTENSES.</em><br/>ZÉRO SUCRE AJOUTÉ.</h1><p class="lead">Quatre eaux vitaminées fonctionnelles, enrichies en vitamines et minéraux essentiels. <strong>Sans sucre ajouté</strong>, arômes 100% naturels, édulcorées à la stévia.</p><div class="hero-actions"><a href="#letest" data-page="letest" class="btn-primary">Trouver ma saveur ⚡</a><a href="#performance" class="btn-outline">Voir la gamme</a></div></div></header><section class="blk" style="padding-top:72px"><div id="produits"></div></section><div class="cta-wrap"><div class="cta-box reveal"><h2 class="cta-title">PAS ENCORE SÛR<br/>DE TA SAVEUR ?</h2><p class="cta-sub">Réponds à 4 questions et découvre l'eau vitaminée VOLT. qui te correspond le mieux.</p><a href="#letest" data-page="letest" class="btn-white">Faire le test ⚡</a></div></div>`,
+  letest:`<header class="page-hero" style="padding-bottom:36px"><div class="page-hero-mesh"></div><div class="page-hero-dots"></div><div class="page-hero-inner"><div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Le test</span></div><div class="page-badge"><span class="page-badge-dot"></span><span>4 questions · 30 secondes</span></div><h1>QUELLE SAVEUR<br/>EST <em>FAITE POUR TOI</em> ?</h1><p class="lead">Réponds à 4 questions rapides. On te recommande l'eau vitaminée VOLT. qui colle le mieux à ton énergie, tes goûts et tes objectifs.</p></div></header><section style="padding:8px 0 96px"><div class="quiz-wrap"><div id="quiz"></div></div></section>`,
+  comment:`<header class="page-hero"><div class="page-hero-mesh"></div><div class="page-hero-dots"></div><div class="page-hero-inner"><div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Comment ça marche</span></div><div class="page-badge"><span class="page-badge-dot"></span><span>Service suisse · Sans App Store</span></div><h1>UN QR CODE.<br/>UNE <em>GORGÉE.</em> C'EST TOUT.</h1><p class="lead">Pas de téléchargement, pas de configuration. <strong>1 boisson toutes les 15 minutes</strong> dans ton fitness.</p></div></header><section class="blk" id="membres" style="padding-top:64px"><div class="section"><div class="reveal sec-center"><div class="sec-label">Pour les membres</div><h2 class="sec-title">TROIS ÉTAPES,<br/><em>UNE BOISSON</em></h2></div><div class="steps"><div class="step reveal d1"><div class="step-num-label">01</div><div class="step-num">01</div><div class="step-title">Tu t'abonnes en ligne</div><div class="step-desc">Crée ton compte en 60 secondes. Choisis ton plan et paie via Stripe ou TWINT.</div></div><div class="step reveal d2"><div class="step-num-label">02</div><div class="step-num">02</div><div class="step-title">Ton QR est prêt</div><div class="step-desc">Un QR code unique et permanent est généré instantanément.</div></div><div class="step reveal d3"><div class="step-num-label">03</div><div class="step-num">03</div><div class="step-title">Scan. Bois. Répète.</div><div class="step-desc">Présente ton QR au terminal VOLT. dans ton fitness. Toutes les 15 min.</div></div></div></div></section><div class="cta-wrap"><div class="cta-box reveal"><h2 class="cta-title">PRÊT À BOOSTER<br/>TES ENTRAÎNEMENTS ?</h2><p class="cta-sub">Rejoins le réseau VOLT. dès aujourd'hui. Activation immédiate, sans engagement.</p><a href="VoltApp.html?tab=signup" class="btn-white">Créer mon compte ⚡</a></div></div>`,
+  avantages:`<header class="page-hero"><div class="page-hero-mesh"></div><div class="page-hero-dots"></div><div class="page-hero-inner"><div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>Avantages</span></div><div class="page-badge"><span class="page-badge-dot"></span><span>Sain · Naturel · Sans compromis</span></div><h1>ACTIVEZ VOTRE<br/>PLEIN <em>POTENTIEL.</em></h1><p class="lead">Des boissons fonctionnelles <strong>sans sucre ajouté</strong>, enrichies en vitamines et minéraux essentiels.</p><div class="hero-actions"><a href="#saveurs" data-page="saveurs" class="btn-primary">Découvrir les saveurs</a><a href="#letest" data-page="letest" class="btn-outline">Faire le test ⚡</a></div></div></header><div class="cta-wrap"><div class="cta-box reveal"><h2 class="cta-title">L'ÉNERGIE SAINE,<br/>À PORTÉE DE SCAN.</h2><p class="cta-sub">Trouve la saveur qui te correspond et rejoins le réseau VOLT. dès aujourd'hui.</p><a href="#letest" data-page="letest" class="btn-white">Faire le test ⚡</a></div></div>`,
+  apropos:`<header class="page-hero"><div class="page-hero-mesh"></div><div class="page-hero-dots"></div><div class="page-hero-inner"><div class="crumb"><a href="index.html">Accueil</a><span class="sep">›</span><span>À propos</span></div><div class="page-badge"><span class="page-badge-dot"></span><span>Née en Suisse</span></div><h1>L'ÉNERGIE AU SERVICE<br/>DE LA <em>PERFORMANCE.</em></h1><p class="lead">VOLT. réinvente l'hydratation dans les salles de sport : des eaux vitaminées fonctionnelles, <strong>sans sucre ajouté</strong>, accessibles d'un simple scan.</p></div></header><div class="cta-wrap"><div class="cta-box reveal"><h2 class="cta-title">REJOINS LE<br/>RÉSEAU VOLT.</h2><p class="cta-sub">Membre ou club de fitness — l'énergie saine commence ici.</p><a href="#letest" data-page="letest" class="btn-white">Trouver ma saveur ⚡</a></div></div>`
 };
 
-function navigateTo(page) {
-  const content = document.getElementById('page-content');
-  if (pages[page]) {
-    content.innerHTML = pages[page];
-    document.querySelectorAll('.reveal').forEach(el => {
-      el.classList.remove('in');
-      setTimeout(() => el.classList.add('in'), 50);
-    });
-    window.scrollTo(0, 0);
+function navigateTo(page){
+  const content=document.getElementById('page-content');
+  if(pages[page]){
+    content.innerHTML=pages[page];
+    document.querySelectorAll('.reveal').forEach(el=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),50);});
+    window.scrollTo(0,0);
     updateNav(page);
   }
 }
 
-function updateNav(page) {
-  document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+function updateNav(page){
+  document.querySelectorAll('.nav-links a[data-page]').forEach(a=>{
     a.classList.remove('active');
-    if (a.getAttribute('data-page') === page) a.classList.add('active');
+    if(a.getAttribute('data-page')===page)a.classList.add('active');
   });
 }
 
-document.querySelectorAll('[data-page]').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const page = link.getAttribute('data-page');
-    navigateTo(page);
-  });
+document.body.addEventListener('click',e=>{
+  const link=e.target.closest('[data-page]');
+  if(!link)return;
+  e.preventDefault();
+  navigateTo(link.getAttribute('data-page'));
 });
+
+const initialPage=window.location.hash.slice(1);
+if(pages[initialPage])navigateTo(initialPage);
 </script>
-</body>
-</html>
+</body></html>
