@@ -1,0 +1,257 @@
+diff --git a/a-propos.html b/a-propos.html
+index 5489276..918d81e 100644
+--- a/a-propos.html
++++ b/a-propos.html
+@@ -3,7 +3,8 @@
+ <head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+-<title>VOLT. — À propos</title>
++<title>À propos de VOLT. — Distributeurs connectés en fitness</title>
++<link rel="canonical" href="https://www.volt-energy.ch/a-propos.html"/>
+ <meta name="description" content="VOLT. — l'hydratation nouvelle génération née en Suisse. Notre mission : rendre l'énergie saine et fonctionnelle accessible directement dans les salles de sport."/>
+ <link rel="icon" href="icon-192.png"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+diff --git a/avantages.html b/avantages.html
+index 9cbddab..056ed12 100644
+--- a/avantages.html
++++ b/avantages.html
+@@ -3,7 +3,8 @@
+ <head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+-<title>VOLT. — Avantages</title>
++<title>Avantages VOLT. — L'abonnement boissons pour ton fitness</title>
++<link rel="canonical" href="https://www.volt-energy.ch/avantages.html"/>
+ <meta name="description" content="Pourquoi choisir VOLT. : zéro sucre ajouté, arômes 100% naturels, vitamines et minéraux essentiels, stévia, sans OGM ni gluten — et un accès simple par QR code dans votre fitness."/>
+ <link rel="icon" href="icon-192.png"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+diff --git a/cgv.html b/cgv.html
+index 66e5bde..8ecb472 100644
+--- a/cgv.html
++++ b/cgv.html
+@@ -5,7 +5,7 @@
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+ <title>Conditions Générales de Vente — VOLT.</title>
+ <meta name="description" content="Conditions générales de vente de VOLT. — Abonnement boissons énergisantes dans les fitness partenaires en Suisse. Dès CHF 9.90/mois."/>
+-<link rel="canonical" href="https://volt-energy.ch/cgv.html"/>
++<link rel="canonical" href="https://www.volt-energy.ch/cgv.html"/>
+ <link rel="preconnect" href="https://fonts.googleapis.com"/>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+ <style>
+@@ -53,13 +53,13 @@ footer{background:var(--ink);padding:32px 40px;text-align:center}
+     <p><strong>Reda Hassini</strong><br/>
+     Rue de la Baumettaz 12, 1023 Crissier, Suisse<br/>
+     Email : <a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a><br/>
+-    Site : <a href="https://volt-energy.ch">volt-energy.ch</a></p>
++    Site : <a href="https://www.volt-energy.ch">volt-energy.ch</a></p>
+   </div>
+ 
+   <div class="section">
+     <div class="art-num">Article 2</div>
+     <div class="section-title">Objet</div>
+-    <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre VOLT. et tout utilisateur (ci-après "le Client") souscrivant à un abonnement VOLT. via le site <a href="https://volt-energy.ch">volt-energy.ch</a>.</p>
++    <p>Les présentes Conditions Générales de Vente (CGV) régissent les relations contractuelles entre VOLT. et tout utilisateur (ci-après "le Client") souscrivant à un abonnement VOLT. via le site <a href="https://www.volt-energy.ch">volt-energy.ch</a>.</p>
+     <p>En souscrivant un abonnement, le Client accepte sans réserve les présentes CGV.</p>
+   </div>
+ 
+diff --git a/comment-ca-marche.html b/comment-ca-marche.html
+index bd945f6..8689f21 100644
+--- a/comment-ca-marche.html
++++ b/comment-ca-marche.html
+@@ -3,7 +3,8 @@
+ <head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+-<title>VOLT. — Comment ça marche</title>
++<title>Comment fonctionne VOLT. — QR code en salle de fitness</title>
++<link rel="canonical" href="https://www.volt-energy.ch/comment-ca-marche.html"/>
+ <meta name="description" content="De l'abonnement à la gorgée : comment fonctionne VOLT. côté membre (QR code, 1 boisson / 15 min) et côté club de fitness (station connectée, espace fitness)."/>
+ <link rel="icon" href="icon-192.png"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+@@ -99,7 +100,7 @@
+     </div>
+     <div style="text-align:center;margin-top:40px" class="reveal">
+       <a href="fitness.html" class="btn-primary">Accéder à l'espace fitness →</a>
+-      <div class="clubs-reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sans engagement de durée — vos membres s'abonnent et réslient à tout moment.</div>
++      <div class="clubs-reassure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Sans engagement de durée — vos membres s'abonnent et résilient à tout moment.</div>
+     </div>
+   </div>
+ </section>
+diff --git a/cookies.html b/cookies.html
+index 5d22e14..1af074b 100644
+--- a/cookies.html
++++ b/cookies.html
+@@ -5,7 +5,7 @@
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+ <title>Politique de cookies — VOLT.</title>
+ <meta name="description" content="Politique de cookies de VOLT. — Nous utilisons uniquement un token de session local (localStorage). Aucun cookie tiers ni tracking publicitaire."/>
+-<link rel="canonical" href="https://volt-energy.ch/cookies.html"/>
++<link rel="canonical" href="https://www.volt-energy.ch/cookies.html"/>
+ <link rel="preconnect" href="https://fonts.googleapis.com"/>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/>
+ <style>
+diff --git a/index.html b/index.html
+index ce6be53..b6e47c1 100644
+--- a/index.html
++++ b/index.html
+@@ -3,15 +3,21 @@
+ <head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+-<title>VOLT. — Énergie par abonnement</title>
++<title>VOLT. — Boissons énergisantes illimitées en salle de fitness</title>
+ <meta name="description" content="VOLT. — Accès aux distributeurs de boissons énergisantes dans vos fitness partenaires. 1 boisson toutes les 15 min. Dès CHF 9.90/mois."/>
+-<link rel="canonical" href="https://volt-energy.ch"/>
++<link rel="canonical" href="https://www.volt-energy.ch"/>
++<script type="application/ld+json">
++{"@context":"https://schema.org","@type":"Organization","name":"VOLT.","url":"https://www.volt-energy.ch","logo":"https://www.volt-energy.ch/icon-512.png","email":"info@volt-energy.ch","description":"Abonnement aux distributeurs de boissons énergisantes dans les fitness partenaires en Suisse. 1 boisson toutes les 15 min.","areaServed":{"@type":"Country","name":"Suisse"}}
++</script>
++<script type="application/ld+json">
++{"@context":"https://schema.org","@type":"Product","name":"Abonnement VOLT.","description":"Accès aux distributeurs VOLT. dans les fitness partenaires en Suisse via QR code permanent. 1 boisson toutes les 15 minutes.","brand":{"@type":"Brand","name":"VOLT."},"offers":[{"@type":"Offer","name":"Mensuel","price":"9.90","priceCurrency":"CHF","url":"https://www.volt-energy.ch/VoltApp.html?plan=month&tab=signup","availability":"https://schema.org/InStock"},{"@type":"Offer","name":"Trimestriel","price":"24.90","priceCurrency":"CHF","url":"https://www.volt-energy.ch/VoltApp.html?plan=quarter&tab=signup","availability":"https://schema.org/InStock"},{"@type":"Offer","name":"Annuel","price":"89.90","priceCurrency":"CHF","url":"https://www.volt-energy.ch/VoltApp.html?plan=year&tab=signup","availability":"https://schema.org/InStock"}]}
++</script>
+ <link rel="icon" href="icon-192.png"/>
+ <link rel="apple-touch-icon" href="icon-192.png"/>
+ <meta property="og:title" content="VOLT. — Énergie par abonnement"/>
+ <meta property="og:description" content="1 boisson / 15 min · Réseau fitness Suisse · Dès CHF 9.90/mois"/>
+-<meta property="og:image" content="https://volt-energy.ch/icon-512.png"/>
+-<meta property="og:url" content="https://volt-energy.ch"/>
++<meta property="og:image" content="https://www.volt-energy.ch/icon-512.png"/>
++<meta property="og:url" content="https://www.volt-energy.ch"/>
+ <meta property="og:type" content="website"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+ <link rel="preconnect" href="https://fonts.googleapis.com"/>
+diff --git a/le-test.html b/le-test.html
+index 1edab0f..a7d534a 100644
+--- a/le-test.html
++++ b/le-test.html
+@@ -4,6 +4,7 @@
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+ <title>VOLT. — Le test : quelle saveur est faite pour toi ?</title>
++<link rel="canonical" href="https://www.volt-energy.ch/le-test.html"/>
+ <meta name="description" content="4 questions pour découvrir l'eau vitaminée VOLT. qui te correspond le mieux : Performance, Antioxidant, Immune Support ou Reload."/>
+ <link rel="icon" href="icon-192.png"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+diff --git a/mentions-legales.html b/mentions-legales.html
+index f298649..76c286a 100644
+--- a/mentions-legales.html
++++ b/mentions-legales.html
+@@ -56,7 +56,7 @@ footer{background:var(--ink);padding:32px 40px;text-align:center}
+       <div class="info-row"><span class="info-label">Responsable</span><span>Reda Hassini</span></div>
+       <div class="info-row"><span class="info-label">Adresse</span><span>Rue de la Baumettaz 12, 1023 Crissier, Suisse</span></div>
+       <div class="info-row"><span class="info-label">Email</span><span><a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a></span></div>
+-      <div class="info-row"><span class="info-label">Site web</span><span><a href="https://volt-energy.ch">volt-energy.ch</a></span></div>
++      <div class="info-row"><span class="info-label">Site web</span><span><a href="https://www.volt-energy.ch">volt-energy.ch</a></span></div>
+     </div>
+   </div>
+ 
+diff --git a/robots.txt b/robots.txt
+index 508ff8d..31acec6 100644
+--- a/robots.txt
++++ b/robots.txt
+@@ -1,4 +1,4 @@
+ User-agent: *
+ Allow: /
+ 
+-Sitemap: https://volt-energy.ch/sitemap.xml
++Sitemap: https://www.volt-energy.ch/sitemap.xml
+diff --git a/saveurs.html b/saveurs.html
+index 212131f..a0b7ec3 100644
+--- a/saveurs.html
++++ b/saveurs.html
+@@ -3,7 +3,8 @@
+ <head>
+ <meta charset="UTF-8"/>
+ <meta name="viewport" content="width=device-width,initial-scale=1"/>
+-<title>VOLT. — Saveurs</title>
++<title>Saveurs VOLT. — Eaux vitaminées sans sucre ajouté</title>
++<link rel="canonical" href="https://www.volt-energy.ch/saveurs.html"/>
+ <meta name="description" content="Les 4 eaux vitaminées VOLT. : Performance, Antioxidant, Immune Support et Reload. Zéro sucre ajouté, arômes 100% naturels, vitamines et minéraux essentiels."/>
+ <link rel="icon" href="icon-192.png"/>
+ <meta name="theme-color" content="#FFFFFF"/>
+diff --git a/sitemap.xml b/sitemap.xml
+index 860151b..82ff242 100644
+--- a/sitemap.xml
++++ b/sitemap.xml
+@@ -1,38 +1,68 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+   <url>
+-    <loc>https://volt-energy.ch/</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>weekly</changefreq>
+     <priority>1.0</priority>
+   </url>
+   <url>
+-    <loc>https://volt-energy.ch/VoltApp.html</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/comment-ca-marche.html</loc>
++    <lastmod>2026-06-15</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.9</priority>
++  </url>
++  <url>
++    <loc>https://www.volt-energy.ch/saveurs.html</loc>
++    <lastmod>2026-06-15</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.8</priority>
++  </url>
++  <url>
++    <loc>https://www.volt-energy.ch/avantages.html</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>monthly</changefreq>
+     <priority>0.8</priority>
+   </url>
+   <url>
+-    <loc>https://volt-energy.ch/cgv.html</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/le-test.html</loc>
++    <lastmod>2026-06-15</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.7</priority>
++  </url>
++  <url>
++    <loc>https://www.volt-energy.ch/a-propos.html</loc>
++    <lastmod>2026-06-15</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.6</priority>
++  </url>
++  <url>
++    <loc>https://www.volt-energy.ch/VoltApp.html</loc>
++    <lastmod>2026-06-15</lastmod>
++    <changefreq>monthly</changefreq>
++    <priority>0.5</priority>
++  </url>
++  <url>
++    <loc>https://www.volt-energy.ch/cgv.html</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>yearly</changefreq>
+     <priority>0.3</priority>
+   </url>
+   <url>
+-    <loc>https://volt-energy.ch/confidentialite.html</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/confidentialite.html</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>yearly</changefreq>
+     <priority>0.3</priority>
+   </url>
+   <url>
+-    <loc>https://volt-energy.ch/mentions-legales.html</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/mentions-legales.html</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>yearly</changefreq>
+     <priority>0.3</priority>
+   </url>
+   <url>
+-    <loc>https://volt-energy.ch/cookies.html</loc>
+-    <lastmod>2026-06-02</lastmod>
++    <loc>https://www.volt-energy.ch/cookies.html</loc>
++    <lastmod>2026-06-15</lastmod>
+     <changefreq>yearly</changefreq>
+     <priority>0.3</priority>
+   </url>
