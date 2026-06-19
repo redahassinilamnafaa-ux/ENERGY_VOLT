@@ -186,6 +186,19 @@ fitAppHeight();
 window.addEventListener('resize',fitAppHeight);
 window.addEventListener('orientationchange',function(){setTimeout(fitAppHeight,300);});
 window.addEventListener('load',fitAppHeight);
+// === DIAGNOSTIC TEMPORAIRE — visible uniquement par le proprietaire connecte ===
+(function(){
+  function probe(p){var d=document.createElement('div');d.style.cssText='position:fixed;left:-9999px;top:0;height:'+p;document.body.appendChild(d);var h=d.offsetHeight;d.remove();return h;}
+  function upd(){try{
+    if(typeof S==='undefined'||!S.user||S.user.email!=='reda.hassinilamnafaa@gmail.com'){var ex=document.getElementById('dbg');if(ex)ex.remove();return;}
+    var app=document.getElementById('app'),nav=document.querySelector('.bnav');
+    var mode=(window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone)?'STANDALONE':'navigateur';
+    var d=document.getElementById('dbg');
+    if(!d){d=document.createElement('div');d.id='dbg';d.style.cssText='position:fixed;top:72px;left:8px;right:8px;z-index:2147483647;background:rgba(190,0,0,.92);color:#fff;font:11px/1.5 monospace;padding:9px 11px;border-radius:8px;white-space:pre;pointer-events:none';document.body.appendChild(d);}
+    d.textContent='VOLT debug v926+\nmode: '+mode+'\ninnerH: '+window.innerHeight+'   screenH: '+screen.height+'\nvisualVP: '+(window.visualViewport?Math.round(window.visualViewport.height):'-')+'\nsafe top: '+probe('env(safe-area-inset-top)')+'   safe bot: '+probe('env(safe-area-inset-bottom)')+'\n#appH: '+(app?app.offsetHeight:'-')+'   docClientH: '+document.documentElement.clientHeight+'\nnavBottom: '+(nav?Math.round(nav.getBoundingClientRect().bottom):'-')+'  innerH: '+window.innerHeight;
+  }catch(e){}}
+  setInterval(upd,600);
+})();
 const PLANS = [
   { id:'month',   label:'MENSUEL',      chf:'9.90',  per:'/mois',    saving:null,             badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
   { id:'quarter', label:'TRIMESTRIEL',  chf:'24.90', per:'/3 mois',  saving:'Éco. CHF 4.80',  badge:'⭐ POPULAIRE',    feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Renouvellement auto.'] },
