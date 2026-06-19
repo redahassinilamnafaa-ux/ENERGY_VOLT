@@ -1,5 +1,5 @@
 // VOLT Service Worker — nécessaire pour que la PWA soit installable
-const CACHE = 'volt-v6';
+const CACHE = 'volt-v7';
 
 self.addEventListener('install', e => {
   e.waitUntil(
