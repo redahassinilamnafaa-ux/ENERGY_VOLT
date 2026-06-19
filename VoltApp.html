@@ -53,10 +53,10 @@ body{height:100%;overflow:hidden}
 }
 ::selection{background:var(--blue);color:#fff}
 #app{position:fixed;top:0;bottom:0;left:0;right:0;margin:0 auto;width:100%;max-width:430px;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
-.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:max(82px,calc(66px + env(safe-area-inset-bottom)));overscroll-behavior-y:contain}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px;overscroll-behavior-y:contain}
 .screen-full{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 .bc{font-family:'Barlow Condensed',sans-serif}
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--white);border-top:1px solid var(--border2);display:flex;z-index:100;padding:8px 0 max(16px,env(safe-area-inset-bottom))}
+.bnav{flex-shrink:0;background:var(--white);border-top:1px solid var(--border2);display:flex;padding:8px 0 max(16px,env(safe-area-inset-bottom))}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px 0;transition:color .15s}
 .bnav-btn .ni{font-size:22px;line-height:1}
 .bnav-btn .nl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -128,7 +128,7 @@ body{height:100%;overflow:hidden}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-#install-banner{position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:var(--ink);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:200;max-width:400px;width:calc(100% - 32px);box-shadow:0 4px 30px rgba(0,0,0,.25);border:1px solid var(--border);animation:fadeUp .3s ease}
+#install-banner{position:fixed;bottom:max(82px,calc(74px + env(safe-area-inset-bottom)));left:50%;transform:translateX(-50%);background:var(--ink);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:200;max-width:400px;width:calc(100% - 32px);box-shadow:0 4px 30px rgba(0,0,0,.25);border:1px solid var(--border);animation:fadeUp .3s ease}
 /* --- écran d'installation (PWA) --- */
 .inst-screen{background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);min-height:100%;display:flex;flex-direction:column}
 .inst-topbar{display:flex;align-items:center;padding:14px 16px 0;position:relative;z-index:2}
