@@ -180,6 +180,12 @@ const CFG = {
   STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
   CD_SECS: 900,
 };
+// Hauteur réelle du viewport en PWA standalone (iOS) — corrige l'espace blanc sous la barre du bas
+function fitAppHeight(){var a=document.getElementById('app');if(a&&window.innerHeight){a.style.height=window.innerHeight+'px';}}
+fitAppHeight();
+window.addEventListener('resize',fitAppHeight);
+window.addEventListener('orientationchange',function(){setTimeout(fitAppHeight,300);});
+window.addEventListener('load',fitAppHeight);
 const PLANS = [
   { id:'month',   label:'MENSUEL',      chf:'9.90',  per:'/mois',    saving:null,             badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
   { id:'quarter', label:'TRIMESTRIEL',  chf:'24.90', per:'/3 mois',  saving:'Éco. CHF 4.80',  badge:'⭐ POPULAIRE',    feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Renouvellement auto.'] },
