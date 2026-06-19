@@ -75,6 +75,15 @@ gtag('config', 'G-ZBHD9KVG4C');
 .statband .l{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-top:8px}
 @media(max-width:920px){.svc{grid-template-columns:1fr}.statband{grid-template-columns:repeat(2,1fr)}.statband .s:nth-child(2){border-right:none}}
 @media(max-width:560px){.statband{grid-template-columns:1fr}.statband .s{border-right:none;border-bottom:1px solid var(--border2)}}
+.faq-item{background:var(--white);border-radius:16px;margin-bottom:8px;overflow:hidden;border:1.5px solid var(--border2);transition:border-color .25s,box-shadow .25s,transform .25s;cursor:pointer}
+.faq-item:hover{border-color:var(--blue);box-shadow:0 8px 30px var(--blue-glow);transform:translateY(-2px)}
+.faq-item.open{border-color:var(--blue);box-shadow:0 8px 30px var(--blue-glow)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;cursor:pointer;gap:16px}
+.faq-q-text{font-size:16px;font-weight:700;color:var(--ink)}
+.faq-icon{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--blue);transition:all .3s;font-weight:700}
+.faq-item.open .faq-icon{background:var(--blue);color:#fff;transform:rotate(45deg)}
+.faq-a{font-size:14px;color:var(--ink3);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-weight:500;padding:0 24px}
+.faq-item.open .faq-a{max-height:300px;padding:0 24px 20px}
 </style>
 </head>
 <body>
@@ -258,6 +267,9 @@ const faqB2B = [
 ];
 const faqB2BList = document.getElementById('faq-b2b-list');
 if (faqB2BList) {
+  const faqObs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); faqObs.unobserve(e.target); } });
+  }, { threshold:.1, rootMargin:'0px 0px -50px 0px' });
   faqB2B.forEach(f => {
     const item = document.createElement('div');
     item.className = 'faq-item reveal';
@@ -268,7 +280,7 @@ if (faqB2BList) {
       if (!open) item.classList.add('open');
     };
     faqB2BList.appendChild(item);
-    if (window.obs) obs.observe(item);
+    faqObs.observe(item);
   });
 }
 </script>
