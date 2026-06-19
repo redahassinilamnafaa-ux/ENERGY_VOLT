@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <!-- Google tag (gtag.js) -->
@@ -16,7 +16,7 @@ gtag('config', 'G-ZBHD9KVG4C');
 <link rel="canonical" href="https://www.volt-energy.ch/VoltApp.html"/>
 <meta name="theme-color" content="#060D2E"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="VOLT."/>
 <link rel="manifest" href="/manifest.json"/>
 <link rel="icon" type="image/png" href="/icon-192.png"/>
@@ -50,13 +50,15 @@ body{height:100%;overflow:hidden}
   --green:#00C47A;
   --red:#FF3B5C;
   --orange:#FF9500;
+  --safe-bottom:0px;
 }
 ::selection{background:var(--blue);color:#fff}
-#app{position:fixed;top:0;left:0;right:0;margin:0 auto;width:100%;max-width:430px;height:100vh;height:100dvh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+@supports(padding:env(safe-area-inset-bottom)){:root{--safe-bottom:env(safe-area-inset-bottom)}}
+#app{position:fixed;top:0;bottom:0;left:0;right:0;margin:0 auto;width:100%;max-width:430px;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
 .screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px;overscroll-behavior-y:contain}
 .screen-full{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
 .bc{font-family:'Barlow Condensed',sans-serif}
-.bnav{flex-shrink:0;background:var(--white);border-top:1px solid var(--border2);display:flex;padding:8px 0 max(16px,env(safe-area-inset-bottom))}
+.bnav{flex-shrink:0;background:var(--white);border-top:1px solid var(--border2);display:flex;padding:8px 0 max(16px,var(--safe-bottom))}
 .bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:2px 0;transition:color .15s}
 .bnav-btn .ni{font-size:22px;line-height:1}
 .bnav-btn .nl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
@@ -175,17 +177,12 @@ body{height:100%;overflow:hidden}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" async></script>
 <script src="https://js.stripe.com/v3/" async></script>
 <script>
+(function(){try{var el=document.createElement('div');el.style.cssText='position:fixed;bottom:0;height:env(safe-area-inset-bottom,0px);width:0;pointer-events:none';document.documentElement.appendChild(el);requestAnimationFrame(function(){var h=el.getBoundingClientRect().height|0;el.parentNode.removeChild(el);if(h>0)document.documentElement.style.setProperty('--safe-bottom',h+'px')});}catch(e){}})();
 const CFG = {
   API: 'https://volt-backend-final.vercel.app',
   STRIPE_KEY: 'pk_live_51TYCHoClAT61ADIRmCN6fiHdNNAzqWW3Se7zCOVUQzRrMllm8VQdGPwnOfpNE9rTKqCpFQbCPBhj1TJgTIkIoyDR000T77uHse',
   CD_SECS: 900,
 };
-// Hauteur réelle du viewport en PWA standalone (iOS) — corrige l'espace blanc sous la barre du bas
-function fitAppHeight(){var a=document.getElementById('app');if(a&&window.innerHeight){a.style.height=window.innerHeight+'px';}}
-fitAppHeight();
-window.addEventListener('resize',fitAppHeight);
-window.addEventListener('orientationchange',function(){setTimeout(fitAppHeight,300);});
-window.addEventListener('load',fitAppHeight);
 const PLANS = [
   { id:'month',   label:'MENSUEL',      chf:'9.90',  per:'/mois',    saving:null,             badge:null,             feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Sans engagement'] },
   { id:'quarter', label:'TRIMESTRIEL',  chf:'24.90', per:'/3 mois',  saving:'Éco. CHF 4.80',  badge:'⭐ POPULAIRE',    feat:['1 boisson / 15 min','QR code permanent','Réseau partenaires','Renouvellement auto.'] },
