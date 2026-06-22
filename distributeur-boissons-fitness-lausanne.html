@@ -204,7 +204,7 @@ const listLausanne = document.getElementById('faq-lausanne-list');
 if (listLausanne) {
   faqLausanne.forEach(f => {
     const item = document.createElement('div');
-    item.className = 'faq-item reveal';
+    item.className = 'faq-item reveal in';
     item.innerHTML = '<div class="faq-q"><span class="faq-q-text">' + f.q + '</span><div class="faq-icon">+</div></div><div class="faq-a">' + f.a + '</div>';
     item.querySelector('.faq-q').onclick = () => {
       const open = item.classList.contains('open');
