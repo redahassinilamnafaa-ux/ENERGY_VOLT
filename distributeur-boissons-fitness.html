@@ -35,7 +35,7 @@ gtag('config', 'G-ZBHD9KVG4C');
 {"@type":"Question","name":"Est-ce que VOLT. propose un distributeur de boissons protéinées pour la musculation ?","acceptedAnswer":{"@type":"Answer","text":"Actuellement, VOLT. distribue des eaux vitaminées électrolytiques, idéales pour l'hydratation pendant et après l'effort. Les boissons sont enrichies en vitamines B, C, magnésium et zinc — essentiels pour la récupération musculaire — mais ne contiennent pas de protéines."}},
 {"@type":"Question","name":"Comment les membres de ma salle s'abonnent-ils à VOLT. ?","acceptedAnswer":{"@type":"Answer","text":"Les membres s'inscrivent directement sur volt-energy.ch en moins d'une minute, sans télécharger d'application. Ils reçoivent un QR code permanent à scanner sur la station en salle. Paiement par carte bancaire ou TWINT."}},
 {"@type":"Question","name":"VOLT. est-il disponible en Suisse alémanique ? (Zürich, Bern, Basel)","acceptedAnswer":{"@type":"Answer","text":"Oui, VOLT. est disponible dans toute la Suisse, y compris en Suisse alémanique. Nous déployons nos stations à Zürich, Bern, Basel, Luzern, St. Gallen et dans les agglomérations environnantes."}},
-{"@type":"Question","name":"Quel espace faut-il prévoir pour installer la station VOLT. dans ma salle ?","acceptedAnswer":{"@type":"Answer","text":"La station VOLT. est compacte (environ 40×40 cm au sol, 150 cm de hauteur). Elle nécessite uniquement une prise électrique standard à proximité. Idéale dans la zone d'accueil, le couloir de cardio ou l'espace vestiaires."}},
+{"@type":"Question","name":"Quel espace faut-il prévoir pour installer la station VOLT. dans ma salle ?","acceptedAnswer":{"@type":"Answer","text":"La station compacte VOLT. nécessite environ 40×40 cm au sol et 150 cm de hauteur. La station haut débit dispose d'un meuble fermé de 100×60 cm. Dans les deux cas, seule une prise électrique standard est nécessaire."}},
 {"@type":"Question","name":"Puis-je suivre les statistiques de consommation de ma salle en temps réel ?","acceptedAnswer":{"@type":"Answer","text":"Oui. Chaque salle partenaire dispose d'un espace fitness dédié avec tableau de bord : nombre d'abonnés actifs dans votre salle, consommations par jour/semaine/mois, revenus générés et niveau de stock — consultables à tout moment depuis votre smartphone ou ordinateur."}},
 {"@type":"Question","name":"VOLT. est-il adapté aux centres sportifs avec plusieurs activités (padel, fitness, natation) ?","acceptedAnswer":{"@type":"Answer","text":"Oui. Pour les centres multisports, nous pouvons déployer plusieurs stations dans différentes zones (salle de musculation, bord de bassin, courts de padel) avec un tableau de bord centralisé pour piloter l'ensemble."}},
 {"@type":"Question","name":"Quel est le délai entre la signature du partenariat et la première boisson servie ?","acceptedAnswer":{"@type":"Answer","text":"Comptez 1 à 2 semaines entre la signature et l'installation. L'installation elle-même prend moins d'une journée. La station est opérationnelle dès la mise en service."}},
@@ -83,6 +83,21 @@ gtag('config', 'G-ZBHD9KVG4C');
 .faq-item.open .faq-icon{background:var(--blue);color:#fff;transform:rotate(45deg)}
 .faq-a{font-size:14px;color:var(--ink3);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s;font-weight:500;padding:0 24px}
 .faq-item.open .faq-a{max-height:300px;padding:0 24px 20px}
+/* machines */
+.machines-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+.machine-card{background:var(--white);border:1.5px solid var(--border2);border-radius:24px;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s}
+.machine-card:hover{transform:translateY(-5px);box-shadow:0 20px 50px var(--blue-glow);border-color:var(--blue)}
+.machine-badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--blue-soft);color:var(--blue);border-radius:20px;padding:5px 14px;margin:20px 20px 0}
+.machine-badge-pro{background:var(--ink);color:#fff}
+.machine-img{padding:24px;background:var(--bg);display:flex;align-items:center;justify-content:center;min-height:260px}
+.machine-img img{max-height:240px;width:auto;object-fit:contain;display:block;margin:0 auto}
+.machine-body{padding:24px}
+.machine-body h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:26px;text-transform:uppercase;color:var(--ink);margin-bottom:10px}
+.machine-desc{font-size:14px;color:var(--ink3);line-height:1.7;font-weight:500;margin-bottom:20px}
+.machine-specs{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.machine-specs li{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--ink)}
+.spec-icon{font-size:16px;flex-shrink:0}
+@media(max-width:700px){.machines-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -117,7 +132,57 @@ gtag('config', 'G-ZBHD9KVG4C');
     </div>
   </div>
 </header>
-<section class="blk" style="padding-top:64px">
+
+<!-- SECTION : NOS DEUX MACHINES -->
+<section class="blk" style="padding:64px 0">
+  <div class="section">
+    <div class="reveal sec-center" style="margin-bottom:48px">
+      <div class="sec-label">Nos équipements</div>
+      <h2 class="sec-title">DEUX MACHINES,<br/><em>UN SERVICE</em></h2>
+      <p class="sec-sub">Selon la taille de votre club et votre flux de membres, VOLT. déploie le format le plus adapté — compact ou haut débit. Installation gratuite et zéro gestion dans les deux cas.</p>
+    </div>
+    <div class="machines-grid">
+      <div class="machine-card reveal d1">
+        <span class="machine-badge">Compact</span>
+        <div class="machine-img">
+          <img src="volt-machine-white.jpg" alt="Station VOLT. compacte" loading="lazy"/>
+        </div>
+        <div class="machine-body">
+          <h3>Station Compacte</h3>
+          <p class="machine-desc">Format léger, installation en quelques heures. S'intègre partout dans votre club sans modifier l'agencement existant.</p>
+          <ul class="machine-specs">
+            <li><span class="spec-icon">📐</span><span>40 × 40 cm · 150 cm de hauteur</span></li>
+            <li><span class="spec-icon">⚡</span><span>Prise électrique standard uniquement</span></li>
+            <li><span class="spec-icon">🏋️</span><span>Idéale pour clubs de 100 à 500 membres</span></li>
+            <li><span class="spec-icon">📍</span><span>Accueil, couloir cardio, vestiaires</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="machine-card reveal d2">
+        <span class="machine-badge machine-badge-pro">Haut Débit</span>
+        <div class="machine-img">
+          <img src="volt-machine-haut-debit.jpg" alt="Station VOLT. haut débit" loading="lazy" onerror="this.style.display='none'"/>
+        </div>
+        <div class="machine-body">
+          <h3>Station Haut Débit</h3>
+          <p class="machine-desc">Grand format avec meuble fermé et stockage produits intégré. Conçu pour les clubs à fort trafic et les centres multisports.</p>
+          <ul class="machine-specs">
+            <li><span class="spec-icon">📐</span><span>100 × 60 cm · 110 cm de hauteur</span></li>
+            <li><span class="spec-icon">🖥️</span><span>Écran tactile · FR / DE / EN / IT</span></li>
+            <li><span class="spec-icon">🏢</span><span>Idéale pour clubs de 500+ membres</span></li>
+            <li><span class="spec-icon">📦</span><span>Stockage produits intégré — meuble fermé</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:40px">
+      <p style="font-size:15px;color:var(--ink3);font-weight:500">VOLT. détermine le format adapté à votre club lors de la visite de déploiement.</p>
+      <a href="mailto:info@volt-energy.ch?subject=Demande%20d'offre%20VOLT.%20pour%20mon%20club" class="btn-primary" style="margin-top:20px;display:inline-block">Demander une offre →</a>
+    </div>
+  </div>
+</section>
+
+<section class="blk bg" style="padding-top:64px">
   <div class="section">
     <div class="reveal sec-center">
       <div class="sec-label">Pour votre club</div>
@@ -132,7 +197,7 @@ gtag('config', 'G-ZBHD9KVG4C');
     </div>
   </div>
 </section>
-<section class="blk bg">
+<section class="blk">
   <div class="section">
     <div class="split">
       <div class="reveal">
@@ -156,7 +221,7 @@ gtag('config', 'G-ZBHD9KVG4C');
     </div>
   </div>
 </section>
-<section class="blk">
+<section class="blk bg">
   <div class="section">
     <div class="reveal sec-center">
       <div class="sec-label">Mise en place</div>
@@ -171,7 +236,7 @@ gtag('config', 'G-ZBHD9KVG4C');
   </div>
 </section>
 <!-- SECTION : TOUS TYPES DE SALLES -->
-<section class="blk bg">
+<section class="blk">
   <div class="section">
     <div class="reveal sec-center">
       <div class="sec-label">Compatibilité</div>
@@ -190,7 +255,7 @@ gtag('config', 'G-ZBHD9KVG4C');
 </section>
 
 <!-- SECTION : ZONES D'INTERVENTION -->
-<section class="blk">
+<section class="blk bg">
   <div class="section">
     <div class="reveal sec-center">
       <div class="sec-label">Couverture nationale</div>
@@ -206,7 +271,7 @@ gtag('config', 'G-ZBHD9KVG4C');
 </section>
 
 <!-- SECTION : FAQ GÉRANTS -->
-<section class="blk bg" id="faq-gerants">
+<section class="blk" id="faq-gerants">
   <div class="section">
     <div class="reveal sec-center">
       <div class="sec-label">Questions fréquentes</div>
@@ -258,7 +323,7 @@ const faqB2B = [
   { q:"VOLT. fonctionne-t-il pour les boxes CrossFit et salles de musculation ?", a:"Oui. La station s'adapte à tout type de salle : musculation, CrossFit, yoga, padel, squash, wellness. Si vos membres transpirent, ils ont besoin d'hydratation." },
   { q:"VOLT. est-il disponible à Genève, Lausanne, Zurich et dans toute la Suisse ?", a:"Oui, dans toute la Suisse — romande (Genève, Lausanne, Fribourg, Sion, Neuchâtel) et alémanique (Zürich, Bern, Basel, Luzern, St. Gallen). Contactez-nous pour votre ville." },
   { q:"Qui gère l'entretien et le réapprovisionnement de la fontaine à boissons ?", a:"VOLT. gère entièrement la maintenance et le réapprovisionnement. Vous n'avez ni stock à surveiller, ni technicien à appeler, ni nettoyage à gérer." },
-  { q:"Quel espace faut-il pour installer la station VOLT. ?", a:"La station est compacte (~40×40 cm au sol, 150 cm de hauteur). Elle nécessite uniquement une prise électrique standard. Idéale en zone cardio, à l'accueil ou dans le couloir vestiaires." },
+  { q:"Quelle différence entre la station compacte et la station haut débit ?", a:"La station compacte (40×40 cm, 150 cm de hauteur) convient aux clubs de 100 à 500 membres. La station haut débit (100×60 cm, meuble fermé avec stockage intégré) est conçue pour les clubs à fort trafic et les centres multisports. VOLT. recommande le format adapté lors de la visite." },
   { q:"Combien de membres faut-il pour rentabiliser la station ?", a:"L'installation étant gratuite, il n'y a pas de seuil de rentabilité pour la salle. Dès le premier abonné VOLT. dans votre club, vous générez un revenu net." },
   { q:"Puis-je suivre les consommations et revenus en temps réel ?", a:"Oui. Votre espace fitness partenaire donne accès à un tableau de bord complet : abonnés actifs, consommations, revenus et niveau de stock, en temps réel depuis votre smartphone." },
   { q:"Quel est le délai entre la signature du partenariat et la première boisson servie ?", a:"Comptez 1 à 2 semaines entre la signature et l'installation. L'installation elle-même prend moins d'une journée." },
