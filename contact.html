@@ -14,11 +14,11 @@ gtag('config', 'G-ZBHD9KVG4C');
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Contact — VOLT. Suisse</title>
 <link rel="canonical" href="https://www.volt-energy.ch/contact.html"/>
-<meta name="description" content="Contactez l'équipe VOLT. pour toute question : support, partenariat, presse ou information générale. Nous répondons sous 24h."/>
+<meta name="description" content="Contactez l'équipe VOLT. — adresse, email, formulaire de contact. Nous répondons sous 24h ouvrables."/>
 <link rel="icon" href="icon-192.png"/>
 <meta name="theme-color" content="#FFFFFF"/>
 <meta property="og:title" content="Contact — VOLT."/>
-<meta property="og:description" content="Contactez l'équipe VOLT. pour toute question : support, partenariat, presse ou information générale."/>
+<meta property="og:description" content="Contactez l'équipe VOLT. — adresse, email, formulaire de contact. Réponse sous 24h."/>
 <meta property="og:image" content="https://www.volt-energy.ch/station-volt.jpg"/>
 <meta property="og:url" content="https://www.volt-energy.ch/contact.html"/>
 <meta property="og:type" content="website"/>
@@ -28,37 +28,35 @@ gtag('config', 'G-ZBHD9KVG4C');
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/></noscript>
 <link rel="stylesheet" href="volt.css"/>
 <style>
-.contact-hero{padding:100px 0 60px;text-align:center}
-.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px}
-.contact-card{background:var(--white);border:1.5px solid var(--border2);border-radius:24px;padding:32px;transition:transform .3s,box-shadow .3s,border-color .3s;text-align:center}
-.contact-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px var(--blue-glow);border-color:var(--blue)}
-.contact-icon{font-size:36px;margin-bottom:16px;display:block}
-.contact-card h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;color:var(--ink);margin-bottom:8px;text-transform:uppercase}
-.contact-card p{font-size:14px;color:var(--ink3);line-height:1.7;font-weight:500;margin-bottom:16px}
-.contact-card a.email-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-weight:700;font-size:14px;text-decoration:none;border-bottom:1.5px solid rgba(0,87,255,.2);padding-bottom:2px;transition:border-color .2s}
-.contact-card a.email-link:hover{border-color:var(--blue)}
-.form-wrap{background:var(--white);border:1.5px solid var(--border2);border-radius:24px;padding:40px;margin-bottom:48px}
-.form-wrap h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;color:var(--ink);margin-bottom:6px;text-transform:uppercase}
-.form-wrap .sub{font-size:15px;color:var(--ink3);font-weight:500;margin-bottom:28px;line-height:1.6}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg2);border:1.5px solid transparent;border-radius:12px;padding:13px 16px;font-size:15px;font-weight:500;color:var(--ink);outline:none;font-family:'Barlow',sans-serif;transition:all .2s}
+.contact-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:32px;align-items:start;margin-bottom:48px}
+.info-panel{display:flex;flex-direction:column;gap:16px}
+.info-card{background:var(--white);border:1.5px solid var(--border2);border-radius:20px;padding:28px 30px}
+.info-card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px}
+.info-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+.info-row:last-child{margin-bottom:0}
+.info-ico{width:36px;height:36px;border-radius:10px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-top:1px}
+.info-lbl{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px}
+.info-val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.5}
+.info-val a{color:var(--blue);text-decoration:none;font-weight:700}
+.info-val a:hover{text-decoration:underline}
+.badge-resp{display:inline-flex;align-items:center;gap:5px;background:rgba(0,196,122,.1);color:#009960;border-radius:50px;padding:4px 12px;font-size:11px;font-weight:700;margin-top:8px}
+.map-wrap{border-radius:20px;overflow:hidden;border:1.5px solid var(--border2);height:180px;background:var(--bg2)}
+.map-wrap iframe{width:100%;height:100%;border:none}
+.form-wrap{background:var(--white);border:1.5px solid var(--border2);border-radius:20px;padding:36px}
+.form-wrap h2{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:var(--ink);margin-bottom:4px;text-transform:uppercase;letter-spacing:.01em}
+.form-sub{font-size:14px;color:var(--ink3);font-weight:500;margin-bottom:24px;line-height:1.6}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--bg2);border:1.5px solid transparent;border-radius:10px;padding:12px 14px;font-size:14px;font-weight:500;color:var(--ink);outline:none;font-family:'Barlow',sans-serif;transition:all .2s}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(0,87,255,.07)}
 .form-group input::placeholder,.form-group textarea::placeholder{color:var(--ink4)}
-.form-group textarea{resize:vertical;min-height:120px}
+.form-group textarea{resize:vertical;min-height:110px}
 .form-group select{cursor:pointer}
-.form-submit{display:flex;align-items:center;gap:16px;margin-top:8px}
-.btn-send{background:var(--blue);color:#fff;border:none;border-radius:50px;padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
-.btn-send:hover{background:#2979FF;transform:translateY(-2px);box-shadow:0 8px 32px var(--blue-glow)}
-.form-note{font-size:12px;color:var(--ink4);font-weight:500}
-.info-band{background:linear-gradient(135deg,#060D2E 0%,#0A1A5C 60%,#0D2280 100%);border-radius:24px;padding:36px 40px;display:flex;align-items:center;gap:32px;flex-wrap:wrap;margin-bottom:48px}
-.info-band-txt{flex:1;min-width:200px}
-.info-band-txt h3{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:26px;color:#fff;text-transform:uppercase;margin-bottom:6px}
-.info-band-txt p{font-size:14px;color:rgba(255,255,255,.55);font-weight:500;line-height:1.7}
-.info-band-actions{display:flex;gap:10px;flex-wrap:wrap}
-#form-success{display:none;background:#E8FFF4;border:1.5px solid rgba(0,196,122,.3);border-radius:14px;padding:18px 22px;font-size:15px;font-weight:600;color:#009960;margin-top:16px}
-@media(max-width:900px){.contact-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+.btn-send{background:var(--blue);color:#fff;border:none;border-radius:50px;padding:13px 30px;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px;margin-top:4px}
+.btn-send:hover{background:#2979FF;transform:translateY(-2px);box-shadow:0 8px 24px var(--blue-glow)}
+#form-success{display:none;background:#E8FFF4;border:1.5px solid rgba(0,196,122,.3);border-radius:12px;padding:16px 20px;font-size:14px;font-weight:600;color:#009960;margin-top:14px}
+@media(max-width:860px){.contact-layout{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -80,93 +78,132 @@ gtag('config', 'G-ZBHD9KVG4C');
 </nav>
 
 <main>
-<section class="blk" style="padding-top:88px">
+<section class="blk" style="padding-top:96px">
   <div class="section">
 
-    <!-- Hero -->
-    <div class="reveal sec-center contact-hero" style="padding-top:0">
-      <div class="sec-label">Nous sommes là</div>
+    <div class="reveal sec-center" style="margin-bottom:40px">
+      <div class="sec-label">Nous sommes là pour vous</div>
       <h2 class="sec-title">CONTACTEZ<br/><em>VOLT.</em></h2>
-      <p style="font-size:16px;color:var(--ink3);line-height:1.7;font-weight:500;max-width:560px;margin:20px auto 0">
-        Une question, un projet de partenariat, un retour sur nos boissons ? Notre équipe répond sous <strong style="color:var(--ink)">24h ouvrables</strong>.
+      <p style="font-size:16px;color:var(--ink3);line-height:1.7;font-weight:500;max-width:540px;margin:18px auto 0">
+        Une question, un partenariat ou un retour ? Notre équipe répond sous <strong style="color:var(--ink)">24h ouvrables</strong>.
       </p>
     </div>
 
-    <!-- 3 cards -->
-    <div class="contact-grid">
-      <div class="contact-card reveal">
-        <span class="contact-icon">⚡</span>
-        <h3>Support utilisateur</h3>
-        <p>Problème avec votre abonnement, votre QR code ou l'application VOLT. ?</p>
-        <a href="mailto:support@volt-energy.ch" class="email-link">support@volt-energy.ch</a>
-      </div>
-      <div class="contact-card reveal">
-        <span class="contact-icon">🏋️</span>
-        <h3>Devenir partenaire</h3>
-        <p>Vous gérez une salle de fitness et souhaitez installer un distributeur VOLT. ?</p>
-        <a href="mailto:partenaires@volt-energy.ch" class="email-link">partenaires@volt-energy.ch</a>
-      </div>
-      <div class="contact-card reveal">
-        <span class="contact-icon">📩</span>
-        <h3>Contact général</h3>
-        <p>Toute autre demande : presse, investissement, retours produit ou information.</p>
-        <a href="mailto:info@volt-energy.ch" class="email-link">info@volt-energy.ch</a>
-      </div>
-    </div>
+    <div class="contact-layout">
 
-    <!-- Contact form -->
-    <div class="form-wrap reveal">
-      <h2>Envoyez-nous un message</h2>
-      <p class="sub">Remplissez le formulaire ci-dessous et nous vous répondrons dans les meilleurs délais.</p>
+      <div class="info-panel">
+        <div class="info-card reveal">
+          <div class="info-card-title">Nos coordonnées</div>
 
-      <form id="contact-form" onsubmit="sendMsg(event)">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Prénom *</label>
-            <input type="text" id="f-prenom" placeholder="Votre prénom" required/>
+          <div class="info-row">
+            <div class="info-ico">📍</div>
+            <div>
+              <div class="info-lbl">Adresse</div>
+              <div class="info-val">
+                Rue de la Baumettaz 12<br/>
+                1023 Crissier, Vaud<br/>
+                Suisse
+              </div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-ico">✉️</div>
+            <div>
+              <div class="info-lbl">Email général</div>
+              <div class="info-val"><a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-ico">🏋️</div>
+            <div>
+              <div class="info-lbl">Partenariats &amp; clubs</div>
+              <div class="info-val"><a href="mailto:partenaires@volt-energy.ch">partenaires@volt-energy.ch</a></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-ico">⚡</div>
+            <div>
+              <div class="info-lbl">Support utilisateur</div>
+              <div class="info-val"><a href="mailto:support@volt-energy.ch">support@volt-energy.ch</a></div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-ico">🌐</div>
+            <div>
+              <div class="info-lbl">Site web</div>
+              <div class="info-val"><a href="https://www.volt-energy.ch">www.volt-energy.ch</a></div>
+            </div>
+          </div>
+
+          <div style="margin-top:4px">
+            <span class="badge-resp">🟢 Réponse sous 24h ouvrables</span>
+          </div>
+        </div>
+
+        <div class="map-wrap reveal">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2745.0!2d6.5785!3d46.5338!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478c2f6f3f3f3f3f%3A0x0!2sRue%20de%20la%20Baumettaz%2012%2C%201023%20Crissier!5e0!3m2!1sfr!2sch!4v1718000000000!5m2!1sfr!2sch"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="VOLT. — Rue de la Baumettaz 12, Crissier">
+          </iframe>
+        </div>
+
+        <div class="info-card reveal" style="background:var(--bg2);border-color:transparent">
+          <div class="info-card-title">Informations légales</div>
+          <div style="font-size:13px;color:var(--ink3);line-height:1.8;font-weight:500">
+            <strong style="color:var(--ink)">Reda Hassini</strong><br/>
+            Entreprise individuelle<br/>
+            Rue de la Baumettaz 12, 1023 Crissier<br/>
+            <a href="mailto:info@volt-energy.ch" style="color:var(--blue);font-weight:600;text-decoration:none">info@volt-energy.ch</a><br/>
+            <a href="mentions-legales.html" style="color:var(--blue);font-weight:600;text-decoration:none;font-size:12px;margin-top:6px;display:inline-block">→ Mentions légales complètes</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-wrap reveal">
+        <h2>Envoyer un message</h2>
+        <p class="form-sub">Remplissez le formulaire ci-dessous — nous vous répondrons à l'adresse indiquée.</p>
+
+        <form id="contact-form" onsubmit="sendMsg(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prénom *</label>
+              <input type="text" id="f-prenom" placeholder="Votre prénom" required/>
+            </div>
+            <div class="form-group">
+              <label>Nom *</label>
+              <input type="text" id="f-nom" placeholder="Votre nom" required/>
+            </div>
           </div>
           <div class="form-group">
-            <label>Nom *</label>
-            <input type="text" id="f-nom" placeholder="Votre nom" required/>
+            <label>Email *</label>
+            <input type="email" id="f-email" placeholder="votre@email.ch" required/>
           </div>
-        </div>
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" id="f-email" placeholder="votre@email.ch" required/>
-        </div>
-        <div class="form-group">
-          <label>Sujet *</label>
-          <select id="f-sujet" required>
-            <option value="">Choisissez un sujet...</option>
-            <option value="support">Support — problème avec l'application ou l'abonnement</option>
-            <option value="partenariat">Partenariat — installer un distributeur VOLT.</option>
-            <option value="boissons">Questions sur les boissons / saveurs</option>
-            <option value="presse">Presse & médias</option>
-            <option value="autre">Autre demande</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Message *</label>
-          <textarea id="f-message" placeholder="Décrivez votre demande en quelques mots..." required></textarea>
-        </div>
-        <div class="form-submit">
-          <button type="submit" class="btn-send">Envoyer le message →</button>
-          <span class="form-note">Réponse sous 24h ouvrables</span>
-        </div>
-        <div id="form-success">✅ Message envoyé ! Nous vous répondrons rapidement à l'adresse indiquée.</div>
-      </form>
-    </div>
+          <div class="form-group">
+            <label>Sujet *</label>
+            <select id="f-sujet" required>
+              <option value="">Choisissez un sujet...</option>
+              <option value="support">Support — problème avec l'application ou l'abonnement</option>
+              <option value="partenariat">Partenariat — installer un distributeur VOLT.</option>
+              <option value="boissons">Questions sur les boissons / saveurs</option>
+              <option value="presse">Presse &amp; médias</option>
+              <option value="autre">Autre demande</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea id="f-message" placeholder="Décrivez votre demande..." required></textarea>
+          </div>
+          <button type="submit" class="btn-send">Envoyer →</button>
+          <div id="form-success">✅ Message envoyé ! Nous vous répondrons sous 24h à l'adresse indiquée.</div>
+        </form>
+      </div>
 
-    <!-- Info band -->
-    <div class="info-band reveal">
-      <div class="info-band-txt">
-        <h3>Intéressé par un partenariat ?</h3>
-        <p>Découvrez nos solutions clé en main pour les salles de fitness : installation gratuite, revenu récurrent, tableau de bord dédié.</p>
-      </div>
-      <div class="info-band-actions">
-        <a href="solutions-clubs.html" class="btn-primary">Nos solutions →</a>
-        <a href="partenaires.html" class="btn-white">Voir les partenaires</a>
-      </div>
     </div>
 
   </div>
@@ -195,23 +232,14 @@ function sendMsg(e) {
   var sujet   = document.getElementById('f-sujet').value;
   var message = document.getElementById('f-message').value.trim();
   if (!prenom || !nom || !email || !sujet || !message) return;
-
-  var subjectMap = {
-    support: 'Support VOLT.',
-    partenariat: 'Demande de partenariat',
-    boissons: 'Question sur les boissons',
-    presse: 'Presse & médias',
-    autre: 'Contact général'
+  var labels = {
+    support:'Support VOLT.', partenariat:'Demande de partenariat',
+    boissons:'Question sur les boissons', presse:'Presse & médias', autre:'Contact général'
   };
-
   var body = 'De : ' + prenom + ' ' + nom + '\nEmail : ' + email + '\n\n' + message;
-  var mailto = 'mailto:info@volt-energy.ch'
-    + '?subject=' + encodeURIComponent('[VOLT.] ' + subjectMap[sujet])
+  window.location.href = 'mailto:info@volt-energy.ch'
+    + '?subject=' + encodeURIComponent('[VOLT.] ' + labels[sujet])
     + '&body=' + encodeURIComponent(body);
-
-  window.location.href = mailto;
-
-  // Show success message
   document.getElementById('contact-form').style.opacity = '.5';
   document.getElementById('contact-form').style.pointerEvents = 'none';
   document.getElementById('form-success').style.display = 'block';
