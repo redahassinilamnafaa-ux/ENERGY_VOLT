@@ -64,7 +64,7 @@ gtag('config', 'G-ZBHD9KVG4C');
         <div class="ico">✅</div>
         <h1>Mot de passe modifié</h1>
         <div class="sub" id="ok-sub">Tu peux maintenant te connecter avec ton nouveau mot de passe.</div>
-        <a class="link" id="ok-link" href="/VoltApp.html">← Aller à la connexion</a>
+        <a class="link" id="ok-link" href="/VoltApp">← Aller à la connexion</a>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ function showErr(msg){ const e=document.getElementById('err'); e.textContent=msg
 
 if (!token) {
   document.getElementById('form-view').innerHTML =
-    '<h1>Lien invalide</h1><div class="sub">Ce lien de réinitialisation est incomplet ou a expiré. Refais une demande depuis la page de connexion.</div><a class="link" href="/VoltApp.html">← Retour à la connexion</a>';
+    '<h1>Lien invalide</h1><div class="sub">Ce lien de réinitialisation est incomplet ou a expiré. Refais une demande depuis la page de connexion.</div><a class="link" href="/VoltApp">← Retour à la connexion</a>';
 }
 
 async function submitReset(){
