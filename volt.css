@@ -308,13 +308,15 @@ footer{background:var(--ink);padding:64px 24px 36px}
 .blk{padding:96px 0}
 .blk.bg{background:var(--bg)}
 
-/* ── NAV responsive (menu dense : on resserre puis on bascule en burger) ── */
-@media(max-width:1200px){
+/* ── NAV responsive ── */
+/* Grand desktop : léger resserrement */
+@media(max-width:1400px){
   nav{padding:0 26px}
-  .nav-links{gap:17px}
+  .nav-links{gap:18px}
   .nav-links a{font-size:13.5px}
 }
-@media(max-width:1024px){
+/* Laptop / tablette paysage → burger à ≤1240px */
+@media(max-width:1240px){
   nav{padding:0 22px}
   .nav-links{display:none;position:fixed;top:66px;left:0;right:0;background:var(--white);flex-direction:column;align-items:flex-start;padding:20px 24px 32px;border-bottom:1px solid var(--border2);gap:16px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
   .nav-links.open{display:flex}
@@ -337,9 +339,6 @@ footer{background:var(--ink);padding:64px 24px 36px}
 }
 @media(max-width:768px){
   nav{padding:0 20px}
-  .nav-links{display:none;position:fixed;top:66px;left:0;right:0;background:var(--white);flex-direction:column;align-items:flex-start;padding:20px 24px 32px;border-bottom:1px solid var(--border2);gap:16px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
-  .nav-links.open{display:flex}
-  .hamburger{display:flex}
   .page-hero{padding:108px 22px 52px}
   .ben-grid{grid-template-columns:1fr}
   .footer-top{grid-template-columns:1fr}
