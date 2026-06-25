@@ -310,13 +310,13 @@ footer{background:var(--ink);padding:64px 24px 36px}
 
 /* ── NAV responsive ── */
 /* Grand desktop : léger resserrement */
-@media(max-width:1400px){
+@media(max-width:1200px){
   nav{padding:0 26px}
-  .nav-links{gap:18px}
-  .nav-links a{font-size:13.5px}
+  .nav-links{gap:16px}
+  .nav-links a{font-size:13px}
 }
-/* Laptop / tablette paysage → burger à ≤1240px */
-@media(max-width:1240px){
+/* Burger uniquement sur tablette/mobile ≤900px */
+@media(max-width:900px){
   nav{padding:0 22px}
   .nav-links{display:none;position:fixed;top:66px;left:0;right:0;background:var(--white);flex-direction:column;align-items:flex-start;padding:20px 24px 32px;border-bottom:1px solid var(--border2);gap:16px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
   .nav-links.open{display:flex}
