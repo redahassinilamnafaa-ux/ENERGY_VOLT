@@ -1,5 +1,5 @@
 // VOLT Service Worker — nécessaire pour que la PWA soit installable
-const CACHE = 'volt-v8';
+const CACHE = 'volt-v9';
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -25,8 +25,8 @@ self.addEventListener('fetch', e => {
   // Never intercept cross-origin requests (API calls to backend)
   if (url.origin !== self.location.origin) return;
 
-  // Network-first for HTML — always serve fresh version when online
-  if (e.request.mode === 'navigate' || url.pathname.endsWith('.html')) {
+  // Network-first for navigation — always serve fresh when online
+  if (e.request.mode === 'navigate') {
     e.respondWith(
       fetch(e.request)
         .then(res => {
@@ -34,7 +34,11 @@ self.addEventListener('fetch', e => {
           caches.open(CACHE).then(c => c.put(e.request, clone));
           return res;
         })
-        .catch(() => caches.match(e.request))
+        .catch(() =>
+          caches.match(e.request).then(cached =>
+            cached || new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } })
+          )
+        )
     );
     return;
   }
