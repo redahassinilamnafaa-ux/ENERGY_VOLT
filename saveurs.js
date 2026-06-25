@@ -230,7 +230,7 @@ window.VOLT_PRODUITS = [
       '<div class="pcard-in'+(rev?' rev':'')+'">'+
         '<div class="pcard-media">'+
           '<div class="pc-strip"></div>'+
-          voltCan(p,480)+
+          voltCan(p,520)+
           '<div class="pc-arome">'+p.arome+'</div>'+
         '</div>'+
         '<div class="pcard-body">'+
