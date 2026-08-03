@@ -117,6 +117,13 @@ tr:hover td{background:var(--bg)}
 .inp:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(0,87,255,.07)}
 .inp::placeholder{color:var(--ink4)}
 .lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:5px}
+
+/* MODALES */
+.modal-bg{position:fixed;inset:0;background:rgba(10,15,30,.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.modal{background:var(--white);border-radius:18px;padding:26px;width:100%;max-width:440px;box-shadow:0 20px 60px rgba(10,15,30,.25);max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;margin-bottom:4px}
+.row2{display:flex;gap:10px}
+.row2 .btn{flex:1}
 .btn{padding:10px 22px;border:none;border-radius:50px;font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:7px}
 .btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 14px var(--glow)}
 .btn-blue:hover{background:var(--blue2);transform:translateY(-1px)}
@@ -126,6 +133,8 @@ tr:hover td{background:var(--bg)}
 .btn-success{background:rgba(0,196,122,.1);color:var(--green);border:1px solid rgba(0,196,122,.2)}
 .btn-success:hover{background:var(--green);color:#fff;border-color:var(--green)}
 .btn-danger{background:rgba(255,59,92,.08);color:var(--red);border:1px solid rgba(255,59,92,.15)}
+.btn-orange{background:rgba(255,149,0,.1);color:var(--orange);border:1px solid rgba(255,149,0,.22)}
+.btn-orange:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
 .btn-danger:hover{background:var(--red);color:#fff}
 
 /* TOAST */
@@ -192,7 +201,10 @@ function subWindow(m) {
   }
   return `<div style="font-size:12px;line-height:1.5"><strong>${m.sub_start||'—'}</strong><div style="color:var(--ink3)">→ ${m.sub_end||'—'}</div>${badge}</div>`;
 }
-function planLabel(p) { return {month:'Mensuel',quarter:'Trimestriel',year:'Annuel'}[p]||p||'—'; }
+function planLabel(p) { return {month:'Mensuel',quarter:'Trimestriel',year:'Annuel',custom:'Jours offerts'}[p]||p||'—'; }
+function escapeHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function closeModal() { document.getElementById('modal-bg')?.remove(); }
+function todayISO() { return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Zurich',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
 function planBadge(p) { return `<span class="badge badge-blue">${planLabel(p)}</span>`; }
 function filterBySearch(arr, keys) {
   if (!S.search) return arr;
@@ -478,9 +490,17 @@ function pageMembers() {
               <td style="font-size:12px;color:var(--ink3)">${m.joined}</td>
               <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
               <td>
-                <button class="btn btn-sm ${m.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${m.id}',${!m.authorized})">
-                  ${m.authorized?'🔒 Bloquer':'🔓 Débloquer'}
-                </button>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <button class="btn btn-sm ${m.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${m.id}',${!m.authorized})">
+                    ${m.authorized?'🔒 Bloquer':'🔓 Débloquer'}
+                  </button>
+                  <button class="btn btn-sm ${m.subscribed?'btn-danger':'btn-orange'}" onclick="showSubscribeModal('${m.id}')">
+                    ${m.subscribed?'⛔ Résilier':'✅ Activer abo'}
+                  </button>
+                  <button class="btn btn-sm btn-ghost" onclick="showSubHistory('${m.id}')">
+                    📜 Historique
+                  </button>
+                </div>
               </td>
             </tr>`).join('')}
           </tbody>
@@ -496,6 +516,194 @@ async function toggleAccess(userId, authorized) {
   if (m) m.authorized = authorized;
   toast(authorized ? '🔓 Accès rétabli' : '🔒 Membre bloqué');
   goTo('members');
+}
+
+// ── Modale d'activation / résiliation d'abonnement ──────
+function showSubscribeModal(userId) {
+  const m = S.members.find(x=>x.id==userId);
+  if (!m) return;
+
+  if (m.subscribed) {
+    document.body.insertAdjacentHTML('beforeend',`
+    <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <div class="modal-title">⛔ Résilier l'abonnement</div>
+        <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(m.name)}</div>
+        <div style="background:rgba(255,59,92,.07);border:1px solid rgba(255,59,92,.18);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--red);font-weight:500;margin-bottom:18px">
+          L'accès sera coupé immédiatement et les dates d'abonnement effacées. L'historique en gardera la trace.
+        </div>
+        <div class="row2">
+          <button class="btn btn-danger" style="justify-content:center" onclick="toggleSubscribe('${userId}',false)">Résilier ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>`);
+    return;
+  }
+
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">✅ Activer un abonnement</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(m.name)}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:8px;background:var(--bg2);border-radius:10px;padding:4px">
+          <button type="button" class="btn btn-sm" id="sub-mode-plan" style="flex:1;justify-content:center;background:var(--blue);color:#fff" onclick="setSubMode('plan')">Plan</button>
+          <button type="button" class="btn btn-sm btn-ghost" id="sub-mode-days" style="flex:1;justify-content:center" onclick="setSubMode('days')">Jours personnalisés</button>
+        </div>
+        <div id="sub-plan-row">
+          <label class="lbl">Plan</label>
+          <select class="inp" id="sub-plan" onchange="previewSub()">
+            <option value="month">Mensuel</option>
+            <option value="quarter" selected>Trimestriel</option>
+            <option value="year">Annuel</option>
+          </select>
+        </div>
+        <div id="sub-days-row" style="display:none">
+          <label class="lbl">Nombre de jours</label>
+          <input class="inp" type="number" id="sub-days" min="1" step="1" value="1" oninput="previewSub()"/>
+        </div>
+        <div>
+          <label class="lbl">Date de début (figée)</label>
+          <input class="inp" type="date" id="sub-start" value="${todayISO()}" onchange="previewSub()"/>
+        </div>
+        <div id="sub-preview" style="background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--blue)"></div>
+        <div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--orange);font-weight:500">
+          ⚠️ Activation manuelle sans paiement. Les deux dates sont écrites une seule fois et ne bougeront plus.
+        </div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="toggleSubscribe('${userId}',true,document.getElementById('sub-plan').value,document.getElementById('sub-start').value)">Activer ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+  setSubMode('plan');
+}
+
+// Bascule entre "durée liée à un plan" et "nombre de jours exact".
+function setSubMode(mode) {
+  window._subMode = mode;
+  const isPlan = mode === 'plan';
+  const planRow = document.getElementById('sub-plan-row');
+  const daysRow = document.getElementById('sub-days-row');
+  const bPlan = document.getElementById('sub-mode-plan');
+  const bDays = document.getElementById('sub-mode-days');
+  if (planRow) planRow.style.display = isPlan ? '' : 'none';
+  if (daysRow) daysRow.style.display = isPlan ? 'none' : '';
+  if (bPlan) { bPlan.className = isPlan ? 'btn btn-sm' : 'btn btn-sm btn-ghost'; bPlan.style.background = isPlan ? 'var(--blue)' : ''; bPlan.style.color = isPlan ? '#fff' : ''; }
+  if (bDays) { bDays.className = !isPlan ? 'btn btn-sm' : 'btn btn-sm btn-ghost'; bDays.style.background = !isPlan ? 'var(--blue)' : ''; bDays.style.color = !isPlan ? '#fff' : ''; }
+  previewSub();
+}
+
+// Aperçu local, calqué sur le calcul serveur.
+function previewSub() {
+  const box = document.getElementById('sub-preview');
+  if (!box) return;
+  const start = (document.getElementById('sub-start')||{}).value;
+  if (!start) { box.textContent = 'Choisis une date de début.'; return; }
+  const [y,m,d] = start.split('-').map(Number);
+  const startD = new Date(Date.UTC(y, m - 1, d));
+  const f = dt => dt.toLocaleDateString('fr-CH', { timeZone:'UTC', day:'numeric', month:'short', year:'numeric' });
+
+  if (window._subMode === 'days') {
+    const n = parseInt((document.getElementById('sub-days')||{}).value, 10);
+    if (!n || n < 1) { box.textContent = 'Indique un nombre de jours valide (≥ 1).'; return; }
+    const endD = new Date(startD.getTime() + (n - 1) * 86400000);
+    box.innerHTML = `📅 Du <strong>${f(startD)}</strong> au <strong>${f(endD)}</strong> inclus · <strong>${n} jour${n>1?'s':''}</strong>`;
+    return;
+  }
+
+  const plan = (document.getElementById('sub-plan')||{}).value || 'month';
+  const months = { month:1, quarter:3, year:12 }[plan] || 1;
+  const idx = (m - 1) + months;
+  const tY = y + Math.floor(idx / 12);
+  const tM = (idx % 12) + 1;
+  const lastDay = new Date(Date.UTC(tY, tM, 0)).getUTCDate();
+  const endD = (d <= lastDay)
+    ? new Date(Date.UTC(tY, tM - 1, d) - 86400000)
+    : new Date(Date.UTC(tY, tM, 1) - 86400000);
+  const days = Math.round((endD - startD) / 86400000) + 1;
+  box.innerHTML = `📅 Du <strong>${f(startD)}</strong> au <strong>${f(endD)}</strong> inclus · <strong>${days} jours</strong>`;
+}
+
+async function toggleSubscribe(userId, subscribed, plan, startDate) {
+  const btn = document.querySelector('#modal-bg .btn-blue, #modal-bg .btn-danger');
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const payload = { user_id: userId, subscribed, plan };
+  if (subscribed && startDate) payload.start_date = startDate;
+  if (subscribed && window._subMode === 'days') {
+    const n = parseInt((document.getElementById('sub-days')||{}).value, 10);
+    if (!n || n < 1) { toast('Nombre de jours invalide.', false); if (btn) { btn.disabled = false; btn.innerHTML = 'Activer ✓'; } return; }
+    payload.days = n;
+    delete payload.plan;
+  }
+  const res = await api('/api/fitness?action=subscribe', payload, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled = false; btn.innerHTML = subscribed ? 'Activer ✓' : 'Résilier ✓'; } return; }
+  closeModal();
+  const m = S.members.find(x=>x.id==userId);
+  if (m) {
+    m.subscribed = subscribed;
+    if (subscribed) {
+      m.plan = res.plan || plan;
+      m.sub_start = res.sub_start || m.sub_start;
+      m.sub_end   = res.sub_end   || m.sub_end;
+      m.days_left = typeof res.days === 'number' ? res.days : m.days_left;
+    } else {
+      m.sub_start = null; m.sub_end = null; m.days_left = null;
+    }
+  }
+  toast(subscribed ? `✅ Abo activé — du ${res.sub_start} au ${res.sub_end} (${res.days} j)` : '⛔ Abonnement résilié');
+  // Recharge pour refléter exactement l'état en base.
+  try {
+    const fresh = await api('/api/fitness?action=members');
+    if (!fresh.error && Array.isArray(fresh.members)) S.members = fresh.members;
+  } catch(e) {}
+  goTo('members');
+}
+
+// ── Historique lisible d'un membre ──────────────────────
+async function showSubHistory(userId) {
+  const m = S.members.find(x=>x.id==userId);
+  if (!m) return;
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-title">📜 Historique d'abonnement</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(m.name)}</div>
+      <div id="sub-history-body" style="max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+        <div style="text-align:center;padding:24px;color:var(--ink3);font-size:13px">Chargement…</div>
+      </div>
+      <div class="row2" style="margin-top:18px">
+        <button class="btn btn-ghost" style="justify-content:center;width:100%" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>`);
+
+  const res = await api(`/api/fitness?action=sub-history&user_id=${userId}`);
+  const body = document.getElementById('sub-history-body');
+  if (!body) return;
+
+  if (res.error) { body.innerHTML = `<div style="color:var(--red);font-size:13px">Erreur : ${escapeHtml(res.error)}</div>`; return; }
+  if (!res.events || res.events.length === 0) {
+    body.innerHTML = `<div style="text-align:center;padding:24px;color:var(--ink3);font-size:13px">Aucun événement enregistré pour ce membre.</div>`;
+    return;
+  }
+
+  const SOURCE_LABEL = { admin:'Admin VOLT', gym:'Fitness', stripe:'Carte (Stripe)', twint:'TWINT', system:'Système' };
+  body.innerHTML = res.events.map(e => `
+    <div style="border:1px solid var(--border2);border-radius:10px;padding:12px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <div style="font-weight:700;font-size:13.5px">${escapeHtml(e.label)}</div>
+        <div style="font-size:11.5px;color:var(--ink3);white-space:nowrap">${escapeHtml(e.when)}</div>
+      </div>
+      ${e.window ? `<div style="font-size:12.5px;color:var(--ink2);margin-top:4px">${escapeHtml(e.window)}${e.days?` · ${e.days} jour${e.days>1?'s':''}`:''}</div>` : ''}
+      <div style="font-size:11.5px;color:var(--ink3);margin-top:4px">
+        ${e.plan_label ? `${escapeHtml(e.plan_label)} · ` : ''}Source : ${SOURCE_LABEL[e.source]||escapeHtml(e.source||'—')}
+      </div>
+      ${e.note ? `<div style="font-size:11.5px;color:var(--ink3);margin-top:4px;font-style:italic">${escapeHtml(e.note)}</div>` : ''}
+    </div>
+  `).join('');
 }
 
 // ── CONSOMMATION ─────────────────────────────────────
