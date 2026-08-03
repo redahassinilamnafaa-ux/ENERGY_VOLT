@@ -185,6 +185,17 @@ function closeModal() { document.getElementById('modal-bg')?.remove(); }
 function fmtChf(n) { return 'CHF ' + Number(n||0).toFixed(2); }
 function today() { return new Date().toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}); }
 function fmtDate(d) { return d ? new Date(d).toLocaleDateString('fr-CH',{day:'numeric',month:'short',year:'numeric'}) : '—'; }
+function subWindow(c) {
+  if (!c.sub_start && !c.sub_end) return '<span style="color:var(--ink3)">—</span>';
+  const left = (typeof c.days_left === 'number') ? c.days_left : null;
+  let badge = '';
+  if (c.subscribed && left !== null) {
+    const col = left <= 0 ? 'var(--red)' : left <= 7 ? 'var(--orange)' : 'var(--ink3)';
+    badge = `<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${left} j restant${left>1?'s':''}</div>`;
+  }
+  return `<div style="font-size:12px;line-height:1.5"><strong>${c.sub_start||'—'}</strong><div style="color:var(--ink3)">→ ${c.sub_end||'—'}</div>${badge}</div>`;
+}
+function todayISO() { const d = new Date(); return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Zurich',year:'numeric',month:'2-digit',day:'2-digit'}).format(d); }
 function filterBySearch(arr, keys) {
   if (!S.search) return arr;
   const q = S.search.toLowerCase();
@@ -410,12 +421,13 @@ function pageDashboard() {
     </div>
     ${recentClients.length === 0 ? '<div class="empty"><div class="empty-ico">👥</div><div class="empty-sub">Aucun client pour l\'instant</div></div>' : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Plan</th><th>Fitness</th><th>Inscrit</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Client</th><th>Plan</th><th>Fitness</th><th>Abonnement</th><th>Inscrit</th><th>Statut</th></tr></thead>
       <tbody>
         ${recentClients.map(c=>`<tr>
           <td><div class="td-name">${c.name}</div><div class="td-sub">${c.email}</div></td>
           <td>${planBadge(c.plan)}</td>
           <td style="font-size:13px;color:var(--ink3)">${c.gym||'—'}</td>
+          <td>${subWindow(c)}</td>
           <td style="font-size:12px;color:var(--ink3)">${c.joined}</td>
           <td>${c.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
         </tr>`).join('')}
@@ -443,12 +455,13 @@ function pageClients() {
   <div class="card">
     ${filtered.length === 0 ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div><div class="empty-sub">Modifie ta recherche</div></div>' : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Abonnement (début → fin)</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(c=>`<tr>
           <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
           <td style="font-size:12px;color:var(--ink3)">${escapeHtml(c.gym)||'—'}</td>
           <td>${planBadge(c.plan)}</td>
+          <td>${subWindow(c)}</td>
           <td style="font-weight:700">${c.scans}</td>
           <td><strong>${fmtChf(c.revenue)}</strong></td>
           <td style="font-size:12px;color:var(--ink3)">${c.joined}</td>
@@ -505,33 +518,77 @@ function showSubscribeModal(userId) {
       <div style="display:flex;flex-direction:column;gap:14px">
         <div>
           <label class="lbl">Plan</label>
-          <select class="inp" id="sub-plan">
+          <select class="inp" id="sub-plan" onchange="previewSub()">
             <option value="month">Mensuel — CHF 9.90/mois</option>
             <option value="quarter" selected>Trimestriel — CHF 24.90/3 mois</option>
             <option value="year">Annuel — CHF 89.90/an</option>
           </select>
         </div>
+        <div>
+          <label class="lbl">Date de début (figée)</label>
+          <input class="inp" type="date" id="sub-start" value="${todayISO()}" onchange="previewSub()"/>
+        </div>
+        <div id="sub-preview" style="background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--blue)"></div>
         <div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--orange);font-weight:500">
-          ⚠️ Activation manuelle sans paiement Stripe. Pour les tests ou gestes commerciaux.
+          ⚠️ Activation manuelle sans paiement Stripe. Les deux dates sont écrites une seule fois et ne bougeront plus.
         </div>
         <div class="row2" style="margin-top:4px">
-          <button class="btn btn-blue" style="justify-content:center" onclick="toggleSubscribe('${userId}',true,document.getElementById('sub-plan').value)">Activer ✓</button>
+          <button class="btn btn-blue" style="justify-content:center" onclick="toggleSubscribe('${userId}',true,document.getElementById('sub-plan').value,document.getElementById('sub-start').value)">Activer ✓</button>
           <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
         </div>
       </div>
     </div>
   </div>`);
+  previewSub();
 }
 
-async function toggleSubscribe(userId, subscribed, plan) {
+// Aperçu local, calqué sur le calcul serveur (mois calendaires, fin en fin de journée).
+function previewSub() {
+  const box = document.getElementById('sub-preview');
+  if (!box) return;
+  const plan = (document.getElementById('sub-plan')||{}).value || 'month';
+  const start = (document.getElementById('sub-start')||{}).value;
+  const months = { month:1, quarter:3, year:12 }[plan] || 1;
+  if (!start) { box.textContent = 'Choisis une date de début.'; return; }
+  const [y,m,d] = start.split('-').map(Number);
+  const idx = (m - 1) + months;
+  const tY = y + Math.floor(idx / 12);
+  const tM = (idx % 12) + 1;
+  const lastDay = new Date(Date.UTC(tY, tM, 0)).getUTCDate();
+  const startD = new Date(Date.UTC(y, m - 1, d));
+  // dernier jour couvert = veille de la date anniversaire (ou dernier jour du mois si le jour n'existe pas)
+  const endD = (d <= lastDay)
+    ? new Date(Date.UTC(tY, tM - 1, d) - 86400000)
+    : new Date(Date.UTC(tY, tM, 1) - 86400000);
+  const days = Math.round((endD - startD) / 86400000) + 1;
+  const f = dt => dt.toLocaleDateString('fr-CH', { timeZone:'UTC', day:'numeric', month:'short', year:'numeric' });
+  box.innerHTML = `📅 Du <strong>${f(startD)}</strong> au <strong>${f(endD)}</strong> inclus · <strong>${days} jours</strong>`;
+}
+
+async function toggleSubscribe(userId, subscribed, plan, startDate) {
   const btn = document.querySelector('#modal-bg .btn-blue, #modal-bg .btn-danger');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await adminApi('/api/admin?action=subscribe', { user_id: userId, subscribed, plan }, 'POST');
+  const payload = { user_id: userId, subscribed, plan };
+  if (subscribed && startDate) payload.start_date = startDate;
+  const res = await adminApi('/api/admin?action=subscribe', payload, 'POST');
   if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled = false; btn.innerHTML = subscribed ? 'Activer ✓' : 'Résilier ✓'; } return; }
   closeModal();
   const c = S.clients.find(x=>x.id==userId);
-  if (c) { c.subscribed = subscribed; if (subscribed) c.plan = plan; }
-  toast(subscribed ? `✅ Abonnement activé (${plan})` : `⛔ Abonnement résilié`);
+  if (c) {
+    c.subscribed = subscribed;
+    if (subscribed) {
+      c.plan = plan;
+      c.sub_start = res.sub_start || c.sub_start;
+      c.sub_end   = res.sub_end   || c.sub_end;
+      c.days_left = typeof res.days === 'number' ? res.days : c.days_left;
+    }
+  }
+  toast(subscribed ? `✅ Abo activé — du ${res.sub_start} au ${res.sub_end} (${res.days} j)` : `⛔ Abonnement résilié`);
+  // Recharge la liste pour afficher les dates réelles renvoyées par la base.
+  try {
+    const fresh = await adminApi('/api/admin?action=clients');
+    if (!fresh.error && Array.isArray(fresh.clients)) S.clients = fresh.clients;
+  } catch(e) {}
   goTo('clients');
 }
 
