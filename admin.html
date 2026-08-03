@@ -437,7 +437,7 @@ function pageDashboard() {
 }
 
 function planBadge(plan) {
-  const labels = { month:'Mensuel', quarter:'Trimestriel', year:'Annuel' };
+  const labels = { month:'Mensuel', quarter:'Trimestriel', year:'Annuel', custom:'Jours offerts' };
   return `<span class="badge badge-blue">${labels[plan]||plan||'—'}</span>`;
 }
 
@@ -474,6 +474,9 @@ function pageClients() {
             <button class="btn btn-sm ${c.subscribed?'btn-danger':'btn-orange'}" onclick="showSubscribeModal('${c.id}')">
               ${c.subscribed?'⛔ Résilier':'✅ Activer abo'}
             </button>
+            <button class="btn btn-sm btn-ghost" onclick="showSubHistory('${c.id}')">
+              📜 Historique
+            </button>
           </td>
         </tr>`).join('')}
       </tbody>
@@ -488,6 +491,51 @@ async function toggleAccess(userId, authorized) {
   if (c) c.authorized = authorized;
   toast(authorized ? '🔓 Accès rétabli' : '🔒 Accès bloqué');
   goTo('clients');
+}
+
+// Historique lisible d'un client : une ligne par activation/résiliation/paiement,
+// pour ne plus jamais confondre "ce qui est affiché maintenant" et "ce qui s'est passé".
+async function showSubHistory(userId) {
+  const c = S.clients.find(x=>x.id==userId);
+  if (!c) return;
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-title">📜 Historique d'abonnement</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(c.name)} · ${escapeHtml(c.email)}</div>
+      <div id="sub-history-body" style="max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+        <div style="text-align:center;padding:24px;color:var(--ink3);font-size:13px">Chargement…</div>
+      </div>
+      <div class="row2" style="margin-top:18px">
+        <button class="btn btn-ghost" style="justify-content:center;width:100%" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>`);
+
+  const res = await adminApi(`/api/admin?action=sub-history&user_id=${userId}`);
+  const body = document.getElementById('sub-history-body');
+  if (!body) return; // modale fermée entre-temps
+
+  if (res.error) { body.innerHTML = `<div style="color:var(--red);font-size:13px">Erreur : ${escapeHtml(res.error)}</div>`; return; }
+  if (!res.events || res.events.length === 0) {
+    body.innerHTML = `<div style="text-align:center;padding:24px;color:var(--ink3);font-size:13px">Aucun événement enregistré pour ce client.</div>`;
+    return;
+  }
+
+  const SOURCE_LABEL = { admin:'Admin', stripe:'Carte (Stripe)', twint:'TWINT', system:'Système' };
+  body.innerHTML = res.events.map(e => `
+    <div style="border:1px solid var(--border,#e5e7ef);border-radius:10px;padding:12px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <div style="font-weight:700;font-size:13.5px">${escapeHtml(e.label)}</div>
+        <div style="font-size:11.5px;color:var(--ink3);white-space:nowrap">${escapeHtml(e.when)}</div>
+      </div>
+      ${e.window ? `<div style="font-size:12.5px;color:var(--ink2);margin-top:4px">${escapeHtml(e.window)}${e.days?` · ${e.days} jour${e.days>1?'s':''}`:''}</div>` : ''}
+      <div style="font-size:11.5px;color:var(--ink3);margin-top:4px">
+        ${e.plan_label ? `${escapeHtml(e.plan_label)} · ` : ''}Source : ${SOURCE_LABEL[e.source]||escapeHtml(e.source||'—')}
+      </div>
+      ${e.note ? `<div style="font-size:11.5px;color:var(--ink3);margin-top:4px;font-style:italic">${escapeHtml(e.note)}</div>` : ''}
+    </div>
+  `).join('');
 }
 
 function showSubscribeModal(userId) {
@@ -516,13 +564,21 @@ function showSubscribeModal(userId) {
       <div class="modal-title">✅ Activer l'abonnement</div>
       <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:20px">${c.name} · ${c.email}</div>
       <div style="display:flex;flex-direction:column;gap:14px">
-        <div>
+        <div style="display:flex;gap:8px;background:var(--bg2,#f3f4f8);border-radius:10px;padding:4px">
+          <button type="button" class="btn btn-sm" id="sub-mode-plan" style="flex:1;justify-content:center;background:var(--blue);color:#fff" onclick="setSubMode('plan')">Plan</button>
+          <button type="button" class="btn btn-sm btn-ghost" id="sub-mode-days" style="flex:1;justify-content:center" onclick="setSubMode('days')">Jours personnalisés</button>
+        </div>
+        <div id="sub-plan-row">
           <label class="lbl">Plan</label>
           <select class="inp" id="sub-plan" onchange="previewSub()">
             <option value="month">Mensuel — CHF 9.90/mois</option>
             <option value="quarter" selected>Trimestriel — CHF 24.90/3 mois</option>
             <option value="year">Annuel — CHF 89.90/an</option>
           </select>
+        </div>
+        <div id="sub-days-row" style="display:none">
+          <label class="lbl">Nombre de jours</label>
+          <input class="inp" type="number" id="sub-days" min="1" step="1" value="1" oninput="previewSub()"/>
         </div>
         <div>
           <label class="lbl">Date de début (figée)</label>
@@ -539,29 +595,53 @@ function showSubscribeModal(userId) {
       </div>
     </div>
   </div>`);
+  setSubMode('plan');
+}
+
+// Bascule entre "durée liée à un plan" et "nombre de jours exact" (ex. 1 jour offert).
+function setSubMode(mode) {
+  window._subMode = mode;
+  const isPlan = mode === 'plan';
+  const planRow = document.getElementById('sub-plan-row');
+  const daysRow = document.getElementById('sub-days-row');
+  const bPlan = document.getElementById('sub-mode-plan');
+  const bDays = document.getElementById('sub-mode-days');
+  if (planRow) planRow.style.display = isPlan ? '' : 'none';
+  if (daysRow) daysRow.style.display = isPlan ? 'none' : '';
+  if (bPlan) { bPlan.style.background = isPlan ? 'var(--blue)' : ''; bPlan.style.color = isPlan ? '#fff' : ''; bPlan.className = isPlan ? 'btn btn-sm' : 'btn btn-sm btn-ghost'; }
+  if (bDays) { bDays.style.background = !isPlan ? 'var(--blue)' : ''; bDays.style.color = !isPlan ? '#fff' : ''; bDays.className = !isPlan ? 'btn btn-sm' : 'btn btn-sm btn-ghost'; }
   previewSub();
 }
 
-// Aperçu local, calqué sur le calcul serveur (mois calendaires, fin en fin de journée).
+// Aperçu local, calqué sur le calcul serveur (mois calendaires ou jours exacts, fin en fin de journée).
 function previewSub() {
   const box = document.getElementById('sub-preview');
   if (!box) return;
-  const plan = (document.getElementById('sub-plan')||{}).value || 'month';
   const start = (document.getElementById('sub-start')||{}).value;
-  const months = { month:1, quarter:3, year:12 }[plan] || 1;
   if (!start) { box.textContent = 'Choisis une date de début.'; return; }
   const [y,m,d] = start.split('-').map(Number);
+  const startD = new Date(Date.UTC(y, m - 1, d));
+  const f = dt => dt.toLocaleDateString('fr-CH', { timeZone:'UTC', day:'numeric', month:'short', year:'numeric' });
+
+  if (window._subMode === 'days') {
+    const n = parseInt((document.getElementById('sub-days')||{}).value, 10);
+    if (!n || n < 1) { box.textContent = 'Indique un nombre de jours valide (≥ 1).'; return; }
+    const endD = new Date(startD.getTime() + (n - 1) * 86400000);
+    box.innerHTML = `📅 Du <strong>${f(startD)}</strong> au <strong>${f(endD)}</strong> inclus · <strong>${n} jour${n>1?'s':''}</strong>`;
+    return;
+  }
+
+  const plan = (document.getElementById('sub-plan')||{}).value || 'month';
+  const months = { month:1, quarter:3, year:12 }[plan] || 1;
   const idx = (m - 1) + months;
   const tY = y + Math.floor(idx / 12);
   const tM = (idx % 12) + 1;
   const lastDay = new Date(Date.UTC(tY, tM, 0)).getUTCDate();
-  const startD = new Date(Date.UTC(y, m - 1, d));
   // dernier jour couvert = veille de la date anniversaire (ou dernier jour du mois si le jour n'existe pas)
   const endD = (d <= lastDay)
     ? new Date(Date.UTC(tY, tM - 1, d) - 86400000)
     : new Date(Date.UTC(tY, tM, 1) - 86400000);
   const days = Math.round((endD - startD) / 86400000) + 1;
-  const f = dt => dt.toLocaleDateString('fr-CH', { timeZone:'UTC', day:'numeric', month:'short', year:'numeric' });
   box.innerHTML = `📅 Du <strong>${f(startD)}</strong> au <strong>${f(endD)}</strong> inclus · <strong>${days} jours</strong>`;
 }
 
@@ -570,6 +650,12 @@ async function toggleSubscribe(userId, subscribed, plan, startDate) {
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
   const payload = { user_id: userId, subscribed, plan };
   if (subscribed && startDate) payload.start_date = startDate;
+  if (subscribed && window._subMode === 'days') {
+    const n = parseInt((document.getElementById('sub-days')||{}).value, 10);
+    if (!n || n < 1) { toast('Nombre de jours invalide.', false); if (btn) { btn.disabled = false; btn.innerHTML = 'Activer ✓'; } return; }
+    payload.days = n;
+    delete payload.plan; // le nombre de jours prime, le backend fixera plan='custom'
+  }
   const res = await adminApi('/api/admin?action=subscribe', payload, 'POST');
   if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled = false; btn.innerHTML = subscribed ? 'Activer ✓' : 'Résilier ✓'; } return; }
   closeModal();
@@ -577,10 +663,13 @@ async function toggleSubscribe(userId, subscribed, plan, startDate) {
   if (c) {
     c.subscribed = subscribed;
     if (subscribed) {
-      c.plan = plan;
+      c.plan = res.plan || plan;
       c.sub_start = res.sub_start || c.sub_start;
       c.sub_end   = res.sub_end   || c.sub_end;
       c.days_left = typeof res.days === 'number' ? res.days : c.days_left;
+    } else {
+      // Résiliation : le serveur efface les dates, on reflète ça immédiatement.
+      c.sub_start = null; c.sub_end = null; c.days_left = null;
     }
   }
   toast(subscribed ? `✅ Abo activé — du ${res.sub_start} au ${res.sub_end} (${res.days} j)` : `⛔ Abonnement résilié`);
