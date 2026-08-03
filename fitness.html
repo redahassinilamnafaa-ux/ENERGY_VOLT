@@ -189,6 +189,26 @@ function filterBySearch(arr, keys) {
   return arr.filter(i => keys.some(k => (i[k]||'').toString().toLowerCase().includes(q)));
 }
 
+// ── PÉRIODE D'ABONNEMENT ─────────────────────────────
+// Dates figées à l'activation côté backend (sub_start_label / sub_end_label /
+// sub_days_left). On les affiche telles quelles : rien n'est recalculé ici,
+// donc rien ne se décale d'un jour à l'autre.
+function subStartCell(m) {
+  if (!m.sub_start_label) return '<td style="font-size:12px;color:var(--ink3)">—</td>';
+  const est = m.sub_start_estimated;
+  return `<td style="font-size:12px;color:var(--ink2);white-space:nowrap"${est?' title="Date reconstituée : abonnement antérieur à l\'enregistrement du début"':''}>${est?'≈ ':''}${m.sub_start_label}</td>`;
+}
+function subEndCell(m) {
+  if (!m.sub_end_label) return '<td style="font-size:12px;color:var(--ink3)">—</td>';
+  const left = m.sub_days_left || 0;
+  const cls  = left === 0 ? 'badge-red' : left <= 7 ? 'badge-orange' : 'badge-green';
+  const txt  = left === 0 ? 'Expiré' : left + (left > 1 ? ' jours' : ' jour');
+  return `<td style="font-size:12px;white-space:nowrap">
+    <div style="color:var(--ink2)">${m.sub_end_label}</div>
+    <div style="margin-top:3px"><span class="badge ${cls}">${txt}</span></div>
+  </td>`;
+}
+
 // ── NAV ──────────────────────────────────────────────
 const PAGES = [
   { id:'dashboard', icon:'📊', label:'Vue d\'ensemble' },
@@ -423,13 +443,14 @@ function pageDashboard() {
     ${recentMembers.length === 0
       ? '<div class="empty"><div class="empty-ico">👥</div><div class="empty-sub">Aucun membre pour l\'instant</div></div>'
       : `<div class="table-wrap"><table>
-          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Inscrit</th><th>Statut</th></tr></thead>
+          <thead><tr><th>Membre</th><th>Plan</th><th>Début abo</th><th>Fin abo</th><th>Scans/mois</th><th>Statut</th></tr></thead>
           <tbody>
             ${recentMembers.map(m=>`<tr>
               <td><div class="td-name">${m.name}</div><div class="td-sub">${m.email}</div></td>
               <td>${planBadge(m.plan)}</td>
+              ${subStartCell(m)}
+              ${subEndCell(m)}
               <td style="font-weight:700">${m.scans_month}</td>
-              <td style="font-size:12px;color:var(--ink3)">${m.joined}</td>
               <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
             </tr>`).join('')}
           </tbody>
@@ -454,11 +475,13 @@ function pageMembers() {
     ${filtered.length === 0
       ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div></div>'
       : `<div class="table-wrap"><table>
-          <thead><tr><th>Membre</th><th>Plan</th><th>Scans/mois</th><th>Total scans</th><th>CA total</th><th>Inscrit</th><th>Statut</th><th>Accès</th></tr></thead>
+          <thead><tr><th>Membre</th><th>Plan</th><th>Début abo</th><th>Fin abo</th><th>Scans/mois</th><th>Total scans</th><th>CA total</th><th>Inscrit</th><th>Statut</th><th>Accès</th></tr></thead>
           <tbody>
             ${filtered.map(m=>`<tr>
               <td><div class="td-name">${m.name}</div><div class="td-sub">${m.email}</div></td>
               <td>${planBadge(m.plan)}</td>
+              ${subStartCell(m)}
+              ${subEndCell(m)}
               <td style="font-weight:700">${m.scans_month}</td>
               <td style="color:var(--ink3)">${m.scans_total}</td>
               <td><strong>${fmtChf(m.revenue)}</strong></td>

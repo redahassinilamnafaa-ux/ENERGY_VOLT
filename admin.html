@@ -191,6 +191,61 @@ function filterBySearch(arr, keys) {
   return arr.filter(item => keys.some(k => (item[k]||'').toString().toLowerCase().includes(q)));
 }
 
+// ── PÉRIODE D'ABONNEMENT ─────────────────────────────
+// Les dates affichées viennent TOUJOURS du backend (sub_start_label /
+// sub_end_label / sub_days_left) : elles sont figées à l'activation et ne sont
+// jamais recalculées ici. Les fonctions ci-dessous ne servent qu'à pré-remplir
+// la modale d'activation ; c'est le serveur qui fait foi.
+const PLAN_MONTHS = { month:1, quarter:3, year:12 };
+
+/** Jour d'aujourd'hui à Zurich, au format AAAA-MM-JJ. */
+function todayDay() { return new Date().toLocaleDateString('sv-SE', { timeZone:'Europe/Zurich' }); }
+
+/** Dernier jour couvert = veille du quantième anniversaire (miroir du backend). */
+function planEndDay(startDay, plan) {
+  const p = String(startDay||'').split('-').map(Number);
+  if (p.length !== 3 || p.some(isNaN)) return '';
+  const total = p[0]*12 + (p[1]-1) + (PLAN_MONTHS[plan] || 1);
+  const ty = Math.floor(total/12), tm = (total%12) + 1;
+  const last = new Date(Date.UTC(ty, tm, 0)).getUTCDate();
+  const d = new Date(Date.UTC(ty, tm-1, Math.min(p[2], last)));
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0,10);
+}
+
+/** Nombre de jours d'accès entre deux jours, bornes incluses. */
+function daysInclusive(a, b) {
+  const t1 = Date.parse(a + 'T00:00:00Z'), t2 = Date.parse(b + 'T00:00:00Z');
+  if (isNaN(t1) || isNaN(t2)) return 0;
+  return Math.round((t2 - t1) / 86400000) + 1;
+}
+
+function fmtDay(day) {
+  const p = String(day||'').split('-').map(Number);
+  if (p.length !== 3 || p.some(isNaN)) return '—';
+  return new Date(Date.UTC(p[0], p[1]-1, p[2]))
+    .toLocaleDateString('fr-CH', { timeZone:'UTC', day:'numeric', month:'long', year:'numeric' });
+}
+
+/** Cellule « Début abo » — jour où le client a souscrit. */
+function subStartCell(c) {
+  if (!c.sub_start_label) return '<td style="font-size:12px;color:var(--ink3)">—</td>';
+  const est = c.sub_start_estimated;
+  return `<td style="font-size:12px;color:var(--ink2);white-space:nowrap"${est?' title="Date reconstituée : abonnement antérieur à l\'enregistrement du début"':''}>${est?'≈ ':''}${c.sub_start_label}</td>`;
+}
+
+/** Cellule « Fin abo » — dernier jour couvert + jours restants. */
+function subEndCell(c) {
+  if (!c.sub_end_label) return '<td style="font-size:12px;color:var(--ink3)">—</td>';
+  const left = c.sub_days_left || 0;
+  const cls  = left === 0 ? 'badge-red' : left <= 7 ? 'badge-orange' : 'badge-green';
+  const txt  = left === 0 ? 'Expiré' : left + (left > 1 ? ' jours' : ' jour');
+  return `<td style="font-size:12px;white-space:nowrap">
+    <div style="color:var(--ink2)">${c.sub_end_label}</div>
+    <div style="margin-top:3px"><span class="badge ${cls}">${txt}</span></div>
+  </td>`;
+}
+
 const PAGES = [
   { id:'dashboard', icon:'📊', label:'Dashboard'   },
   { id:'clients',   icon:'👥', label:'Clients'     },
@@ -410,13 +465,14 @@ function pageDashboard() {
     </div>
     ${recentClients.length === 0 ? '<div class="empty"><div class="empty-ico">👥</div><div class="empty-sub">Aucun client pour l\'instant</div></div>' : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Plan</th><th>Fitness</th><th>Inscrit</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Client</th><th>Plan</th><th>Fitness</th><th>Début abo</th><th>Fin abo</th><th>Statut</th></tr></thead>
       <tbody>
         ${recentClients.map(c=>`<tr>
-          <td><div class="td-name">${c.name}</div><div class="td-sub">${c.email}</div></td>
+          <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
           <td>${planBadge(c.plan)}</td>
-          <td style="font-size:13px;color:var(--ink3)">${c.gym||'—'}</td>
-          <td style="font-size:12px;color:var(--ink3)">${c.joined}</td>
+          <td style="font-size:13px;color:var(--ink3)">${escapeHtml(c.gym)||'—'}</td>
+          ${subStartCell(c)}
+          ${subEndCell(c)}
           <td>${c.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
         </tr>`).join('')}
       </tbody>
@@ -443,12 +499,14 @@ function pageClients() {
   <div class="card">
     ${filtered.length === 0 ? '<div class="empty"><div class="empty-ico">🔍</div><div class="empty-title">Aucun résultat</div><div class="empty-sub">Modifie ta recherche</div></div>' : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Début abo</th><th>Fin abo</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(c=>`<tr>
           <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
           <td style="font-size:12px;color:var(--ink3)">${escapeHtml(c.gym)||'—'}</td>
           <td>${planBadge(c.plan)}</td>
+          ${subStartCell(c)}
+          ${subEndCell(c)}
           <td style="font-weight:700">${c.scans}</td>
           <td><strong>${fmtChf(c.revenue)}</strong></td>
           <td style="font-size:12px;color:var(--ink3)">${c.joined}</td>
@@ -497,48 +555,98 @@ function showSubscribeModal(userId) {
     </div>`);
     return;
   }
+  const start = todayDay();
   document.body.insertAdjacentHTML('beforeend',`
   <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
     <div class="modal">
       <div class="modal-title">✅ Activer l'abonnement</div>
-      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:20px">${c.name} · ${c.email}</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:20px">${escapeHtml(c.name)} · ${escapeHtml(c.email)}</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div>
           <label class="lbl">Plan</label>
-          <select class="inp" id="sub-plan">
+          <select class="inp" id="sub-plan" onchange="syncSubDates()">
             <option value="month">Mensuel — CHF 9.90/mois</option>
             <option value="quarter" selected>Trimestriel — CHF 24.90/3 mois</option>
             <option value="year">Annuel — CHF 89.90/an</option>
           </select>
         </div>
+        <div class="row2">
+          <div>
+            <label class="lbl">Premier jour</label>
+            <input class="inp" id="sub-start" type="date" value="${start}" onchange="syncSubDates()"/>
+          </div>
+          <div>
+            <label class="lbl">Dernier jour inclus</label>
+            <input class="inp" id="sub-end" type="date" value="${planEndDay(start,'quarter')}" onchange="syncSubDates(true)"/>
+          </div>
+        </div>
+        <div id="sub-summary" style="background:var(--soft);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--blue);font-weight:500;line-height:1.5"></div>
         <div style="background:rgba(255,149,0,.08);border:1px solid rgba(255,149,0,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--orange);font-weight:500">
           ⚠️ Activation manuelle sans paiement Stripe. Pour les tests ou gestes commerciaux.
         </div>
         <div class="row2" style="margin-top:4px">
-          <button class="btn btn-blue" style="justify-content:center" onclick="toggleSubscribe('${userId}',true,document.getElementById('sub-plan').value)">Activer ✓</button>
+          <button class="btn btn-blue" style="justify-content:center" onclick="submitSubscribe('${userId}')">Activer ✓</button>
           <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
         </div>
       </div>
     </div>
   </div>`);
+  syncSubDates();
 }
 
-async function toggleSubscribe(userId, subscribed, plan) {
+// Recalcule la fin depuis le plan, sauf si l'admin a saisi la sienne (endEdited).
+function syncSubDates(endEdited) {
+  const planEl = document.getElementById('sub-plan');
+  const sEl    = document.getElementById('sub-start');
+  const eEl    = document.getElementById('sub-end');
+  const sum    = document.getElementById('sub-summary');
+  if (!planEl || !sEl || !eEl || !sum) return;
+  if (!endEdited && sEl.value) eEl.value = planEndDay(sEl.value, planEl.value);
+  const n = (sEl.value && eEl.value) ? daysInclusive(sEl.value, eEl.value) : 0;
+  sum.innerHTML = n > 0
+    ? `📅 <strong>${n} jour${n>1?'s':''}</strong> d'accès — du ${fmtDay(sEl.value)} au ${fmtDay(eEl.value)} inclus.<br/>Ces dates sont enregistrées telles quelles et ne bougeront plus.`
+    : `<span style="color:var(--red)">La date de fin doit être postérieure à la date de début.</span>`;
+}
+
+function submitSubscribe(userId) {
+  const plan       = document.getElementById('sub-plan').value;
+  const start_date = document.getElementById('sub-start').value;
+  const end_date   = document.getElementById('sub-end').value;
+  if (!start_date || !end_date || daysInclusive(start_date, end_date) <= 0) {
+    toast('Dates invalides : la fin doit suivre le début.', false); return;
+  }
+  toggleSubscribe(userId, true, plan, { start_date, end_date });
+}
+
+const SUB_FIELDS = ['sub_started_at','sub_expires_at','sub_start_day','sub_end_day',
+                    'sub_start_label','sub_end_label','sub_days_total','sub_days_left',
+                    'sub_expired','sub_start_estimated'];
+
+async function toggleSubscribe(userId, subscribed, plan, dates) {
   const btn = document.querySelector('#modal-bg .btn-blue, #modal-bg .btn-danger');
   if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
-  const res = await adminApi('/api/admin?action=subscribe', { user_id: userId, subscribed, plan }, 'POST');
+  const res = await adminApi('/api/admin?action=subscribe',
+    Object.assign({ user_id: userId, subscribed, plan }, dates || {}), 'POST');
   if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled = false; btn.innerHTML = subscribed ? 'Activer ✓' : 'Résilier ✓'; } return; }
   closeModal();
   const c = S.clients.find(x=>x.id==userId);
-  if (c) { c.subscribed = subscribed; if (subscribed) c.plan = plan; }
-  toast(subscribed ? `✅ Abonnement activé (${plan})` : `⛔ Abonnement résilié`);
+  if (c) {
+    c.subscribed = subscribed;
+    // On recopie les dates renvoyées par le serveur : c'est lui qui fait foi.
+    if (subscribed) { c.plan = plan; SUB_FIELDS.forEach(k => { if (k in res) c[k] = res[k]; }); }
+  }
+  toast(subscribed
+    ? `✅ Abonnement activé — du ${res.sub_start_label} au ${res.sub_end_label} (${res.sub_days_total} j)`
+    : `⛔ Abonnement résilié`);
   goTo('clients');
 }
 
 function exportClientsCSV() {
   const q = v => '"' + String(v||'').replace(/"/g,'""') + '"';
-  const rows = S.clients.map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
-  downloadCSV(['Nom,Email,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
+  const rows = S.clients.map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan),
+    q(c.sub_start_day||''), q(c.sub_end_day||''), c.sub_days_total||'', c.sub_days_left||'',
+    c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
+  downloadCSV(['Nom,Email,Fitness,Plan,Début abo,Fin abo,Jours,Jours restants,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
 }
 
 function pagePayments() {
