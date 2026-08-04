@@ -193,7 +193,13 @@ function subWindow(c) {
     const col = left <= 0 ? 'var(--red)' : left <= 7 ? 'var(--orange)' : 'var(--ink3)';
     badge = `<div style="font-size:11px;font-weight:700;color:${col};margin-top:2px">${left} j restant${left>1?'s':''}</div>`;
   }
-  return `<div style="font-size:12px;line-height:1.5"><strong>${c.sub_start||'—'}</strong><div style="color:var(--ink3)">→ ${c.sub_end||'—'}</div>${badge}</div>`;
+  let pause = '';
+  if (c.paused_now) {
+    pause = `<div style="font-size:11px;font-weight:700;color:var(--orange);margin-top:3px">⏸️ En pause jusqu'au ${c.paused_to}</div>`;
+  } else if (c.pause_planned) {
+    pause = `<div style="font-size:11px;font-weight:600;color:var(--ink3);margin-top:3px">⏸️ Pause prévue ${c.paused_from} → ${c.paused_to}</div>`;
+  }
+  return `<div style="font-size:12px;line-height:1.5"><strong>${c.sub_start||'—'}</strong><div style="color:var(--ink3)">→ ${c.sub_end||'—'}</div>${badge}${pause}</div>`;
 }
 function todayISO() { const d = new Date(); return new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Zurich',year:'numeric',month:'2-digit',day:'2-digit'}).format(d); }
 function filterBySearch(arr, keys) {
@@ -474,6 +480,9 @@ function pageClients() {
             <button class="btn btn-sm ${c.subscribed?'btn-danger':'btn-orange'}" onclick="showSubscribeModal('${c.id}')">
               ${c.subscribed?'⛔ Résilier':'✅ Activer abo'}
             </button>
+            ${c.subscribed ? (c.pause_planned
+              ? `<button class="btn btn-sm btn-ghost" onclick="cancelPause('${c.id}')">▶️ Annuler la pause</button>`
+              : `<button class="btn btn-sm btn-ghost" onclick="showPauseModal('${c.id}')">⏸️ Pause vacances</button>`) : ''}
             <button class="btn btn-sm btn-ghost" onclick="showSubHistory('${c.id}')">
               📜 Historique
             </button>
@@ -491,6 +500,77 @@ async function toggleAccess(userId, authorized) {
   if (c) c.authorized = authorized;
   toast(authorized ? '🔓 Accès rétabli' : '🔒 Accès bloqué');
   goTo('clients');
+}
+
+// ── Pause d'abonnement (vacances) ────────────────────────
+// Différent de "Bloquer" : ici la date de fin est repoussée d'autant,
+// le client ne perd aucun jour payé.
+function showPauseModal(userId) {
+  const c = S.clients.find(x=>x.id==userId);
+  if (!c) return;
+  const t = todayISO();
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">⏸️ Mettre l'abonnement en pause</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(c.name)}</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="row2" style="gap:12px">
+          <div style="flex:1"><label class="lbl">Du</label><input class="inp" type="date" id="pause-from" min="${t}" value="${t}" onchange="previewPause()"/></div>
+          <div style="flex:1"><label class="lbl">Au (inclus)</label><input class="inp" type="date" id="pause-to" min="${t}" value="${t}" onchange="previewPause()"/></div>
+        </div>
+        <div id="pause-preview" style="background:rgba(0,87,255,.07);border:1px solid rgba(0,87,255,.2);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;color:var(--blue)"></div>
+        <div style="background:rgba(0,196,122,.08);border:1px solid rgba(0,196,122,.2);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--green);font-weight:500">
+          ✅ L'accès est suspendu pendant la pause, et la date de fin est repoussée d'autant. Le client ne perd aucun jour.
+        </div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="submitPause('${userId}')">Mettre en pause ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+  previewPause();
+}
+
+function previewPause() {
+  const box = document.getElementById('pause-preview');
+  if (!box) return;
+  const f = (document.getElementById('pause-from')||{}).value;
+  const t = (document.getElementById('pause-to')||{}).value;
+  if (!f || !t) { box.textContent = 'Choisis les deux dates.'; return; }
+  const fD = new Date(f + 'T00:00:00Z'), tD = new Date(t + 'T00:00:00Z');
+  if (tD < fD) { box.textContent = '⚠️ La date de fin doit être après la date de début.'; return; }
+  const n = Math.round((tD - fD) / 86400000) + 1;
+  const fmt = d => d.toLocaleDateString('fr-CH',{timeZone:'UTC',day:'numeric',month:'short',year:'numeric'});
+  box.innerHTML = `⏸️ Pause du <strong>${fmt(fD)}</strong> au <strong>${fmt(tD)}</strong> inclus · <strong>${n} jour${n>1?'s':''}</strong> rendus à la fin`;
+}
+
+async function submitPause(userId) {
+  const btn = document.querySelector('#modal-bg .btn-blue');
+  const from = (document.getElementById('pause-from')||{}).value;
+  const to   = (document.getElementById('pause-to')||{}).value;
+  if (!from || !to) { toast('Choisis les deux dates.', false); return; }
+  if (btn) { btn.innerHTML = '<div class="spin"></div>'; btn.disabled = true; }
+  const res = await adminApi('/api/admin?action=pause', { user_id: userId, from, to }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); if (btn) { btn.disabled=false; btn.innerHTML='Mettre en pause ✓'; } return; }
+  closeModal();
+  toast(`⏸️ Pause de ${res.days} j — fin repoussée au ${res.sub_end}`);
+  await refreshClients(); goTo('clients');
+}
+
+async function cancelPause(userId) {
+  const res = await adminApi('/api/admin?action=cancel-pause', { user_id: userId }, 'POST');
+  if (res.error) { toast('Erreur: ' + res.error, false); return; }
+  toast(`▶️ Pause annulée — fin ajustée au ${res.sub_end}`);
+  await refreshClients(); goTo('clients');
+}
+
+async function refreshClients() {
+  try {
+    const fresh = await adminApi('/api/admin?action=clients');
+    if (!fresh.error && Array.isArray(fresh.clients)) S.clients = fresh.clients;
+  } catch(e) {}
 }
 
 // Historique lisible d'un client : une ligne par activation/résiliation/paiement,
