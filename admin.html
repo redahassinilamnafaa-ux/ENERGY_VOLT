@@ -1170,7 +1170,7 @@ function pageStock() {
           <td><span class="badge ${s.grams<=STOCK_ALERT_G?'badge-orange':'badge-green'}">${(s.grams/1000).toFixed(1)} kg</span></td>
           <td>${Math.floor(s.grams/1000)}</td>
           <td><span style="font-size:12px;color:var(--ink3)">${s.updated_at?new Date(s.updated_at).toLocaleString('fr-CH'):'—'}</span></td>
-          <td><button class="btn btn-ghost btn-sm" onclick="showSetStock('${s.gym_id}','${escapeHtml(s.product)}',${s.grams})">✏️ Ajuster</button></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showSetStock('${s.gym_id}',${escapeHtml(JSON.stringify(s.product))},${s.grams})">✏️ Ajuster</button></td>
         </tr>`).join('')}
       </tbody>
     </table></div>`}
