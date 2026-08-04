@@ -1077,12 +1077,13 @@ function pageMachines() {
   <div class="card">
     ${filtered.length === 0 ? `<div class="empty"><div class="empty-ico">🖥️</div><div class="empty-title">Aucune machine</div><div class="empty-sub">Ajoute ta première machine CM30</div></div>` : `
     <div class="table-wrap"><table>
-      <thead><tr><th>Machine ID</th><th>Nom</th><th>Fitness lié</th><th>Secret</th><th>Statut</th><th>Actions</th></tr></thead>
+      <thead><tr><th>Machine ID</th><th>Nom</th><th>Fitness lié</th><th>Stocks</th><th>Secret</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(m=>`<tr>
           <td><div class="td-name" style="font-family:monospace;font-size:13px">${escapeHtml(m.machine_id)}</div></td>
           <td>${escapeHtml(m.name)||'—'}</td>
           <td>${m.gym_name ? `<span class="badge badge-blue">${escapeHtml(m.gym_name)}</span>` : '<span class="badge badge-gray">Non lié</span>'}</td>
+          <td>${renderLevels(m.levels)}</td>
           <td><span style="font-family:monospace;font-size:11px;color:var(--ink3)">${m.secret ? escapeHtml(m.secret.substring(0,24))+'…' : '—'}</span></td>
           <td>${m.active?'<span class="badge badge-green">● Active</span>':'<span class="badge badge-gray">● Inactive</span>'}</td>
           <td style="display:flex;gap:6px;flex-wrap:wrap">
@@ -1093,6 +1094,34 @@ function pageMachines() {
       </tbody>
     </table></div>`}
   </div>`;
+}
+
+/**
+ * Stocks d'une borne : bidon d'eau et bacs de poudre.
+ *
+ * Le bidon n'a AUCUN capteur — la tablette en tient un decompte et bloque la
+ * distribution a 2 L pour que la pompe ne tourne jamais a vide. Les seuils
+ * ci-dessous sont donc ceux de la tablette, pas des valeurs decoratives.
+ *
+ * `levels` est null tant que la borne n'a servi aucune boisson depuis la mise
+ * a jour : on le dit explicitement plutot que d'afficher un faux zero.
+ */
+function renderLevels(l) {
+  if (!l) return '<span class="badge badge-gray">Pas encore de donnée</span>';
+  const cap = l.water_capacity_ml || 16000;
+  const ml  = typeof l.water_ml === 'number' ? l.water_ml : 0;
+  const cls = ml <= 2000 ? 'badge-red' : (ml <= 4000 ? 'badge-orange' : 'badge-green');
+  const label = ml <= 2000 ? ' · BLOQUÉ' : (ml <= 4000 ? ' · à remplir' : '');
+  const hoppers = Array.isArray(l.hoppers) ? l.hoppers : [];
+  const low = hoppers.filter(h => h.warn_g > 0 && h.grams <= h.warn_g);
+  return `
+    <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start">
+      <span class="badge ${cls}">💧 ${(ml/1000).toFixed(1)} L / ${Math.round(cap/1000)} L${label}</span>
+      ${low.length
+        ? `<span class="badge badge-orange">📦 ${low.map(h=>escapeHtml(h.name||h.id)).join(', ')}</span>`
+        : (hoppers.length ? '<span class="badge badge-green">📦 Bacs OK</span>' : '')}
+      <span style="font-size:11px;color:var(--ink3)">${l.updated_at ? new Date(l.updated_at).toLocaleString('fr-CH') : ''}</span>
+    </div>`;
 }
 
 function showAddMachine() {
