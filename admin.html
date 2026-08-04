@@ -157,7 +157,7 @@ let adminToken = null; // JWT stocké en mémoire uniquement (jamais en localSto
 
 let S = {
   logged:false, page:'dashboard',
-  clients:[], payments:[], gyms:[], machines:[], virements:[], stock:[], feedback:[],
+  clients:[], payments:[], gyms:[], machines:[], virements:[], stock:[], feedback:[], faults:[],
   _stats:{}, search:'', vFilter_month:'', vFilter_gym:'',
   loading:false, adminEmail:'',
 };
@@ -218,6 +218,7 @@ const PAGES = [
   { id:'machines',  icon:'🖥️',  label:'Machines'    },
   { id:'stock',     icon:'📦', label:'Stock'       },
   { id:'feedback',  icon:'💬', label:'Messages'    },
+  { id:'faults',    icon:'⚠️', label:'Pannes'      },
   { id:'config',    icon:'⚙️',  label:'Config'      },
 ];
 
@@ -239,6 +240,7 @@ function renderPage() {
   if (S.page === 'machines')  return pageMachines();
   if (S.page === 'stock')     return pageStock();
   if (S.page === 'feedback')  return pageFeedback();
+  if (S.page === 'faults')    return pageFaults();
   if (S.page === 'config')    return pageConfig();
   return '';
 }
@@ -306,7 +308,7 @@ async function doLogin() {
     // Extraire l'email du payload JWT (base64, pas de vérification côté client)
     try { S.adminEmail = JSON.parse(atob(adminToken.split('.')[1])).email || email; } catch(e) { S.adminEmail = email; }
     S.logged = true;
-    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes, faultsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
@@ -315,9 +317,11 @@ async function doLogin() {
       adminApi('/api/admin?action=virements'),
       adminApi('/api/admin?action=stock'),
       adminApi('/api/admin?action=feedback'),
+      adminApi('/api/admin?action=faults'),
     ]);
     if (!stockRes.error    && Array.isArray(stockRes.stock))       S.stock    = stockRes.stock;
     if (!feedbackRes.error && Array.isArray(feedbackRes.feedback)) S.feedback = feedbackRes.feedback;
+    if (!faultsRes.error   && Array.isArray(faultsRes.faults))     S.faults   = faultsRes.faults;
     if (!stats.error) S._stats = stats;
     if (!clientsRes.error  && Array.isArray(clientsRes.clients))     S.clients   = clientsRes.clients;
     if (!paymentsRes.error && Array.isArray(paymentsRes.payments))   S.payments  = paymentsRes.payments;
@@ -1244,6 +1248,37 @@ function pageFeedback() {
   </div>`;
 }
 
+/* ══ Distributions échouées ═══════════════════════════════════════════════
+   Le motif vient de la carte de la machine, conservé tel quel : c'est lui qui
+   permet de comprendre après coup pourquoi une boisson n'est pas sortie.
+   Le client n'est jamais débité sur un échec — ni boisson, ni délai perdu.  */
+
+function pageFaults() {
+  const rows = filterBySearch(S.faults, ['machine_id','gym_name','product_name','fail_reason']);
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Pannes</div><div class="page-sub">${S.faults.length} distributions échouées</div></div>
+    <div class="topbar-actions">
+      <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
+    </div>
+  </div>
+  <div class="card">
+    ${rows.length === 0 ? `<div class="empty"><div class="empty-ico">✅</div><div class="empty-title">Aucune panne</div><div class="empty-sub">Toutes les distributions ont abouti</div></div>` : `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Borne</th><th>Fitness</th><th>Boisson</th><th>Motif remonté par la machine</th></tr></thead>
+      <tbody>
+        ${rows.map(f=>`<tr>
+          <td><span style="font-size:12px;color:var(--ink3)">${f.updated_at?new Date(f.updated_at).toLocaleString('fr-CH'):'—'}</span></td>
+          <td><span style="font-family:monospace;font-size:12px">${escapeHtml(f.machine_id||'—')}</span></td>
+          <td>${f.gym_name?`<span class="badge badge-blue">${escapeHtml(f.gym_name)}</span>`:'<span class="badge badge-gray">—</span>'}</td>
+          <td>${escapeHtml(f.product_name||'—')}</td>
+          <td style="max-width:460px;font-size:12px;color:var(--ink2)">${escapeHtml(f.fail_reason||'motif non communiqué')}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`}
+  </div>`;
+}
+
 function showAddMachine() {
   const gymOptions = S.gyms.map(g=>`<option value="${g.id}">${g.name}${g.filiale?' ('+g.filiale+')':''}</option>`).join('');
   document.body.insertAdjacentHTML('beforeend',`
@@ -1379,7 +1414,7 @@ async function runDbSetup() {
 async function refreshData() {
   toast('🔄 Actualisation...');
   try {
-    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes, faultsRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
@@ -1388,9 +1423,11 @@ async function refreshData() {
       adminApi('/api/admin?action=virements'),
       adminApi('/api/admin?action=stock'),
       adminApi('/api/admin?action=feedback'),
+      adminApi('/api/admin?action=faults'),
     ]);
     if (!stockRes.error    && Array.isArray(stockRes.stock))       S.stock    = stockRes.stock;
     if (!feedbackRes.error && Array.isArray(feedbackRes.feedback)) S.feedback = feedbackRes.feedback;
+    if (!faultsRes.error   && Array.isArray(faultsRes.faults))     S.faults   = faultsRes.faults;
     if (!stats.error) S._stats = stats;
     if (!clientsRes.error  && Array.isArray(clientsRes.clients))      S.clients   = clientsRes.clients;
     if (!paymentsRes.error && Array.isArray(paymentsRes.payments))    S.payments  = paymentsRes.payments;

@@ -424,6 +424,53 @@ function renderMachineStocks() {
   </div>`;
 }
 
+/**
+ * Messages laissés par vos membres sur la borne, et distributions échouées.
+ *
+ * Les deux sont limités à VOS machines : le message part de la borne, qui est
+ * rattachée à votre salle. Le bloc disparaît quand il n'y a rien à signaler,
+ * pour ne pas encombrer le tableau de bord en fonctionnement normal.
+ */
+function renderIncidents() {
+  const msgs   = Array.isArray(S.stats?.feedback) ? S.stats.feedback : [];
+  const faults = Array.isArray(S.stats?.faults)   ? S.stats.faults   : [];
+  if (msgs.length === 0 && faults.length === 0) return '';
+
+  const msgCard = msgs.length ? `
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px">
+        💬 Messages de vos membres (${msgs.length})
+      </div>
+      ${msgs.slice(0,5).map(m=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border,#eee)">
+          <div style="font-size:13px;white-space:pre-wrap">${escapeHtml(m.message)}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:5px">
+            ${new Date(m.created_at).toLocaleString('fr-CH')}
+            ${m.phone ? ' · <a href="tel:'+escapeHtml(m.phone)+'">'+escapeHtml(m.phone)+'</a>' : ' · sans numéro'}
+          </div>
+        </div>`).join('')}
+    </div>` : '';
+
+  const faultCard = faults.length ? `
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px">
+        ⚠️ Distributions échouées (${faults.length})
+      </div>
+      ${faults.slice(0,5).map(f=>`
+        <div style="padding:10px 0;border-bottom:1px solid var(--border,#eee)">
+          <div style="font-size:13px"><strong>${escapeHtml(f.product_name||'Boisson')}</strong> — ${escapeHtml(f.fail_reason||'motif non communiqué')}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:5px">${f.updated_at?new Date(f.updated_at).toLocaleString('fr-CH'):''}</div>
+        </div>`).join('')}
+      <div style="font-size:12px;color:var(--ink3);margin-top:10px">
+        Le membre n'a rien perdu : ni sa boisson, ni son délai de 15 minutes.
+      </div>
+    </div>` : '';
+
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:16px">
+    ${msgCard}${faultCard}
+  </div>`;
+}
+
 function pageDashboard() {
   const st = S.stats;
   const activeMembers = st.members_active || S.members.filter(m=>m.subscribed).length;
@@ -462,6 +509,7 @@ function pageDashboard() {
   </div>
 
   ${renderMachineStocks()}
+  ${renderIncidents()}
 
   <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-bottom:16px">
     <!-- Graphique scans -->
