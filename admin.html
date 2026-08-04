@@ -157,7 +157,7 @@ let adminToken = null; // JWT stocké en mémoire uniquement (jamais en localSto
 
 let S = {
   logged:false, page:'dashboard',
-  clients:[], payments:[], gyms:[], machines:[], virements:[],
+  clients:[], payments:[], gyms:[], machines:[], virements:[], stock:[], feedback:[],
   _stats:{}, search:'', vFilter_month:'', vFilter_gym:'',
   loading:false, adminEmail:'',
 };
@@ -216,6 +216,8 @@ const PAGES = [
   { id:'compta',    icon:'📋', label:'Comptabilité'},
   { id:'gyms',      icon:'🏋️', label:'Fitness'     },
   { id:'machines',  icon:'🖥️',  label:'Machines'    },
+  { id:'stock',     icon:'📦', label:'Stock'       },
+  { id:'feedback',  icon:'💬', label:'Messages'    },
   { id:'config',    icon:'⚙️',  label:'Config'      },
 ];
 
@@ -235,6 +237,8 @@ function renderPage() {
   if (S.page === 'compta')    return pageCompta();
   if (S.page === 'gyms')      return pageGyms();
   if (S.page === 'machines')  return pageMachines();
+  if (S.page === 'stock')     return pageStock();
+  if (S.page === 'feedback')  return pageFeedback();
   if (S.page === 'config')    return pageConfig();
   return '';
 }
@@ -302,14 +306,18 @@ async function doLogin() {
     // Extraire l'email du payload JWT (base64, pas de vérification côté client)
     try { S.adminEmail = JSON.parse(atob(adminToken.split('.')[1])).email || email; } catch(e) { S.adminEmail = email; }
     S.logged = true;
-    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
       adminApi('/api/admin?action=gyms'),
       adminApi('/api/admin?action=machines'),
       adminApi('/api/admin?action=virements'),
+      adminApi('/api/admin?action=stock'),
+      adminApi('/api/admin?action=feedback'),
     ]);
+    if (!stockRes.error    && Array.isArray(stockRes.stock))       S.stock    = stockRes.stock;
+    if (!feedbackRes.error && Array.isArray(feedbackRes.feedback)) S.feedback = feedbackRes.feedback;
     if (!stats.error) S._stats = stats;
     if (!clientsRes.error  && Array.isArray(clientsRes.clients))     S.clients   = clientsRes.clients;
     if (!paymentsRes.error && Array.isArray(paymentsRes.payments))   S.payments  = paymentsRes.payments;
@@ -1124,6 +1132,118 @@ function renderLevels(l) {
     </div>`;
 }
 
+/* ══════════════════════════════════════════════════════════════════════════
+   Stock livré aux fitness
+   ══════════════════════════════════════════════════════════════════════════
+   La réserve baisse d'un sachet chaque fois qu'un bac est rechargé sur une
+   borne — jamais en servant une boisson. Deux compteurs distincts : le bac se
+   vide en servant, la réserve se vide en rechargeant le bac.                */
+
+const STOCK_ALERT_G = 1000;
+
+function pageStock() {
+  const rows = filterBySearch(S.stock, ['gym_name','product']);
+  const low  = S.stock.filter(s => s.grams <= STOCK_ALERT_G);
+  return `
+  <div class="topbar">
+    <div>
+      <div class="page-title">Stock livré</div>
+      <div class="page-sub">${S.stock.length} références · ${low.length} à livrer</div>
+    </div>
+    <div class="topbar-actions">
+      <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
+      <button class="btn btn-blue btn-sm" onclick="showSetStock()">+ Enregistrer une livraison</button>
+    </div>
+  </div>
+  ${low.length ? `<div class="card card-pad" style="margin-bottom:16px;border-left:4px solid var(--orange,#f0922b)">
+    <strong>📦 Livraisons à prévoir</strong><br/>
+    ${low.map(s=>`${escapeHtml(s.gym_name||('Fitness #'+s.gym_id))} — ${escapeHtml(s.product)} : <strong>${(s.grams/1000).toFixed(1)} kg</strong>`).join('<br/>')}
+  </div>` : ''}
+  <div class="card">
+    ${rows.length === 0 ? `<div class="empty"><div class="empty-ico">📦</div><div class="empty-title">Aucun stock enregistré</div><div class="empty-sub">Enregistre ta première livraison</div></div>` : `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Fitness</th><th>Saveur</th><th>Restant</th><th>Rechargements possibles</th><th>Dernier mouvement</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${rows.map(s=>`<tr>
+          <td><div class="td-name">${escapeHtml(s.gym_name||('Fitness #'+s.gym_id))}</div></td>
+          <td>${escapeHtml(s.product)}</td>
+          <td><span class="badge ${s.grams<=STOCK_ALERT_G?'badge-orange':'badge-green'}">${(s.grams/1000).toFixed(1)} kg</span></td>
+          <td>${Math.floor(s.grams/1000)}</td>
+          <td><span style="font-size:12px;color:var(--ink3)">${s.updated_at?new Date(s.updated_at).toLocaleString('fr-CH'):'—'}</span></td>
+          <td><button class="btn btn-ghost btn-sm" onclick="showSetStock('${s.gym_id}','${escapeHtml(s.product)}',${s.grams})">✏️ Ajuster</button></td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`}
+  </div>`;
+}
+
+function showSetStock(gymId, product, grams) {
+  const gymOptions = S.gyms.map(g=>`<option value="${g.id}"${String(g.id)===String(gymId)?' selected':''}>${escapeHtml(g.name)}</option>`).join('');
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-title">📦 Stock livré</div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div><label class="lbl">Fitness</label><select class="inp" id="s-gym">${gymOptions}</select></div>
+        <div><label class="lbl">Saveur (exactement le nom du bac sur la machine)</label>
+          <input class="inp" id="s-product" placeholder="Immune" value="${product?escapeHtml(product):''}"/></div>
+        <div><label class="lbl">Quantité en stock après livraison (kg)</label>
+          <input class="inp" id="s-kg" type="number" step="0.5" min="0" placeholder="3" value="${grams!=null?(grams/1000):''}"/></div>
+        <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--blue);font-weight:500">
+          ℹ️ Valeur absolue, pas un ajout : saisis ce qui est réellement sur place. Alerte email sous ${(STOCK_ALERT_G/1000).toFixed(1)} kg.
+        </div>
+        <div class="row2" style="margin-top:4px">
+          <button class="btn btn-blue" style="justify-content:center" onclick="saveStock()">Enregistrer ✓</button>
+          <button class="btn btn-ghost" style="justify-content:center" onclick="closeModal()">Annuler</button>
+        </div>
+      </div>
+    </div>
+  </div>`);
+}
+
+async function saveStock() {
+  const gym_id  = document.getElementById('s-gym').value;
+  const product = document.getElementById('s-product').value.trim();
+  const kg      = parseFloat(document.getElementById('s-kg').value);
+  if (!gym_id || !product || !(kg >= 0)) return toast('Fitness, saveur et quantité requis.', false);
+  const grams = Math.round(kg * 1000);
+  const res = await adminApi('/api/admin?action=stock', { gym_id, product, grams }, 'POST');
+  if (res.error) return toast(res.error, false);
+  const existing = S.stock.find(s => String(s.gym_id)===String(gym_id) && s.product===product);
+  if (existing) { existing.grams = grams; existing.updated_at = new Date().toISOString(); }
+  else S.stock.push({ gym_id, gym_name: S.gyms.find(g=>String(g.id)===String(gym_id))?.name, product, grams, updated_at:new Date().toISOString() });
+  closeModal(); toast('✅ Stock enregistré !'); goTo('stock');
+}
+
+/* ══ Messages laissés par les clients sur les bornes ══════════════════════ */
+
+function pageFeedback() {
+  const rows = filterBySearch(S.feedback, ['message','phone','machine_id']);
+  return `
+  <div class="topbar">
+    <div><div class="page-title">Messages</div><div class="page-sub">${S.feedback.length} signalements depuis les bornes</div></div>
+    <div class="topbar-actions">
+      <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
+    </div>
+  </div>
+  <div class="card">
+    ${rows.length === 0 ? `<div class="empty"><div class="empty-ico">💬</div><div class="empty-title">Aucun message</div><div class="empty-sub">Les clients peuvent écrire depuis le bouton « ? » de la borne</div></div>` : `
+    <div class="table-wrap"><table>
+      <thead><tr><th>Date</th><th>Borne</th><th>Message</th><th>Rappel</th></tr></thead>
+      <tbody>
+        ${rows.map(f=>`<tr>
+          <td><span style="font-size:12px;color:var(--ink3)">${new Date(f.created_at).toLocaleString('fr-CH')}</span></td>
+          <td><span style="font-family:monospace;font-size:12px">${escapeHtml(f.machine_id||'—')}</span></td>
+          <td style="max-width:520px;white-space:pre-wrap">${escapeHtml(f.message)}</td>
+          <td>${f.phone
+            ? `<a href="tel:${escapeHtml(f.phone)}" class="badge badge-blue">${escapeHtml(f.phone)}</a>`
+            : '<span class="badge badge-gray">non communiqué</span>'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`}
+  </div>`;
+}
+
 function showAddMachine() {
   const gymOptions = S.gyms.map(g=>`<option value="${g.id}">${g.name}${g.filiale?' ('+g.filiale+')':''}</option>`).join('');
   document.body.insertAdjacentHTML('beforeend',`
@@ -1259,14 +1379,18 @@ async function runDbSetup() {
 async function refreshData() {
   toast('🔄 Actualisation...');
   try {
-    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes] = await Promise.all([
+    const [stats, clientsRes, paymentsRes, gymsRes, machinesRes, virementsRes, stockRes, feedbackRes] = await Promise.all([
       adminApi('/api/admin?action=stats'),
       adminApi('/api/admin?action=clients'),
       adminApi('/api/admin?action=payments'),
       adminApi('/api/admin?action=gyms'),
       adminApi('/api/admin?action=machines'),
       adminApi('/api/admin?action=virements'),
+      adminApi('/api/admin?action=stock'),
+      adminApi('/api/admin?action=feedback'),
     ]);
+    if (!stockRes.error    && Array.isArray(stockRes.stock))       S.stock    = stockRes.stock;
+    if (!feedbackRes.error && Array.isArray(feedbackRes.feedback)) S.feedback = feedbackRes.feedback;
     if (!stats.error) S._stats = stats;
     if (!clientsRes.error  && Array.isArray(clientsRes.clients))      S.clients   = clientsRes.clients;
     if (!paymentsRes.error && Array.isArray(paymentsRes.payments))    S.payments  = paymentsRes.payments;
