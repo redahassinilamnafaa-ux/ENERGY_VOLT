@@ -1181,6 +1181,24 @@ function pageStock() {
   </div>`;
 }
 
+/**
+ * Noms de bacs réellement remontés par les bornes.
+ *
+ * Le stock est classé par NOM de bac, et ce nom doit correspondre au caractère
+ * près à celui de la machine — sinon le rechargement ne décompte rien. Plutôt
+ * que de demander à l'exploitant de le recopier de mémoire, on lui propose la
+ * liste que les bornes ont elles-mêmes envoyée.
+ */
+function knownHopperNames() {
+  const names = new Set();
+  (S.machines||[]).forEach(m => {
+    const hs = m.levels && Array.isArray(m.levels.hoppers) ? m.levels.hoppers : [];
+    hs.forEach(h => { if (h && h.name) names.add(h.name); });
+  });
+  (S.stock||[]).forEach(s => { if (s.product) names.add(s.product); });
+  return [...names].sort();
+}
+
 function showSetStock(gymId, product, grams) {
   const gymOptions = S.gyms.map(g=>`<option value="${g.id}"${String(g.id)===String(gymId)?' selected':''}>${escapeHtml(g.name)}</option>`).join('');
   document.body.insertAdjacentHTML('beforeend',`
@@ -1189,8 +1207,14 @@ function showSetStock(gymId, product, grams) {
       <div class="modal-title">📦 Stock livré</div>
       <div style="display:flex;flex-direction:column;gap:14px">
         <div><label class="lbl">Fitness</label><select class="inp" id="s-gym">${gymOptions}</select></div>
-        <div><label class="lbl">Saveur (exactement le nom du bac sur la machine)</label>
-          <input class="inp" id="s-product" placeholder="Immune" value="${product?escapeHtml(product):''}"/></div>
+        <div><label class="lbl">Saveur (nom du bac sur la machine)</label>
+          <input class="inp" id="s-product" list="s-product-list" placeholder="Immune" value="${product?escapeHtml(product):''}"/>
+          <datalist id="s-product-list">${knownHopperNames().map(n=>`<option value="${escapeHtml(n)}"></option>`).join('')}</datalist>
+          <div style="font-size:12px;color:var(--ink3);margin-top:5px">
+            ${knownHopperNames().length
+              ? 'Choisis dans la liste : ce sont les noms réellement remontés par tes bornes.'
+              : 'Aucune borne n\'a encore remonté ses bacs — saisis le nom exact affiché dans Inventaire sur la tablette.'}
+          </div></div>
         <div><label class="lbl">Quantité en stock après livraison (kg)</label>
           <input class="inp" id="s-kg" type="number" step="0.5" min="0" placeholder="3" value="${grams!=null?(grams/1000):''}"/></div>
         <div style="background:var(--soft);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--blue);font-weight:500">
@@ -1212,7 +1236,9 @@ async function saveStock() {
   if (!gym_id || !product || !(kg >= 0)) return toast('Fitness, saveur et quantité requis.', false);
   const grams = Math.round(kg * 1000);
   const res = await adminApi('/api/admin?action=stock', { gym_id, product, grams }, 'POST');
-  if (res.error) return toast(res.error, false);
+  // detail : message technique renvoye par le serveur, affiche temporairement
+  // le temps de diagnostiquer un refus a l'enregistrement.
+  if (res.error) return toast(res.error + (res.detail ? ' — ' + res.detail : ''), false);
   const existing = S.stock.find(s => String(s.gym_id)===String(gym_id) && s.product===product);
   if (existing) { existing.grams = grams; existing.updated_at = new Date().toISOString(); }
   else S.stock.push({ gym_id, gym_name: S.gyms.find(g=>String(g.id)===String(gym_id))?.name, product, grams, updated_at:new Date().toISOString() });
