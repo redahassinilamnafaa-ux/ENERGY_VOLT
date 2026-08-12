@@ -159,6 +159,7 @@ let S = {
   logged:false, page:'dashboard',
   clients:[], payments:[], gyms:[], machines:[], virements:[], stock:[], feedback:[], faults:[],
   _stats:{}, search:'', vFilter_month:'', vFilter_gym:'',
+  cFilter_gym:'', cFilter_status:'',
   loading:false, adminEmail:'',
 };
 
@@ -224,6 +225,7 @@ const PAGES = [
 
 function goTo(page) {
   S.page = page; S.search = '';
+  S.cFilter_gym = ''; S.cFilter_status = '';
   document.querySelectorAll('.nav-item[data-page]').forEach(el =>
     el.classList.toggle('active', el.dataset.page === page));
   document.getElementById('main-content').innerHTML = renderPage();
@@ -259,7 +261,32 @@ function bindPage() {
     };
   });
   const si = document.getElementById('search-inp');
-  if (si) si.oninput = e => { S.search = e.target.value; document.getElementById('main-content').innerHTML = renderPage(); bindPage(); };
+  if (si) si.oninput = e => { S.search = e.target.value; rerenderPage({ keepFocus:'search-inp', caret:e.target.selectionStart }); };
+
+  const fg = document.getElementById('filter-gym');
+  if (fg) fg.onchange = e => { S.cFilter_gym = e.target.value; rerenderPage(); };
+  const fs = document.getElementById('filter-status');
+  if (fs) fs.onchange = e => { S.cFilter_status = e.target.value; rerenderPage(); };
+}
+
+/**
+ * Re-rend la page courante en preservant le focus du champ demande.
+ *
+ * `innerHTML = ...` DETRUIT les elements existants : le champ de recherche
+ * etait donc recree a chaque frappe et perdait le focus, obligeant a recliquer
+ * entre chaque lettre. On restaure ici le focus et la position du curseur.
+ */
+function rerenderPage(opts) {
+  document.getElementById('main-content').innerHTML = renderPage();
+  bindPage();
+  if (opts && opts.keepFocus) {
+    const el = document.getElementById(opts.keepFocus);
+    if (el) {
+      el.focus();
+      const pos = opts.caret != null ? opts.caret : el.value.length;
+      try { el.setSelectionRange(pos, pos); } catch(_) {}
+    }
+  }
 }
 
 function renderLogin() {
@@ -459,13 +486,33 @@ function planBadge(plan) {
   return `<span class="badge badge-blue">${labels[plan]||plan||'—'}</span>`;
 }
 
+/** Clients réellement visibles : recherche + filtres. Sert aussi à l'export CSV,
+ *  pour que le fichier corresponde toujours à ce qui est affiché. */
+function visibleClients() {
+  let list = filterBySearch(S.clients, ['name','email','gym','plan']);
+  if (S.cFilter_gym)    list = list.filter(c => (c.gym || '—') === S.cFilter_gym);
+  if (S.cFilter_status) list = list.filter(c => S.cFilter_status === 'active' ? !!c.subscribed : !c.subscribed);
+  return list;
+}
+
 function pageClients() {
-  const filtered = filterBySearch(S.clients, ['name','email','gym','plan']);
+  const filtered = visibleClients();
   const active   = S.clients.filter(c=>c.subscribed).length;
+  const gymList  = [...new Set(S.clients.map(c => c.gym || '—'))].sort();
+  const filtering = S.cFilter_gym || S.cFilter_status || S.search;
   return `
   <div class="topbar">
-    <div><div class="page-title">Clients</div><div class="page-sub">${active} abonnés actifs · ${S.clients.length} inscrits</div></div>
+    <div><div class="page-title">Clients</div><div class="page-sub">${active} abonnés actifs · ${S.clients.length} inscrits${filtering ? ` · <strong>${filtered.length} affiché(s)</strong>` : ''}</div></div>
     <div class="topbar-actions">
+      <select class="search-inp" id="filter-gym" style="width:auto;padding-left:14px">
+        <option value="">🏋️ Tous les fitness</option>
+        ${gymList.map(g=>`<option value="${escapeHtml(g)}" ${S.cFilter_gym===g?'selected':''}>${escapeHtml(g)}</option>`).join('')}
+      </select>
+      <select class="search-inp" id="filter-status" style="width:auto;padding-left:14px">
+        <option value="">Tous les statuts</option>
+        <option value="active"   ${S.cFilter_status==='active'?'selected':''}>Abonnés</option>
+        <option value="inactive" ${S.cFilter_status==='inactive'?'selected':''}>Non abonnés</option>
+      </select>
       <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
       <button class="btn btn-ghost btn-sm" onclick="exportClientsCSV()">📥 CSV</button>
     </div>
@@ -775,7 +822,7 @@ async function toggleSubscribe(userId, subscribed, plan, startDate) {
 
 function exportClientsCSV() {
   const q = v => '"' + String(v||'').replace(/"/g,'""') + '"';
-  const rows = S.clients.map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
+  const rows = visibleClients().map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
   downloadCSV(['Nom,Email,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
 }
 
