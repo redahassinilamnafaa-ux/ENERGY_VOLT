@@ -825,12 +825,21 @@ async function syncStripePayments(btn) {
   const res = await adminApi('/api/admin?action=sync-payments', {}, 'POST');
   if (res.error) {
     if (btn) { btn.innerHTML = label; btn.disabled = false; }
-    toast('❌ ' + res.error, false);
+    // `detail` porte le message reel (Stripe ou Postgres) ; sans lui on ne voit
+    // qu'un "Erreur serveur" impossible a diagnostiquer.
+    toast('❌ ' + res.error + (res.detail ? ' — ' + res.detail : ''), false);
+    console.error('sync-payments:', res);
     return;
   }
   // refreshData() re-rend la page : le bouton est recree, inutile de le restaurer.
   await refreshData();
-  toast(`✅ ${res.imported} paiement(s) importe(s) — ${res.scanned} analyse(s) chez Stripe`);
+  if (res.truncated) {
+    // L'import s'est arrete avant la limite de temps de Vercel : il reste des
+    // paiements a analyser, un nouveau clic reprend ou il s'est arrete.
+    toast(`✅ ${res.imported} importe(s) — il en reste, reclique pour continuer`);
+  } else {
+    toast(`✅ ${res.imported} paiement(s) importe(s) — ${res.scanned} analyse(s) chez Stripe`);
+  }
 }
 
 function exportPaymentsCSV() {
