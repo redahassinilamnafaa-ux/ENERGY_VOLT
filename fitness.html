@@ -166,7 +166,7 @@ const BACKEND = 'https://volt-backend-final.vercel.app';
 let S = {
   logged: false, page: 'dashboard',
   gym: null, token: null,
-  stats: {}, members: [], virements: [], scans: [],
+  stats: {}, members: [], virements: [], scans: [], monthly: [],
   search: '', mFilter_status: '',
 };
 
@@ -318,7 +318,7 @@ async function doLogin() {
   ]);
   if (!statsRes.error)     S.stats     = statsRes;
   if (!membersRes.error)   S.members   = membersRes.members || [];
-  if (!scansRes.error)     S.scans     = scansRes.scans     || [];
+  if (!scansRes.error)   { S.scans     = scansRes.scans     || []; S.monthly = scansRes.months || []; }
   if (!virementsRes.error) S.virements = virementsRes.virements || [];
 
   renderApp();
@@ -342,7 +342,7 @@ function showErr(msg) {
 }
 
 function doLogout() {
-  S = { logged:false, page:'dashboard', gym:null, token:null, stats:{}, members:[], virements:[], scans:[], search:'', mFilter_status:'' };
+  S = { logged:false, page:'dashboard', gym:null, token:null, stats:{}, members:[], virements:[], scans:[], monthly:[], search:'', mFilter_status:'' };
   renderLogin();
 }
 
@@ -492,6 +492,49 @@ function renderIncidents() {
   </div>`;
 }
 
+/**
+ * Graphe a barres des 12 derniers mois. Les mois sans distribution sont fournis
+ * a zero par le backend (generate_series), pour que l'axe reste continu et que
+ * la comparaison d'un mois a l'autre reste honnete.
+ */
+function renderMonthlyChart(months, opts) {
+  opts = opts || {};
+  if (!months || !months.length)
+    return '<div class="empty"><div class="empty-ico">📊</div><div class="empty-sub">Aucune donnée</div></div>';
+  const max   = Math.max(...months.map(m=>m.n), 1);
+  const total = months.reduce((s,m)=>s+m.n, 0);
+  const cur   = months[months.length-1];
+  const prev  = months.length > 1 ? months[months.length-2] : null;
+  // Evolution par rapport au mois precedent : sans repere, un chiffre brut ne dit rien.
+  let trend = '';
+  if (prev) {
+    if (prev.n === 0 && cur.n > 0)      trend = `<span style="color:var(--green,#00C47A);font-weight:700">↑ nouveau</span>`;
+    else if (prev.n > 0) {
+      const pct = Math.round((cur.n - prev.n) / prev.n * 100);
+      const col = pct >= 0 ? 'var(--green,#00C47A)' : 'var(--red,#E5484D)';
+      trend = `<span style="color:${col};font-weight:700">${pct >= 0 ? '↑' : '↓'} ${Math.abs(pct)}% vs mois dernier</span>`;
+    }
+  }
+  const label = ym => {
+    const [y, mm] = ym.split('-');
+    const noms = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+    return noms[parseInt(mm,10)-1] + ' ' + y.slice(2);
+  };
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13px;color:var(--ink3)"><strong style="color:var(--ink);font-size:15px">${total}</strong> boissons sur 12 mois</div>
+      <div style="font-size:12px">${trend}</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:${opts.compact?4:6}px;height:${opts.compact?110:150}px">
+      ${months.map(m=>`
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+          <div style="font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:3px">${m.n||''}</div>
+          <div title="${label(m.ym)} : ${m.n}" style="width:100%;border-radius:6px 6px 0 0;background:${m===cur?'var(--blue,#0057FF)':'rgba(0,87,255,.28)'};height:${Math.max(m.n/max*100, m.n?4:1)}%;min-height:2px;transition:height .3s"></div>
+          <div style="font-size:9px;color:var(--ink3);margin-top:5px;white-space:nowrap">${label(m.ym)}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
 function pageDashboard() {
   const st = S.stats;
   const activeMembers = st.members_active || S.members.filter(m=>m.subscribed).length;
@@ -527,6 +570,11 @@ function pageDashboard() {
       <div class="kpi-label">Revenus ce mois</div>
       <div class="kpi-sub">${fmtChf(revTotal)} au total</div>
     </div>
+  </div>
+
+  <div class="card card-pad" style="margin-bottom:20px">
+    <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:4px">Boissons distribuées · 12 derniers mois</div>
+    ${renderMonthlyChart(S.monthly)}
   </div>
 
   ${renderMachineStocks()}
@@ -637,6 +685,7 @@ function pageMembers() {
               <td>${m.subscribed?'<span class="badge badge-green">✓ Actif</span>':'<span class="badge badge-gray">Inactif</span>'}</td>
               <td>
                 <div style="display:flex;flex-direction:column;gap:6px">
+                  <button class="btn btn-sm btn-ghost" onclick="showMemberScans('${m.id}')">📊 Consommation</button>
                   <button class="btn btn-sm ${m.authorized?'btn-danger':'btn-success'}" onclick="toggleAccess('${m.id}',${!m.authorized})">
                     ${m.authorized?'🔒 Bloquer':'🔓 Débloquer'}
                   </button>
@@ -883,6 +932,35 @@ async function refreshMembers() {
 }
 
 // ── Historique lisible d'un membre ──────────────────────
+/** Consommation mensuelle d'un membre sur 12 mois. Chargee a la demande :
+ *  inutile d'alourdir la liste des membres avec 12 valeurs par personne. */
+async function showMemberScans(userId) {
+  const m = S.members.find(x=>x.id==userId);
+  if (!m) return;
+  document.body.insertAdjacentHTML('beforeend',`
+  <div class="modal-bg" id="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal" style="max-width:560px">
+      <div class="modal-title">📊 Consommation mensuelle</div>
+      <div style="font-size:14px;font-weight:600;color:var(--ink2);margin-bottom:18px">${escapeHtml(m.name)}</div>
+      <div id="member-scans-body">
+        <div style="text-align:center;padding:24px;color:var(--ink3);font-size:13px">Chargement…</div>
+      </div>
+      <div class="row2" style="margin-top:18px">
+        <button class="btn btn-ghost" style="justify-content:center;width:100%" onclick="closeModal()">Fermer</button>
+      </div>
+    </div>
+  </div>`);
+
+  const res  = await api(`/api/fitness?action=member-scans&user_id=${encodeURIComponent(userId)}`);
+  const body = document.getElementById('member-scans-body');
+  if (!body) return;   // modale fermee entre-temps
+  if (res.error) {
+    body.innerHTML = `<div style="color:var(--red,#E5484D);font-size:13px">Erreur : ${escapeHtml(res.error)}</div>`;
+    return;
+  }
+  body.innerHTML = renderMonthlyChart(res.months, { compact:true });
+}
+
 async function showSubHistory(userId) {
   const m = S.members.find(x=>x.id==userId);
   if (!m) return;
@@ -1043,7 +1121,7 @@ async function refreshData() {
   ]);
   if (!statsRes.error)     S.stats     = statsRes;
   if (!membersRes.error)   S.members   = membersRes.members   || [];
-  if (!scansRes.error)     S.scans     = scansRes.scans       || [];
+  if (!scansRes.error)   { S.scans     = scansRes.scans       || []; S.monthly = scansRes.months || []; }
   if (!virementsRes.error) S.virements = virementsRes.virements || [];
   goTo(S.page);
   if (statsRes.error || membersRes.error || scansRes.error || virementsRes.error) {
