@@ -263,6 +263,31 @@ function bindPage() {
   const si = document.getElementById('search-inp');
   if (si) si.oninput = e => { S.search = e.target.value; rerenderPage({ keepFocus:'search-inp', caret:e.target.selectionStart }); };
 
+  // Rattachement d'un client a un fitness. Sans lui, ses paiements restent
+  // absents de la Comptabilite, des Virements et du tableau de bord de la salle,
+  // ces trois vues joignant payments -> users -> gyms en INNER JOIN.
+  document.querySelectorAll('.gym-select').forEach(sel => {
+    sel.onchange = async function() {
+      const user_id = this.dataset.user;
+      const gym_id  = this.value || null;
+      const prev    = this.dataset.prev || '';
+      this.disabled = true;
+      const res = await adminApi('/api/admin?action=client-gym', { user_id, gym_id }, 'POST');
+      this.disabled = false;
+      if (res.error) {
+        this.value = prev;   // on remet la valeur d'avant, l'ecran ne ment pas
+        toast('❌ ' + res.error + (res.detail ? ' — ' + res.detail : ''), false);
+        return;
+      }
+      this.dataset.prev = gym_id || '';
+      const c = S.clients.find(x => String(x.id) === String(user_id));
+      const g = S.gyms.find(x => String(x.id) === String(gym_id));
+      if (c) { c.gym_id = gym_id; c.gym = g ? g.name : '—'; c.filiale = g ? (g.filiale||'') : ''; }
+      toast(g ? `✅ Rattaché à ${g.name} — Actualise pour voir la compta` : '✅ Fitness retiré');
+    };
+    sel.dataset.prev = sel.value;
+  });
+
   const fg = document.getElementById('filter-gym');
   if (fg) fg.onchange = e => { S.cFilter_gym = e.target.value; rerenderPage(); };
   const fs = document.getElementById('filter-status');
@@ -524,7 +549,10 @@ function pageClients() {
       <tbody>
         ${filtered.map(c=>`<tr>
           <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
-          <td style="font-size:12px;color:var(--ink3)">${escapeHtml(c.gym)||'—'}</td>
+          <td><select class="status-select gym-select" data-user="${escapeHtml(String(c.id))}" style="font-size:12px;max-width:150px">
+            <option value="">— Aucun —</option>
+            ${S.gyms.map(g=>`<option value="${escapeHtml(String(g.id))}" ${String(c.gym_id||'')===String(g.id)?'selected':''}>${escapeHtml(g.name)}</option>`).join('')}
+          </select></td>
           <td>${planBadge(c.plan)}</td>
           <td>${subWindow(c)}</td>
           <td style="font-weight:700">${c.scans}</td>
