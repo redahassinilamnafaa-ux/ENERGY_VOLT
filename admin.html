@@ -609,7 +609,7 @@ function planBadge(plan) {
 /** Clients réellement visibles : recherche + filtres. Sert aussi à l'export CSV,
  *  pour que le fichier corresponde toujours à ce qui est affiché. */
 function visibleClients() {
-  let list = filterBySearch(S.clients, ['name','email','gym','plan']);
+  let list = filterBySearch(S.clients, ['name','email','phone','gym','plan']);
   if (S.cFilter_gym)    list = list.filter(c => (c.gym || '—') === S.cFilter_gym);
   if (S.cFilter_status) list = list.filter(c => S.cFilter_status === 'active' ? !!c.subscribed : !c.subscribed);
   return list;
@@ -643,7 +643,7 @@ function pageClients() {
       <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Abonnement (début → fin)</th><th>Scans/30j</th><th>CA total</th><th>Inscrit</th><th>Email vérifié</th><th>Statut</th><th>Actions</th></tr></thead>
       <tbody>
         ${filtered.map(c=>`<tr>
-          <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div></td>
+          <td><div class="td-name">${escapeHtml(c.name)}</div><div class="td-sub">${escapeHtml(c.email)}</div>${c.phone?`<div class="td-sub"><a href="tel:${escapeHtml(c.phone)}" style="color:var(--blue);text-decoration:none">📞 ${escapeHtml(c.phone)}</a></div>`:''}</td>
           <td><select class="status-select gym-select" data-user="${escapeHtml(String(c.id))}" style="font-size:12px;max-width:150px">
             <option value="">— Aucun —</option>
             ${S.gyms.map(g=>`<option value="${escapeHtml(String(g.id))}" ${String(c.gym_id||'')===String(g.id)?'selected':''}>${escapeHtml(g.name)}</option>`).join('')}
@@ -945,8 +945,8 @@ async function toggleSubscribe(userId, subscribed, plan, startDate) {
 
 function exportClientsCSV() {
   const q = v => '"' + String(v||'').replace(/"/g,'""') + '"';
-  const rows = visibleClients().map(c => [q(c.name), q(c.email), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
-  downloadCSV(['Nom,Email,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
+  const rows = visibleClients().map(c => [q(c.name), q(c.email), q(c.phone), q(c.gym), q(c.plan), c.scans, c.revenue, q(c.joined), c.subscribed?'Actif':'Inactif'].join(','));
+  downloadCSV(['Nom,Email,Téléphone,Fitness,Plan,Scans,CA,Inscrit,Statut', ...rows].join('\n'), 'volt-clients.csv');
 }
 
 function pagePayments() {
