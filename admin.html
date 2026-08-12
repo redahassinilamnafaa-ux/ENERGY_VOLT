@@ -787,7 +787,8 @@ function pagePayments() {
     <div><div class="page-title">Paiements</div><div class="page-sub">Total encaissé : ${fmtChf(total)}</div></div>
     <div class="topbar-actions">
       <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
-      <button class="btn btn-ghost btn-sm" onclick="exportPaymentsCSV()">📥 CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="syncStripePayments(this)">🔄 Importer depuis Stripe</button>
+       <button class="btn btn-ghost btn-sm" onclick="exportPaymentsCSV()">📥 CSV</button>
     </div>
   </div>
   <div class="card">
@@ -809,6 +810,27 @@ function pagePayments() {
       </tr></tfoot>
     </table></div>
   </div>`;
+}
+
+// Rattrape les paiements encaisses par Stripe mais absents de la base.
+// Necessaire apres le correctif de l'index unique manquant sur
+// payments.stripe_payment_id : sans lui, Postgres rejetait CHAQUE insertion, si
+// bien que des abonnements etaient actives sans qu'aucune ligne de paiement
+// n'existe. Ces paiements-la ne subsistent que chez Stripe.
+// Sans effet de bord : le backend n'ecrit que ce qui manque, on peut relancer.
+async function syncStripePayments(btn) {
+  if (!confirm('Importer depuis Stripe les paiements absents de la base ?\n\nSans risque : seuls les paiements manquants sont ajoutes, avec leur date d\'origine.')) return;
+  const label = btn ? btn.innerHTML : null;
+  if (btn) { btn.innerHTML = '⏳ Import…'; btn.disabled = true; }
+  const res = await adminApi('/api/admin?action=sync-payments', {}, 'POST');
+  if (res.error) {
+    if (btn) { btn.innerHTML = label; btn.disabled = false; }
+    toast('❌ ' + res.error, false);
+    return;
+  }
+  // refreshData() re-rend la page : le bouton est recree, inutile de le restaurer.
+  await refreshData();
+  toast(`✅ ${res.imported} paiement(s) importe(s) — ${res.scanned} analyse(s) chez Stripe`);
 }
 
 function exportPaymentsCSV() {
