@@ -167,7 +167,7 @@ let S = {
   logged: false, page: 'dashboard',
   gym: null, token: null,
   stats: {}, members: [], virements: [], scans: [],
-  search: '',
+  search: '', mFilter_status: '',
 };
 
 // ── API ──────────────────────────────────────────────
@@ -227,7 +227,7 @@ const PAGES = [
 ];
 
 function goTo(page) {
-  S.page = page; S.search = '';
+  S.page = page; S.search = ''; S.mFilter_status = '';
   document.querySelectorAll('.nav-item[data-page]').forEach(el =>
     el.classList.toggle('active', el.dataset.page === page));
   document.getElementById('main-content').innerHTML = renderPage();
@@ -246,9 +246,30 @@ function bindPage() {
   const si = document.getElementById('search-inp');
   if (si) si.oninput = e => {
     S.search = e.target.value;
-    document.getElementById('main-content').innerHTML = renderPage();
-    bindPage();
+    rerenderPage({ keepFocus:'search-inp', caret:e.target.selectionStart });
   };
+  const fs = document.getElementById('filter-status');
+  if (fs) fs.onchange = e => { S.mFilter_status = e.target.value; rerenderPage(); };
+}
+
+/**
+ * Re-rend la page en preservant le focus du champ demande.
+ *
+ * `innerHTML = ...` DETRUIT les elements existants : le champ de recherche etait
+ * recree a chaque frappe et perdait le focus, obligeant a recliquer entre chaque
+ * lettre. On restaure ici le focus et la position du curseur.
+ */
+function rerenderPage(opts) {
+  document.getElementById('main-content').innerHTML = renderPage();
+  bindPage();
+  if (opts && opts.keepFocus) {
+    const el = document.getElementById(opts.keepFocus);
+    if (el) {
+      el.focus();
+      const pos = opts.caret != null ? opts.caret : el.value.length;
+      try { el.setSelectionRange(pos, pos); } catch(_) {}
+    }
+  }
 }
 
 // ── LOGIN ────────────────────────────────────────────
@@ -321,7 +342,7 @@ function showErr(msg) {
 }
 
 function doLogout() {
-  S = { logged:false, page:'dashboard', gym:null, token:null, stats:{}, members:[], virements:[], scans:[], search:'' };
+  S = { logged:false, page:'dashboard', gym:null, token:null, stats:{}, members:[], virements:[], scans:[], search:'', mFilter_status:'' };
   renderLogin();
 }
 
@@ -581,13 +602,21 @@ function pageDashboard() {
 
 // ── MEMBRES ──────────────────────────────────────────
 function pageMembers() {
-  const filtered = filterBySearch(S.members, ['name','email','plan']);
-  const active   = S.members.filter(m=>m.subscribed).length;
+  let filtered = filterBySearch(S.members, ['name','email','plan']);
+  if (S.mFilter_status)
+    filtered = filtered.filter(m => S.mFilter_status === 'active' ? !!m.subscribed : !m.subscribed);
+  const active    = S.members.filter(m=>m.subscribed).length;
+  const filtering = S.mFilter_status || S.search;
 
   return `
   <div class="topbar">
-    <div><div class="page-title">Membres</div><div class="page-sub">${active} abonnés actifs · ${S.members.length} inscrits</div></div>
+    <div><div class="page-title">Membres</div><div class="page-sub">${active} abonnés actifs · ${S.members.length} inscrits${filtering ? ` · <strong>${filtered.length} affiché(s)</strong>` : ''}</div></div>
     <div class="topbar-actions">
+      <select class="search-inp" id="filter-status" style="width:auto;padding-left:14px">
+        <option value="">Tous les membres</option>
+        <option value="active"   ${S.mFilter_status==='active'?'selected':''}>Abonnés</option>
+        <option value="inactive" ${S.mFilter_status==='inactive'?'selected':''}>Non abonnés</option>
+      </select>
       <div class="search-wrap"><input class="search-inp" id="search-inp" placeholder="Rechercher..." value="${S.search}"/></div>
     </div>
   </div>
