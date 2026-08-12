@@ -780,7 +780,7 @@ function exportClientsCSV() {
 }
 
 function pagePayments() {
-  const filtered = filterBySearch(S.payments, ['client','plan','method']);
+  const filtered = filterBySearch(S.payments, ['client','gym','plan','method']);
   const total    = S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+(Number(p.amount)||0), 0);
   return `
   <div class="topbar">
@@ -793,10 +793,11 @@ function pagePayments() {
   </div>
   <div class="card">
     <div class="table-wrap"><table>
-      <thead><tr><th>Client</th><th>Plan</th><th>Montant</th><th>Méthode</th><th>Date</th><th>Statut</th></tr></thead>
+      <thead><tr><th>Client</th><th>Fitness</th><th>Plan</th><th>Montant</th><th>Méthode</th><th>Date</th><th>Statut</th></tr></thead>
       <tbody>
         ${filtered.map(p=>`<tr>
           <td class="td-name">${p.client}</td>
+          <td style="font-size:13px">${p.gym || '—'}${p.filiale ? `<span style="color:var(--ink3);font-size:11.5px"> · ${p.filiale}</span>` : ''}</td>
           <td>${planBadge(p.plan)}</td>
           <td><strong style="font-family:'Barlow Condensed',sans-serif;font-size:17px">${fmtChf(p.amount)}</strong></td>
           <td style="font-size:13px;color:var(--ink3)">${p.method}</td>
@@ -805,7 +806,7 @@ function pagePayments() {
         </tr>`).join('')}
       </tbody>
       <tfoot><tr style="background:var(--bg)">
-        <td colspan="2"><strong>Total encaissé</strong></td>
+        <td colspan="3"><strong>Total encaissé</strong></td>
         <td colspan="4"><strong style="font-family:'Barlow Condensed',sans-serif;font-size:18px">${fmtChf(total)}</strong></td>
       </tr></tfoot>
     </table></div>
@@ -844,8 +845,8 @@ async function syncStripePayments(btn) {
 
 function exportPaymentsCSV() {
   const esc = v => `"${String(v==null?'':v).replace(/"/g,'""')}"`;
-  const rows = S.payments.map(p => [p.client, p.plan, p.amount, p.method, p.date, p.status].map(esc).join(','));
-  downloadCSV(['Client,Plan,Montant,Méthode,Date,Statut', ...rows].join('\n'), 'volt-paiements.csv');
+  const rows = S.payments.map(p => [p.client, p.gym, p.filiale, p.plan, p.amount, p.method, p.date, p.status].map(esc).join(','));
+  downloadCSV(['Client,Fitness,Filiale,Plan,Montant,Méthode,Date,Statut', ...rows].join('\n'), 'volt-paiements.csv');
 }
 
 function statusSelect(v) {
