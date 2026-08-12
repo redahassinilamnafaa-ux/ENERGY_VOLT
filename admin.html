@@ -433,6 +433,54 @@ function renderApp() {
   bindPage();
 }
 
+/**
+ * Graphe a barres sur 12 mois. Les mois sans activite sont fournis a zero par le
+ * backend (generate_series) : l'axe reste continu et la comparaison d'un mois a
+ * l'autre reste honnete.
+ *
+ * `key` choisit la serie ('n' = boissons, 'rev' = revenus), `fmt` sa mise en forme.
+ */
+function renderMonthlyChart(months, opts) {
+  opts = opts || {};
+  const key = opts.key || 'n';
+  const fmt = opts.fmt || (v => v);
+  if (!months || !months.length)
+    return '<div class="empty"><div class="empty-ico">📊</div><div class="empty-sub">Aucune donnée</div></div>';
+  const vals  = months.map(m => Number(m[key]) || 0);
+  const max   = Math.max(...vals, 1);
+  const total = vals.reduce((s,v)=>s+v, 0);
+  const cur   = vals[vals.length-1];
+  const prev  = vals.length > 1 ? vals[vals.length-2] : null;
+  // Sans point de comparaison, un chiffre brut ne dit rien.
+  let trend = '';
+  if (prev !== null) {
+    if (prev === 0 && cur > 0) trend = '<span style="color:#00C47A;font-weight:700">↑ nouveau</span>';
+    else if (prev > 0) {
+      const pct = Math.round((cur - prev) / prev * 100);
+      const col = pct >= 0 ? '#00C47A' : '#E5484D';
+      trend = `<span style="color:${col};font-weight:700">${pct >= 0 ? '↑' : '↓'} ${Math.abs(pct)}% vs mois dernier</span>`;
+    }
+  }
+  const label = ym => {
+    const [y, mm] = ym.split('-');
+    const noms = ['janv','févr','mars','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+    return noms[parseInt(mm,10)-1] + ' ' + y.slice(2);
+  };
+  return `
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13px;color:var(--ink3)"><strong style="color:var(--ink);font-size:15px">${fmt(total)}</strong> sur 12 mois</div>
+      <div style="font-size:12px">${trend}</div>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:5px;height:130px">
+      ${months.map((m,i)=>`
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%">
+          <div style="font-size:9px;font-weight:700;color:var(--ink3);margin-bottom:3px">${vals[i] ? fmt(vals[i]) : ''}</div>
+          <div title="${label(m.ym)} : ${fmt(vals[i])}" style="width:100%;border-radius:6px 6px 0 0;background:${i===months.length-1?(opts.color||'#0057FF'):(opts.colorSoft||'rgba(0,87,255,.28)')};height:${Math.max(vals[i]/max*100, vals[i]?4:1)}%;min-height:2px"></div>
+          <div style="font-size:9px;color:var(--ink3);margin-top:5px;white-space:nowrap">${label(m.ym)}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
 function pageDashboard() {
   const rs = S._stats;
   const totalRev    = rs.rev_total   || S.payments.filter(p=>p.status==='success').reduce((s,p)=>s+(Number(p.amount)||0),0);
@@ -458,6 +506,16 @@ function pageDashboard() {
     <div class="kpi"><span class="kpi-ico">👥</span><div class="kpi-val green">${activeClients}</div><div class="kpi-label">Abonnés actifs</div><div class="kpi-sub">Sur ${S.clients.length} inscrits</div></div>
     <div class="kpi"><span class="kpi-ico">⚡</span><div class="kpi-val orange">${totalScans}</div><div class="kpi-label">Scans ce mois</div><div class="kpi-sub">Boissons distribuées</div></div>
     <div class="kpi"><span class="kpi-ico">🏋️</span><div class="kpi-val">${activeGyms}</div><div class="kpi-label">Fitness actifs</div><div class="kpi-sub">Sur ${S.gyms.length} partenaires</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px">Boissons distribuées · 12 mois</div>
+      ${renderMonthlyChart(rs.months, { key:'n' })}
+    </div>
+    <div class="card card-pad">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px">Revenus encaissés · 12 mois</div>
+      ${renderMonthlyChart(rs.months, { key:'rev', fmt:v=>fmtChf(v), color:'#00A66B', colorSoft:'rgba(0,196,122,.28)' })}
+    </div>
   </div>
   <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:16px">
     <div class="card card-pad">
