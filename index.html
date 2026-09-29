@@ -333,7 +333,7 @@ footer{background:#03132E;padding:64px 24px 36px}
 .ville-link:hover{border-color:var(--brand-red);color:var(--brand-red)}
 
 /* ── ANIMATIONS ── */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+.reveal{opacity:0;transform:translateY(32px) scale(.96);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
@@ -894,11 +894,11 @@ document.querySelectorAll('.step, .benefit').forEach(el => {
     ).join('');
     l1El.innerHTML = letters;
     gsap.set(l1El, { opacity: 1 });
-    gsap.set('#l1Split span', { opacity: 0, y: 70, rotate: 6 });
+    gsap.set('#l1Split span', { opacity: 0, y: 70, rotation: 6 });
 
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     tl.to('.eyebrow', { opacity: 1, duration: .5 })
-      .to('#l1Split span', { opacity: 1, y: 0, rotate: 0, duration: .8, stagger: .025 }, '-=.2')
+      .to('#l1Split span', { opacity: 1, y: 0, rotation: 0, duration: .8, stagger: .025 }, '-=.2')
       .to('.headline .l2', { opacity: 1, y: 0, duration: .7 }, '-=.5')
       .to('.hero-desc', { opacity: 1, duration: .6 }, '-=.35')
       .to('.hero-actions', { opacity: 1, duration: .5 }, '-=.3')
@@ -912,24 +912,49 @@ document.querySelectorAll('.step, .benefit').forEach(el => {
       .forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
   }
 
-  // boutons magnétiques
+  // boutons magnétiques — setters quickTo réutilisés au lieu d'un tween créé à chaque mousemove
   document.querySelectorAll('.magnetic').forEach(btn => {
+    const setX = gsap.quickTo(btn, 'x', { duration: .4, ease: 'power3.out' });
+    const setY = gsap.quickTo(btn, 'y', { duration: .4, ease: 'power3.out' });
     btn.addEventListener('mousemove', e => {
       const r = btn.getBoundingClientRect();
-      gsap.to(btn, { x: (e.clientX - r.left - r.width / 2) * .35, y: (e.clientY - r.top - r.height / 2) * .35, duration: .4, ease: 'power3.out' });
+      setX((e.clientX - r.left - r.width / 2) * .35);
+      setY((e.clientY - r.top - r.height / 2) * .35);
     });
     btn.addEventListener('mouseleave', () => gsap.to(btn, { x: 0, y: 0, duration: .6, ease: 'elastic.out(1,0.4)' }));
   });
 
   if (!prefersReduced && window.ScrollTrigger) {
     const heroEl = document.querySelector('.hero');
-    if (heroEl) heroEl.addEventListener('mousemove', e => {
-      const r = heroEl.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - .5;
-      const py = (e.clientY - r.top) / r.height - .5;
-      gsap.to('#rig', { x: px * 24, rotateZ: px * 1.2, duration: .6, ease: 'power2.out' });
-      gsap.to('.glow', { x: px * 40, y: py * 40, duration: .8, ease: 'power2.out' });
-    });
+    if (heroEl) {
+      const setRigX = gsap.quickTo('#rig', 'x', { duration: .6, ease: 'power2.out' });
+      const setRigRotZ = gsap.quickTo('#rig', 'rotateZ', { duration: .6, ease: 'power2.out' });
+      const setGlowX = gsap.quickTo('.glow', 'x', { duration: .8, ease: 'power2.out' });
+      const setGlowY = gsap.quickTo('.glow', 'y', { duration: .8, ease: 'power2.out' });
+      heroEl.addEventListener('mousemove', e => {
+        const r = heroEl.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - .5;
+        const py = (e.clientY - r.top) / r.height - .5;
+        setRigX(px * 24); setRigRotZ(px * 1.2);
+        setGlowX(px * 40); setGlowY(py * 40);
+      });
+    }
+
+    // WOW — anneaux du hero qui tournent avec l'inertie du scroll + machine qui s'estompe en profondeur
+    // (scale volontairement exclu ici : #rig a déjà un tween infini sur y, un 2e sur scale
+    // fait paniquer le cache de reset de GSAP — cf. warnings "scale not eligible for reset")
+    if (lenis) {
+      const setRingsRot = gsap.quickTo('.rings', 'rotation', { duration: .8, ease: 'power2.out' });
+      const setRigOpacity = gsap.quickTo('#rig', 'opacity', { duration: .4, ease: 'power1.out' });
+      let ringAngle = 0;
+      lenis.on('scroll', (e) => {
+        ringAngle += (e.velocity || 0) * 1.4;
+        setRingsRot(ringAngle);
+        const depth = gsap.utils.clamp(0, 1, (e.scroll || 0) / (window.innerHeight * .9));
+        setRigOpacity(1 - depth * .5);
+      });
+    }
+
 
     // SAVEURS — cascade + icône pop
     const cards = gsap.utils.toArray('.fl-card');
@@ -951,13 +976,17 @@ document.querySelectorAll('.step, .benefit').forEach(el => {
       });
     }
 
-    // SAVEURS — tilt 3D au survol
+    // SAVEURS — tilt 3D au survol (setters quickTo réutilisés par carte)
     cards.forEach(card => {
+      gsap.set(card, { transformPerspective: 700 });
+      const setRotY = gsap.quickTo(card, 'rotateY', { duration: .4, ease: 'power2.out' });
+      const setRotX = gsap.quickTo(card, 'rotateX', { duration: .4, ease: 'power2.out' });
+      const setScale = gsap.quickTo(card, 'scale', { duration: .4, ease: 'power2.out' });
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - .5;
         const py = (e.clientY - r.top) / r.height - .5;
-        gsap.to(card, { rotateY: px * 14, rotateX: py * -14, scale: 1.03, duration: .4, ease: 'power2.out', transformPerspective: 700 });
+        setRotY(px * 14); setRotX(py * -14); setScale(1.03);
       });
       card.addEventListener('mouseleave', () => gsap.to(card, { rotateY: 0, rotateX: 0, scale: 1, duration: .6, ease: 'power3.out' }));
     });
