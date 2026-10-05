@@ -3,11 +3,43 @@
   "headers": [
     {
       "source": "/sw.js",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
     },
     {
       "source": "/VoltApp.html",
-      "headers": [{ "key": "Cache-Control", "value": "no-cache, must-revalidate" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/avantages",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/VoltApp",
+      "destination": "/fitness",
+      "permanent": false
+    },
+    {
+      "source": "/voltapp",
+      "destination": "/fitness",
+      "permanent": false
+    },
+    {
+      "source": "/partenaires",
+      "destination": "/solutions-clubs",
+      "permanent": false
     }
   ]
 }
