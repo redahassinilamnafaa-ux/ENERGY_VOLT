@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:(function(){try{return localStorage.getItem('volt-consent')==='granted'?'granted':'denied'}catch(e){return 'denied'}})(),wait_for_update:500});</script>
+<script src="/cookie-consent.js" defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBHD9KVG4C"></script>
 <script>
@@ -16,351 +18,370 @@ gtag('config', 'G-ZBHD9KVG4C');
 <link rel="canonical" href="https://www.volt-energy.ch/contact"/>
 <meta name="description" content="Contactez l'équipe VOLT. — support, partenariat ou question générale. Nous répondons sous 24h ouvrables à info@volt-energy.ch."/>
 <link rel="icon" href="icon-192.png"/>
-<meta name="theme-color" content="#FFFFFF"/>
+<meta name="theme-color" content="#041C42"/>
 <meta property="og:title" content="Contact — VOLT."/>
 <meta property="og:description" content="Contactez l'équipe VOLT. — support, partenariat ou question générale. Réponse sous 24h."/>
-<meta property="og:image" content="https://www.volt-energy.ch/station-volt.jpg"/>
+<meta property="og:image" content="https://www.volt-energy.ch/og-volt.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
 <meta property="og:url" content="https://www.volt-energy.ch/contact.html"/>
 <meta property="og:type" content="website"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap"/></noscript>
-<link rel="stylesheet" href="volt.css"/>
-<style>
-
-/* ── HERO ─────────────────────────────────────── */
-.contact-hero{
-  padding:104px 0 80px;
-  background:linear-gradient(135deg,#050b1a 0%,#0a1535 60%,#0d1f4a 100%);
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.contact-hero::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 50% at 50% 80%,rgba(253,40,37,.22),transparent);
-  pointer-events:none;
-}
-.ch-label{
-  display:inline-block;
-  font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--blue);
-  background:rgba(253,40,37,.12);border:1px solid rgba(253,40,37,.25);
-  border-radius:50px;padding:5px 16px;margin-bottom:22px;
-}
-.ch-title{
-  font-family:'Barlow Condensed',sans-serif;font-weight:900;
-  font-size:clamp(48px,7vw,84px);line-height:.95;text-transform:uppercase;
-  color:#fff;letter-spacing:-.02em;margin-bottom:20px;
-}
-.ch-title em{color:var(--blue);font-style:normal}
-.ch-sub{
-  font-size:17px;color:rgba(255,255,255,.6);font-weight:500;line-height:1.6;
-  max-width:460px;margin:0 auto 32px;
-}
-.ch-sub strong{color:#fff}
-.ch-email-btn{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--blue);color:#fff;
-  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:21px;
-  border-radius:50px;padding:14px 32px;text-decoration:none;
-  transition:all .2s;letter-spacing:.01em;
-}
-.ch-email-btn:hover{background:#E4304B;transform:translateY(-2px);box-shadow:0 10px 30px rgba(253,40,37,.45)}
-.ch-email-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-
-/* ── RAISONS ──────────────────────────────────── */
-.reasons-wrap{padding:64px 0 0;background:var(--white)}
-.reasons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.reason-card{
-  background:var(--bg2);border:1.5px solid var(--border2);border-radius:20px;
-  padding:32px 28px;text-align:left;
-  transition:border-color .25s,box-shadow .25s,transform .25s;
-}
-.reason-card:hover{border-color:var(--blue);box-shadow:0 12px 36px var(--blue-glow);transform:translateY(-4px)}
-.reason-ico{
-  width:48px;height:48px;border-radius:14px;background:var(--blue-soft);
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  margin-bottom:18px;
-}
-.reason-card h3{
-  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;
-  text-transform:uppercase;color:var(--ink);margin-bottom:10px;letter-spacing:-.2px;
-}
-.reason-card p{font-size:14px;color:var(--ink3);line-height:1.65;font-weight:500;margin-bottom:16px}
-.reason-tag{
-  display:inline-flex;align-items:center;gap:6px;
-  font-size:12px;font-weight:700;color:var(--blue);
-  background:var(--blue-soft);border-radius:50px;padding:4px 12px;
-  text-decoration:none;
-}
-.reason-tag:hover{text-decoration:underline}
-
-/* ── MAIN LAYOUT ──────────────────────────────── */
-.contact-body{padding:48px 0 80px;background:var(--white)}
-.contact-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:28px;align-items:start}
-
-/* ── FORM ─────────────────────────────────────── */
-.form-wrap{background:var(--white);border:1.5px solid var(--border2);border-radius:24px;padding:40px}
-.form-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;text-transform:uppercase;color:var(--ink);margin-bottom:6px;letter-spacing:-.3px}
-.form-sub{font-size:14.5px;color:var(--ink3);font-weight:500;line-height:1.65;margin-bottom:28px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
-.fg input,.fg select,.fg textarea{
-  width:100%;background:var(--bg2);border:1.5px solid transparent;
-  border-radius:12px;padding:13px 15px;font-size:14px;font-weight:500;
-  color:var(--ink);outline:none;font-family:'Barlow',sans-serif;transition:all .2s;box-sizing:border-box;
-}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--blue);background:var(--white);box-shadow:0 0 0 3px rgba(253,40,37,.07)}
-.fg input::placeholder,.fg textarea::placeholder{color:var(--ink4)}
-.fg textarea{resize:vertical;min-height:130px}
-.fg select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23a0aab8' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
-.btn-send{
-  background:var(--blue);color:#fff;border:none;border-radius:50px;
-  padding:14px 32px;font-family:'Barlow Condensed',sans-serif;font-size:20px;
-  font-weight:900;cursor:pointer;transition:all .2s;
-  display:inline-flex;align-items:center;gap:8px;letter-spacing:.01em;
-}
-.btn-send:hover{background:#E4304B;transform:translateY(-2px);box-shadow:0 8px 24px var(--blue-glow)}
-#form-success{
-  display:none;background:#E8FFF4;border:1.5px solid rgba(0,196,122,.3);
-  border-radius:12px;padding:16px 20px;font-size:14px;font-weight:600;color:#009960;margin-top:16px;
-}
-
-/* ── INFO SIDEBAR ─────────────────────────────── */
-.info-panel{display:flex;flex-direction:column;gap:16px}
-.info-card{background:var(--white);border:1.5px solid var(--border2);border-radius:20px;padding:28px 26px}
-.info-section-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
-.info-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-.info-row:last-child{margin-bottom:0}
-.info-ico{
-  width:40px;height:40px;border-radius:12px;background:var(--blue-soft);
-  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;margin-top:1px;
-}
-.info-lbl{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px}
-.info-val{font-size:14px;font-weight:600;color:var(--ink);line-height:1.55}
-.info-val a{color:var(--blue);text-decoration:none;font-weight:700}
-.info-val a:hover{text-decoration:underline}
-.badge-green{display:inline-flex;align-items:center;gap:6px;background:rgba(0,196,122,.1);color:#009960;border-radius:50px;padding:6px 14px;font-size:11px;font-weight:800;letter-spacing:.04em}
-.badge-dot{width:7px;height:7px;border-radius:50%;background:#009960;flex-shrink:0}
-
-.partner-cta{
-  background:linear-gradient(135deg,#050b1a,#0a1535);
-  border:1.5px solid rgba(253,40,37,.2);border-radius:20px;padding:28px 26px;
-}
-.partner-cta-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:20px;text-transform:uppercase;color:#fff;margin-bottom:8px;letter-spacing:-.2px}
-.partner-cta-title em{color:var(--blue);font-style:normal}
-.partner-cta p{font-size:13.5px;color:rgba(255,255,255,.55);line-height:1.6;font-weight:500;margin-bottom:18px}
-.partner-cta a{
-  display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;
-  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;
-  border-radius:50px;padding:10px 20px;text-decoration:none;transition:all .2s;letter-spacing:.01em;
-}
-.partner-cta a:hover{background:#E4304B}
-
-/* ── RESPONSIVE ───────────────────────────────── */
-@media(max-width:880px){
-  .contact-grid{grid-template-columns:1fr}
-  .reasons-grid{grid-template-columns:1fr 1fr}
-}
-@media(max-width:640px){
-  .reasons-grid{grid-template-columns:1fr}
-  .form-row{grid-template-columns:1fr}
-  .form-wrap{padding:28px 20px}
-  .ch-title{font-size:48px}
-}
-</style>
+<script src="/support.js"></script>
 </head>
 <body>
-
-<nav id="nav">
-  <a href="index" class="nav-logo">VOLT<span class="nav-logo-dot">.</span></a>
-  <div class="nav-links" id="navLinks">
-    <a href="index">Accueil</a>
-    <a href="saveurs">Saveurs</a>
-    <a href="comment-ca-marche">Comment ça marche</a>
-    <a href="avantages">Avantages</a>
-    <a href="a-propos">À propos</a>
-    <a href="contact" class="active">Contact</a>
-    <a href="fitness" class="nav-fitness"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-5h4v5"/></svg>Espace fitness</a>
-    <a href="VoltApp" class="nav-cta">Se connecter →</a>
-  </div>
-  <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+<x-dc>
+<helmet>
+<title>Contact — VOLT. Suisse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"></link>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""></link>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&amp;display=swap"></link>
+<style>:focus-visible{outline:2px solid #F02C38;outline-offset:3px;border-radius:6px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#FFFFFF;color:#0A0F1E;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:#F02C38;color:#fff}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#EDF1FB}
+::-webkit-scrollbar-thumb{background:#F02C38;border-radius:2px}
+a{color:#F02C38;text-decoration:none}
+a:hover{color:#F02C38}
+</style>
+</helmet>
+<nav style="position:fixed; top:0; left:0; right:0; z-index:200; height:66px; padding:0 {{ navPad }}; display:flex; align-items:center; justify-content:space-between; background:rgba(4,28,66,.82); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,.08); box-shadow:{{ navShadow }}; transition:box-shadow .3s;">
+  <a href="/" aria-label="VOLT. accueil" style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:26px; line-height:1; color:#FFFFFF;"><svg viewBox="11.3 24.5 228.6 87" role="img" aria-label="VOLT." style="display:inline-block; vertical-align:middle; height:.92em; width:auto; overflow:visible;"><path fill="currentColor" d="m 30.64,110 q -1.68,0 -2.04,-1.56 L 11.8,27.92 V 27.44 Q 11.8,26 13.48,26 h 20.64 q 1.8,0 1.92,1.68 l 5.4,42.48 q 0,0.36 0.36,0.36 0.36,0 0.36,-0.36 L 47.08,27.68 Q 47.2,26 49,26 h 20.04 q 2.04,0 1.68,1.92 L 53.68,108.44 Q 53.32,110 51.64,110 Z"></path><path fill="currentColor" d="m 95.920066,110.96 q -12.12,0 -19.44,-6.96 -7.2,-6.96 -7.2,-18.72 V 50.72 q 0,-11.76 7.2,-18.72 7.32,-6.96 19.44,-6.96 12.120004,0 19.320004,6.96 7.32,6.96 7.32,18.72 v 34.56 q 0,11.76 -7.32,18.72 -7.2,6.96 -19.320004,6.96 z m 0,-19.32 q 1.92,0 3,-1.44 1.080004,-1.44 1.080004,-3.96 V 49.76 q 0,-2.52 -1.080004,-3.96 -1.08,-1.44 -3,-1.44 -1.92,0 -3,1.44 -1.08,1.44 -1.08,3.96 v 36.48 q 0,2.52 1.08,3.96 1.08,1.44 3,1.44 z"></path><path fill="currentColor" d="m 126.87998,110 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 27.8 q 0,-0.84 0.48,-1.32 0.48,-0.48 1.32,-0.48 h 18.96 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 62.16 q 0,0.72 0.72,0.72 h 23.4 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 15.72 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 z"></path><path fill="currentColor" d="m 217.11989,26 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 15.72 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 h -14.16 q -0.72,0 -0.72,0.72 v 62.16 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 h -18.96 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 46.04 q 0,-0.72 -0.72,-0.72 h -13.8 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 27.8 q 0,-0.84 0.48,-1.32 0.48,-0.48 1.32,-0.48 z"></path><path fill="#F02C38" d="m 228.03985,110.96 q -4.92,0 -8.16,-3.12 -3.12,-3.24 -3.12,-8.16 0,-5.04 3.12,-8.16 3.24,-3.12 8.16,-3.12 4.92,0 8.04,3.12 3.24,3.12 3.24,8.16 0,4.8 -3.24,8.04 -3.24,3.24 -8.04,3.24 z"></path></svg></a>
+  <sc-if value="{{ navDesktop }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex; align-items:center; gap:{{ linkGap }};">
+      <a href="/" style="color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">Accueil</a>
+      <a href="/saveurs" style="color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">Saveurs</a>
+      <a href="/le-test" style="color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">Le test</a>
+      <a href="/comment-ca-marche" style="color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">Comment ça marche</a>
+      <a href="/a-propos" style="color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">À propos</a>
+      <a href="/contact" style="color:#F02C38; font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:color .2s;" style-hover="color:#FFFFFF">Contact</a>
+      <a href="/fitness" style="display:inline-flex; align-items:center; gap:7px; padding:8px 16px; border-radius:50px; border:1.5px solid rgba(255,255,255,.18); color:rgba(250,250,250,.6); font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; transition:all .2s;" style-hover="border-color:#F02C38; color:#FFFFFF; background:rgba(240,44,56,.12)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M10 21v-5h4v5"></path></svg>Espace fitness</a>
+      <a href="/fitness" onMouseMove="{{ mag }}" onMouseLeave="{{ magOut }}" style="background:#F02C38; color:#FFFFFF; padding:11px 24px; border-radius:50px; font-size:13px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; white-space:nowrap; box-shadow:0 4px 16px rgba(240,44,56,.3); transition:transform .5s cubic-bezier(.34,1.56,.64,1), background .25s;" style-hover="background:#F5505A; color:#FFFFFF">Se connecter →</a>
+    </div>
+  </sc-if>
+  <sc-if value="{{ navMobile }}" hint-placeholder-val="{{ false }}">
+    <button onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menu }}" style="display:flex; flex-direction:column; gap:5px; cursor:pointer; padding:10px; background:none; border:none;"><span style="width:22px; height:2px; background:#FFFFFF; border-radius:2px;"></span><span style="width:22px; height:2px; background:#FFFFFF; border-radius:2px;"></span><span style="width:22px; height:2px; background:#FFFFFF; border-radius:2px;"></span></button>
+  </sc-if>
 </nav>
-
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; top:66px; left:0; right:0; z-index:199; background:#041C42; display:flex; flex-direction:column; padding:20px 24px 32px; gap:16px; border-bottom:1px solid rgba(255,255,255,.1);">
+    <a href="/" onClick="{{ closeMenu }}" style="color:rgba(250,250,250,.6); font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">Accueil</a>
+    <a href="/saveurs" onClick="{{ closeMenu }}" style="color:rgba(250,250,250,.6); font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">Saveurs</a>
+      <a href="/le-test" onClick="{{ closeMenu }}" style="color:rgba(250,250,250,.6); font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">Le test</a>
+    <a href="/comment-ca-marche" onClick="{{ closeMenu }}" style="color:rgba(250,250,250,.6); font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">Comment ça marche</a>
+    <a href="/a-propos" onClick="{{ closeMenu }}" style="color:rgba(250,250,250,.6); font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">À propos</a>
+    <a href="/contact" onClick="{{ closeMenu }}" style="color:#F02C38; font-size:15px; font-weight:700; letter-spacing:.04em; text-transform:uppercase;">Contact</a>
+    <a href="/fitness" style="display:flex; justify-content:center; padding:12px 16px; border-radius:50px; border:1.5px solid rgba(255,255,255,.18); color:rgba(250,250,250,.75); font-size:14px; font-weight:700; text-transform:uppercase;">Espace fitness</a>
+    <a href="/fitness" style="display:flex; justify-content:center; background:#F02C38; color:#FFFFFF; padding:14px 24px; border-radius:50px; font-size:14px; font-weight:700; text-transform:uppercase;">Se connecter →</a>
+  </div>
+</sc-if>
 <main>
 
-<!-- ── HERO ──────────────────────────────────── -->
-<section class="contact-hero">
-  <div class="section">
-    <div class="ch-label">Contactez-nous</div>
-    <h1 class="ch-title">UNE QUESTION ?<br/><em>ON EST LÀ.</em></h1>
-    <p class="ch-sub">Réponse garantie sous <strong>24h ouvrables</strong> — support, partenariat ou toute autre demande.</p>
-    <a href="mailto:info@volt-energy.ch" class="ch-email-btn">
-      <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 7 10 7 10-7"/></svg>
-      info@volt-energy.ch
-    </a>
+<section data-screen-label="01 Hero" style="position:relative; background:#041C42; color:#FFFFFF; overflow:hidden; padding:clamp(140px,16vw,200px) 0 clamp(72px,8vw,110px);">
+  <div aria-hidden="true" style="position:absolute; right:-10%; top:-20%; width:70%; aspect-ratio:1; border-radius:50%; background:radial-gradient(closest-side, rgba(240,44,56,.22), rgba(240,44,56,0)); pointer-events:none;"></div>
+  <div style="position:relative; max-width:1280px; margin:0 auto; padding:0 {{ edge }}; display:flex; flex-direction:column; gap:28px;">
+    <div data-in="0" style="display:flex; align-items:center; gap:10px;"><span style="width:34px; height:2px; background:#F02C38;"></span><span style="font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#FFFFFF;">Contact</span></div>
+    <h1 data-in="120" style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(56px,9vw,160px); line-height:.9;">Une question ?<br><span style="background:linear-gradient(180deg,#FF9AA1 0%,#FF4552 42%,#E3192A 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:#FF3D4A; -webkit-box-decoration-break:clone; box-decoration-break:clone;">On est là.</span></h1>
+    <p data-in="260" style="font-size:clamp(17px,1.4vw,20px); line-height:1.6; font-weight:500; color:rgba(250,250,250,.72); max-width:560px;">Membre, club de fitness ou simple curieux : on te répond sous 24 h ouvrables.</p>
+    <div data-in="380" style="display:flex; flex-wrap:wrap; gap:14px;"><a href="mailto:info@volt-energy.ch" onMouseMove="{{ mag }}" onMouseLeave="{{ magOut }}" style="background:#F02C38; color:#FFFFFF; font-weight:700; font-size:15px; letter-spacing:.03em; padding:18px 32px; border-radius:50px; display:inline-flex; align-items:center; gap:10px; box-shadow:0 8px 24px rgba(240,44,56,.3); transition:transform .5s cubic-bezier(.34,1.56,.64,1), background .25s;" style-hover="background:#F5505A; color:#FFFFFF"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"></rect><path d="m2 7 10 7 10-7"></path></svg>info@volt-energy.ch</a></div>
+    </div>
+</section>
+<section data-screen-label="02 Raisons" style="background:#EDF1FB; color:#041C42; padding:clamp(72px,8vw,120px) 0 0;">
+  <div style="max-width:1280px; margin:0 auto; padding:0 {{ edge }}; display:grid; grid-template-columns:{{ threeCols }}; gap:16px;">
+    <div data-rv="0"><div onMouseMove="{{ spot }}" style="height:100%; padding:1px; border-radius:28px; background:radial-gradient(380px circle at var(--x,50%) var(--y,0%), rgba(240,44,56,.75), rgba(4,28,66,.08) 55%); transition:transform .5s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-6px)"><div style="height:100%; border-radius:27px; background:#FFFFFF; padding:clamp(24px,2.6vw,34px); display:flex; flex-direction:column; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:16px; background:rgba(240,44,56,.08); border:1.5px solid rgba(240,44,56,.15); display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F02C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1v-6h3zM3 19a2 2 0 0 0 2 2h1v-6H3z"></path></svg></div>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:26px; line-height:1; color:#041C42;">Support</h3>
+        <p style="font-size:15px; line-height:1.65; font-weight:500; color:rgba(4,28,66,.62); flex:1;">Un souci avec la station VOLT. de ta salle ou ton accès ? On t'aide rapidement.</p>
+        <a href="mailto:info@volt-energy.ch?subject=%5BVOLT.%5D%20Support" style="font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#F02C38;" style-hover="color:#041C42">Écrire au support →</a>
+      </div></div></div>
+    <div data-rv="120"><div onMouseMove="{{ spot }}" style="height:100%; padding:1px; border-radius:28px; background:radial-gradient(380px circle at var(--x,50%) var(--y,0%), rgba(240,44,56,.75), rgba(4,28,66,.08) 55%); transition:transform .5s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-6px)"><div style="height:100%; border-radius:27px; background:#FFFFFF; padding:clamp(24px,2.6vw,34px); display:flex; flex-direction:column; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:16px; background:rgba(240,44,56,.08); border:1.5px solid rgba(240,44,56,.15); display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F02C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"></path></svg></div>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:26px; line-height:1; color:#041C42;">Partenariat</h3>
+        <p style="font-size:15px; line-height:1.65; font-weight:500; color:rgba(4,28,66,.62); flex:1;">Tu gères une salle et veux installer une station VOLT. ? Parlons de ton projet.</p>
+        <a href="mailto:info@volt-energy.ch?subject=%5BVOLT.%5D%20Demande%20de%20partenariat" style="font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#F02C38;" style-hover="color:#041C42">Proposer un partenariat →</a>
+      </div></div></div>
+    <div data-rv="240"><div onMouseMove="{{ spot }}" style="height:100%; padding:1px; border-radius:28px; background:radial-gradient(380px circle at var(--x,50%) var(--y,0%), rgba(240,44,56,.75), rgba(4,28,66,.08) 55%); transition:transform .5s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-6px)"><div style="height:100%; border-radius:27px; background:#FFFFFF; padding:clamp(24px,2.6vw,34px); display:flex; flex-direction:column; gap:16px;">
+        <div style="width:56px; height:56px; border-radius:16px; background:rgba(240,44,56,.08); border:1.5px solid rgba(240,44,56,.15); display:flex; align-items:center; justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#F02C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+        <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:26px; line-height:1; color:#041C42;">Autre demande</h3>
+        <p style="font-size:15px; line-height:1.65; font-weight:500; color:rgba(4,28,66,.62); flex:1;">Saveurs, retours d'expérience, presse : on est à l'écoute.</p>
+        <a href="mailto:info@volt-energy.ch?subject=%5BVOLT.%5D%20Question%20g%C3%A9n%C3%A9rale" style="font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#F02C38;" style-hover="color:#041C42">Envoyer un message →</a>
+      </div></div></div>
   </div>
 </section>
-
-<!-- ── RAISONS D'ÉCRIRE ───────────────────────── -->
-<section class="reasons-wrap">
-  <div class="section">
-    <div class="reasons-grid">
-      <div class="reason-card reveal d1">
-        <div class="reason-ico">🎧</div>
-        <h3>Support</h3>
-        <p>Problème avec votre application, votre abonnement ou la borne VOLT. dans votre salle ? On vous aide rapidement.</p>
-        <a href="mailto:info@volt-energy.ch?subject=[VOLT.] Support" class="reason-tag">→ Écrire pour un support</a>
+<section data-screen-label="03 Formulaire" style="background:#EDF1FB; color:#041C42; padding:16px 0 clamp(96px,11vw,160px);">
+  <div style="max-width:1280px; margin:0 auto; padding:0 {{ edge }}; display:grid; grid-template-columns:{{ formCols }}; gap:16px; align-items:stretch;">
+    <div data-rv="0" style="background:#FFFFFF; border-radius:28px; padding:clamp(24px,3.4vw,48px); display:flex; flex-direction:column; gap:24px;">
+      <div style="display:flex; flex-direction:column; gap:10px;"><span style="font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#F02C38;">Envoyer un message</span><h2 style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(36px,4vw,60px); line-height:.9;">Écris-nous.</h2></div>
+      <form onSubmit="{{ send }}" style="display:flex; flex-direction:column; gap:14px; opacity:{{ formOp }}; transition:opacity .3s;">
+        <div style="display:grid; grid-template-columns:{{ nameCols }}; gap:14px;">
+          <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Prénom *</span><input name="prenom" required autocomplete="given-name" placeholder="Ton prénom" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+          <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Nom *</span><input name="nom" required autocomplete="family-name" placeholder="Ton nom" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+        </div>
+        <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Email *</span><input name="email" type="email" required autocomplete="email" placeholder="ton@email.ch" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+        <div style="display:flex; flex-direction:column; gap:9px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Sujet *</span>
+          <div style="display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ subjects }}" as="s" hint-placeholder-count="5">
+              <button type="button" onClick="{{ s.pick }}" aria-pressed="{{ s.on }}" style="height:42px; padding:0 18px; border-radius:999px; border:1.5px solid {{ s.bd }}; background:{{ s.bg }}; color:{{ s.fg }}; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:all .25s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-2px)">{{ s.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ isGym }}" hint-placeholder-val="{{ false }}">
+          <div id="salle" style="display:flex; flex-direction:column; gap:14px; padding:20px; border-radius:20px; background:#FFF4F5; border:1.5px solid rgba(240,44,56,.18);">
+            <span style="font-size:13px; font-weight:800; color:#041C42;">Parle-nous de ta salle — on te recontacte sous 48 h.</span>
+            <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Nom de la salle *</span><input name="salle" required placeholder="Ex. Fitness Crissier" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s; background:#FFFFFF;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+            <div style="display:grid; grid-template-columns:{{ nameCols }}; gap:14px;">
+              <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Ville *</span><input name="ville" required placeholder="Lausanne" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s; background:#FFFFFF;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+              <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Membres actifs</span><select name="membres" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s; background:#FFFFFF; appearance:auto;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"><option value="">Choisir…</option><option>Moins de 300</option><option>300 à 800</option><option>800 à 1500</option><option>Plus de 1500</option></select></label>
+            </div>
+            <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Contrôle d'accès actuel</span><input name="acces" placeholder="Badge, carte, QR, nom du logiciel…" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s; background:#FFFFFF;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></input></label>
+          </div>
+        </sc-if>
+        <label style="display:flex; flex-direction:column; gap:7px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.55);">Message *</span><textarea name="message" required rows="6" placeholder="Décris ta demande…" style="width:100%; box-sizing:border-box; background:#EDF1FB; border:1.5px solid transparent; border-radius:14px; padding:15px 16px; font-size:15px; font-weight:500; color:#041C42; font-family:inherit; outline:none; transition:border-color .2s, background .2s, box-shadow .2s; resize:vertical; min-height:150px;" style-focus="border-color:#F02C38; background:#FFFFFF; box-shadow:0 0 0 4px rgba(240,44,56,.1)"></textarea></label>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:16px; margin-top:6px;">
+          <button type="submit" onMouseMove="{{ mag }}" onMouseLeave="{{ magOut }}" style="background:#F02C38; color:#FFFFFF; border:none; cursor:pointer; font-family:inherit; font-weight:700; font-size:15px; letter-spacing:.03em; text-transform:uppercase; padding:18px 32px; border-radius:50px; box-shadow:0 8px 24px rgba(240,44,56,.3); transition:transform .5s cubic-bezier(.34,1.56,.64,1), background .25s;" style-hover="background:#F5505A">Envoyer le message.</button>
+          <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px; font-weight:700; color:#0E9F6E;">Ton application mail s'ouvre — on te répond sous 24 h ouvrables.</span></sc-if>
+        </div>
+      </form>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div data-rv="120" style="position:relative; overflow:hidden; flex:1; background:#041C42; color:#FFFFFF; border-radius:28px; padding:clamp(24px,3vw,40px); display:flex; flex-direction:column; gap:22px;">
+        <div aria-hidden="true" style="position:absolute; right:-30%; bottom:-40%; width:90%; aspect-ratio:1; border-radius:50%; background:radial-gradient(closest-side, rgba(240,44,56,.3), rgba(240,44,56,0));"></div>
+        <span style="position:relative; font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:rgba(250,250,250,.6);">Nos coordonnées</span>
+        <div style="position:relative; display:flex; flex-direction:column; gap:18px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;"><div style="width:42px; height:42px; flex-shrink:0; border-radius:12px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F02C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="3"></rect><path d="m2 7 10 7 10-7"></path></svg></div><div style="display:flex; flex-direction:column; gap:4px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(250,250,250,.5);">Email</span><span style="font-size:15px; font-weight:600; line-height:1.55; color:#FFFFFF;"><a href="mailto:info@volt-energy.ch" style="color:#FFFFFF;" style-hover="color:#F02C38">info@volt-energy.ch</a></span></div></div>
+          <div style="display:flex; gap:14px; align-items:flex-start;"><div style="width:42px; height:42px; flex-shrink:0; border-radius:12px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F02C38" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></div><div style="display:flex; flex-direction:column; gap:4px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(250,250,250,.5);">Adresse</span><span style="font-size:15px; font-weight:600; line-height:1.55; color:#FFFFFF;">Rue de la Baumettaz 12<br>1023 Crissier, Vaud · Suisse<br><a href="https://maps.google.com/?q=Rue+de+la+Baumettaz+12,+1023+Crissier,+Suisse" target="_blank" rel="noopener noreferrer" style="font-size:13px; font-weight:800; color:#F02C38;" style-hover="color:#FFFFFF">Voir sur la carte →</a></span></div></div>
+        </div>
+        <span style="position:relative; align-self:flex-start; display:inline-flex; align-items:center; gap:8px; height:34px; padding:0 14px; border-radius:999px; background:rgba(14,159,110,.16); color:#3DDC97; font-size:12px; font-weight:800;"><span style="width:7px; height:7px; border-radius:50%; background:#3DDC97;"></span>Réponse sous 24 h ouvrables</span>
       </div>
-      <div class="reason-card reveal d2">
-        <div class="reason-ico">🤝</div>
-        <h3>Partenariat</h3>
-        <p>Vous gérez une salle de fitness et souhaitez installer une station VOLT. ? Discutons de votre projet.</p>
-        <a href="mailto:info@volt-energy.ch?subject=[VOLT.] Demande de partenariat" class="reason-tag">→ Proposer un partenariat</a>
-      </div>
-      <div class="reason-card reveal d3">
-        <div class="reason-ico">💬</div>
-        <h3>Autre demande</h3>
-        <p>Questions sur les saveurs, retours d'expérience, presse ou toute autre curiosité — on est à l'écoute.</p>
-        <a href="mailto:info@volt-energy.ch?subject=[VOLT.] Question générale" class="reason-tag">→ Envoyer un message</a>
-      </div>
+      <a data-rv="200" href="/fitness" onMouseMove="{{ spot }}" style="position:relative; overflow:hidden; background:#F02C38; color:#FFFFFF; border-radius:28px; padding:clamp(24px,3vw,36px); display:flex; flex-direction:column; gap:10px; transition:transform .5s cubic-bezier(.34,1.56,.64,1);" style-hover="transform:translateY(-4px); color:#FFFFFF">
+        <div aria-hidden="true" style="position:absolute; inset:0; background:radial-gradient(300px circle at var(--x,80%) var(--y,20%), rgba(255,255,255,.25), rgba(255,255,255,0) 60%);"></div>
+        <span style="position:relative; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(26px,2.4vw,34px); line-height:1;">Vous gérez une salle ?</span>
+        <span style="position:relative; font-size:15px; line-height:1.55; font-weight:600;">Découvrez comment installer VOLT. dans votre fitness.</span>
+        <span style="position:relative; font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin-top:6px;">Espace fitness →</span>
+      </a>
     </div>
   </div>
 </section>
-
-<!-- ── FORMULAIRE + INFOS ─────────────────────── -->
-<section class="contact-body">
-  <div class="section">
-    <div class="contact-grid">
-
-      <div class="form-wrap reveal">
-        <h2 class="form-title">Envoyer un message</h2>
-        <p class="form-sub">Remplissez le formulaire — nous vous répondrons à l'adresse indiquée sous 24h ouvrables.</p>
-
-        <form id="contact-form" onsubmit="sendMsg(event)">
-          <div class="form-row">
-            <div class="fg">
-              <label>Prénom *</label>
-              <input type="text" id="f-prenom" placeholder="Votre prénom" required autocomplete="given-name"/>
-            </div>
-            <div class="fg">
-              <label>Nom *</label>
-              <input type="text" id="f-nom" placeholder="Votre nom" required autocomplete="family-name"/>
-            </div>
-          </div>
-          <div class="fg">
-            <label>Email *</label>
-            <input type="email" id="f-email" placeholder="votre@email.ch" required autocomplete="email"/>
-          </div>
-          <div class="fg">
-            <label>Sujet *</label>
-            <select id="f-sujet" required>
-              <option value="">Choisissez un sujet…</option>
-              <option value="support">🎧 Support — application ou abonnement</option>
-              <option value="borne">⚡ Problème avec une borne VOLT.</option>
-              <option value="partenariat">🤝 Partenariat — installer une station</option>
-              <option value="saveurs">🥤 Questions sur les saveurs</option>
-              <option value="presse">📰 Presse &amp; médias</option>
-              <option value="autre">💬 Autre demande</option>
-            </select>
-          </div>
-          <div class="fg">
-            <label>Message *</label>
-            <textarea id="f-message" placeholder="Décrivez votre demande…" required></textarea>
-          </div>
-          <button type="submit" class="btn-send">Envoyer le message →</button>
-          <div id="form-success">✅ Message envoyé ! Nous vous répondrons sous 24h ouvrables.</div>
-        </form>
-      </div>
-
-      <div class="info-panel">
-
-        <div class="info-card reveal">
-          <div class="info-section-lbl">Nos coordonnées</div>
-
-          <div class="info-row">
-            <div class="info-ico">✉️</div>
-            <div>
-              <div class="info-lbl">Email</div>
-              <div class="info-val"><a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a></div>
-            </div>
-          </div>
-
-          <div class="info-row">
-            <div class="info-ico">📍</div>
-            <div>
-              <div class="info-lbl">Adresse</div>
-              <div class="info-val">
-                Rue de la Baumettaz 12<br/>
-                1023 Crissier, Vaud<br/>
-                Suisse<br/>
-                <a href="https://maps.google.com/?q=Rue+de+la+Baumettaz+12,+1023+Crissier,+Suisse" target="_blank" rel="noopener noreferrer" style="font-size:13px;margin-top:6px;display:inline-block">Voir sur Google Maps →</a>
-              </div>
-            </div>
-          </div>
-
-          <div class="info-row">
-            <div class="info-ico">🌐</div>
-            <div>
-              <div class="info-lbl">Site web</div>
-              <div class="info-val"><a href="https://www.volt-energy.ch">www.volt-energy.ch</a></div>
-            </div>
-          </div>
-
-          <div style="margin-top:6px">
-            <span class="badge-green"><span class="badge-dot"></span>Réponse sous 24h ouvrables</span>
-          </div>
-        </div>
-
-        <div class="partner-cta reveal">
-          <div class="partner-cta-title">VOUS GÉREZ<br/><em>UNE SALLE ?</em></div>
-          <p>Découvrez comment installer une station VOLT. dans votre fitness et offrir un service premium à vos membres.</p>
-          <a href="fitness">Espace partenaires →</a>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
 </main>
-
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div><div class="footer-logo">VOLT<em>.</em></div><div class="footer-desc">Eaux vitaminées fonctionnelles et distributeurs connectés pour les fitness partenaires en Suisse.</div></div>
-      <div><div class="footer-col-h">Contact</div><div class="footer-links"><a href="contact">Contact</a><a href="partenaires">Partenaires</a><a href="fitness">Espace fitness</a><a href="mailto:info@volt-energy.ch">info@volt-energy.ch</a><a href="mentions-legales">Mentions légales</a><a href="confidentialite">Politique de confidentialité</a><a href="cgv">Conditions d'utilisation</a></div></div>
-      <div><div class="footer-col-h">Nos villes</div><div class="footer-links"><a href="distributeur-boissons-fitness-geneve">Genève</a><a href="distributeur-boissons-fitness-lausanne">Lausanne</a><a href="distributeur-boissons-fitness-zurich">Zürich</a><a href="distributeur-boissons-fitness-berne">Berne</a><a href="distributeur-boissons-fitness-bale">Bâle</a><a href="distributeur-boissons-fitness-fribourg">Fribourg</a><a href="distributeur-boissons-fitness-neuchatel">Neuchâtel</a><a href="distributore-bevande-palestra-lugano">Lugano</a></div></div>
+<footer data-screen-label="10 Footer" style="background:#03132E; padding:64px 24px 36px;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <div style="display:grid; grid-template-columns:{{ footCols }}; gap:48px; margin-bottom:52px;">
+      <div>
+        <div style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:30px; color:#FFFFFF; margin-bottom:12px;"><svg viewBox="11.3 24.5 228.6 87" role="img" aria-label="VOLT." style="display:inline-block; vertical-align:middle; height:.92em; width:auto; overflow:visible;"><path fill="currentColor" d="m 30.64,110 q -1.68,0 -2.04,-1.56 L 11.8,27.92 V 27.44 Q 11.8,26 13.48,26 h 20.64 q 1.8,0 1.92,1.68 l 5.4,42.48 q 0,0.36 0.36,0.36 0.36,0 0.36,-0.36 L 47.08,27.68 Q 47.2,26 49,26 h 20.04 q 2.04,0 1.68,1.92 L 53.68,108.44 Q 53.32,110 51.64,110 Z"></path><path fill="currentColor" d="m 95.920066,110.96 q -12.12,0 -19.44,-6.96 -7.2,-6.96 -7.2,-18.72 V 50.72 q 0,-11.76 7.2,-18.72 7.32,-6.96 19.44,-6.96 12.120004,0 19.320004,6.96 7.32,6.96 7.32,18.72 v 34.56 q 0,11.76 -7.32,18.72 -7.2,6.96 -19.320004,6.96 z m 0,-19.32 q 1.92,0 3,-1.44 1.080004,-1.44 1.080004,-3.96 V 49.76 q 0,-2.52 -1.080004,-3.96 -1.08,-1.44 -3,-1.44 -1.92,0 -3,1.44 -1.08,1.44 -1.08,3.96 v 36.48 q 0,2.52 1.08,3.96 1.08,1.44 3,1.44 z"></path><path fill="currentColor" d="m 126.87998,110 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 27.8 q 0,-0.84 0.48,-1.32 0.48,-0.48 1.32,-0.48 h 18.96 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 62.16 q 0,0.72 0.72,0.72 h 23.4 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 15.72 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 z"></path><path fill="currentColor" d="m 217.11989,26 q 0.84,0 1.32,0.48 0.48,0.48 0.48,1.32 v 15.72 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 h -14.16 q -0.72,0 -0.72,0.72 v 62.16 q 0,0.84 -0.48,1.32 -0.48,0.48 -1.32,0.48 h -18.96 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 46.04 q 0,-0.72 -0.72,-0.72 h -13.8 q -0.84,0 -1.32,-0.48 -0.48,-0.48 -0.48,-1.32 V 27.8 q 0,-0.84 0.48,-1.32 0.48,-0.48 1.32,-0.48 z"></path><path fill="#F02C38" d="m 228.03985,110.96 q -4.92,0 -8.16,-3.12 -3.12,-3.24 -3.12,-8.16 0,-5.04 3.12,-8.16 3.24,-3.12 8.16,-3.12 4.92,0 8.04,3.12 3.24,3.12 3.24,8.16 0,4.8 -3.24,8.04 -3.24,3.24 -8.04,3.24 z"></path></svg></div>
+        <div style="font-size:13px; color:rgba(255,255,255,.62); line-height:1.8; max-width:250px;">Boissons vitaminées à volonté, intégrées directement à ton fitness.</div>
+        <address style="font-style:normal; font-size:12px; color:rgba(255,255,255,.62); line-height:1.9; margin-top:16px;">Rue de la Baumettaz 12<br>1023 Crissier, Vaud — Suisse<br><a href="tel:+41788705963" style="color:rgba(255,255,255,.62);">+41 78 870 59 63</a><br><a href="mailto:info@volt-energy.ch" style="color:rgba(255,255,255,.62);">info@volt-energy.ch</a></address>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.62); margin-bottom:16px;">Navigation</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="/saveurs" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Saveurs</a>
+          <a href="/comment-ca-marche" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Comment ça marche</a>
+          <a href="/a-propos" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">À propos</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.62); margin-bottom:16px;">Contact</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="/fitness" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Espace fitness</a>
+          <a href="mailto:info@volt-energy.ch" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">info@volt-energy.ch</a>
+          <a href="/mentions-legales" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Mentions légales</a>
+          <a href="/confidentialite" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Politique de confidentialité</a>
+          <a href="/cgv" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Conditions d'utilisation</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.62); margin-bottom:16px;">Nos villes</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="/distributeur-boissons-fitness-geneve" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Genève</a>
+          <a href="/distributeur-boissons-fitness-lausanne" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Lausanne</a>
+          <a href="/distributeur-boissons-fitness-zurich" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Zürich</a>
+          <a href="/distributeur-boissons-fitness-berne" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Berne</a>
+          <a href="/distributeur-boissons-fitness-bale" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Bâle</a>
+          <a href="/distributeur-boissons-fitness-fribourg" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Fribourg</a>
+          <a href="/distributeur-boissons-fitness-neuchatel" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Neuchâtel</a>
+          <a href="/distributore-bevande-palestra-lugano" style="font-size:14px; color:rgba(255,255,255,.5); font-weight:500; transition:color .2s;" style-hover="color:#FFFFFF">Lugano</a>
+        </div>
+      </div>
     </div>
-    <div class="footer-bottom"><div class="footer-copy">© 2026 VOLT. — Tous droits réservés</div><div class="footer-legal"><a href="cgv">CGV</a><a href="confidentialite">Politique de confidentialité</a><a href="cookies">Cookies</a><a href="contact">Contact</a></div></div>
+    <div style="border-top:1px solid rgba(255,255,255,.08); padding-top:28px; display:flex; flex-direction:{{ footDir }}; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; text-align:{{ footAlign }};">
+      <div style="font-size:13px; color:rgba(255,255,255,.62);">© 2026 VOLT. — Tous droits réservés</div>
+      <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center;">
+        <a href="/cgv" style="font-size:12px; color:rgba(255,255,255,.62); transition:color .2s;" style-hover="color:rgba(255,255,255,.7)">CGV</a>
+        <a href="/confidentialite" style="font-size:12px; color:rgba(255,255,255,.62); transition:color .2s;" style-hover="color:rgba(255,255,255,.7)">Politique de confidentialité</a>
+        <a href="/cookies" style="font-size:12px; color:rgba(255,255,255,.62); transition:color .2s;" style-hover="color:rgba(255,255,255,.7)">Cookies</a>
+        <a href="mailto:info@volt-energy.ch" style="font-size:12px; color:rgba(255,255,255,.62); transition:color .2s;" style-hover="color:rgba(255,255,255,.7)">Support</a>
+      </div>
+    </div>
   </div>
 </footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;motion&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Expérience&quot;}}">
+const SAV = [
+  { slug:'iced-tea-lemon', nom:'Iced Tea Lemon', arome:'Thé glacé citron', c1:'#D9A331', c2:'#8C6A1F', accroche:'Le classique thé glacé au citron, ultra rafraîchissant.', ingredients:"Eau, acidifiant (acide citrique), édulcorants (cyclamate, acésulfame K, saccharine), colorant (caramel au sulfite d'ammonium : contient des sulfites), arôme naturel, 1,4 % extrait de thé, 1 % jus de citron à base de concentré de jus de citron, sel, fructose, épaississant (gomme xanthane), niacine, conservateur (sorbate de potassium), vitamine B6, mononitrate de thiamine.", allergenes:['Sulfites'], kcal:'0,4', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'7', kcal:'1,7', sucres:'0,05 g', sel:'0,06 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650811836' },
+  { slug:'multifruit', nom:'Multi Fruit', arome:'Mangue, orange, pêche, pomme', c1:'#E8722A', c2:'#96450F', accroche:'Un mélange multifruits gourmand et ensoleillé.', ingredients:"Eau, acidifiant (acide citrique), arôme, 2 % jus multifruits à base de concentré de jus de fruits (mangue, orange, pêche, pomme), édulcorants (cyclamate de sodium, acésulfame K, saccharine), colorants (anthocyanes, riboflavine), sel, fructose, épaississant (gomme xanthane), nicotinamide, conservateur (sorbate de potassium), chlorhydrate de pyridoxine, mononitrate de thiamine.", allergenes:[], kcal:'0,6', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'10', kcal:'2,3', sucres:'0,04 g', sel:'0,05 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650801585' },
+  { slug:'peche-passion', nom:'Peach Passion Fruit', arome:'Pêche et fruit de la passion', c1:'#E06B45', c2:'#96402A', accroche:'Pêche et fruit de la passion, duo solaire.', ingredients:"Eau, acidifiant (acide citrique), édulcorants (cyclamate, acésulfame K, saccharine), arôme, 1 % jus de fruit de la passion à base de concentré, 1 % jus de pêche à base de concentré, sel, fructose, épaississant (gomme xanthane), colorant (bêta-carotène), niacine, stabilisant (ester glycérique de résine de bois, gomme arabique), conservateur (sorbate de potassium), vitamine B6, mononitrate de thiamine.", allergenes:[], kcal:'0,6', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'10', kcal:'2,4', sucres:'0,04 g', sel:'0,05 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650801592' },
+  { slug:'cassis', nom:'Blackberry', arome:'Mûre', c1:'#4B2059', c2:'#26102E', accroche:'Mûre intense, pour les envies corsées.', ingredients:"Eau, acidifiant (acide citrique), arôme, édulcorants (cyclamate, acésulfame K, saccharine), 1 % jus de mûre à base de concentré de jus de mûre, aliment colorant (concentré de carotte, concentré de myrtille), colorant (caramel au sulfite d'ammonium : contient des sulfites), sel, fructose, épaississant (gomme xanthane), niacine, antimoussant (mono- et diglycérides d'acides gras), conservateur (sorbate de potassium), vitamine B6, mononitrate de thiamine.", allergenes:['Sulfites'], kcal:'0,7', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'11', kcal:'2,6', sucres:'0,05 g', sel:'0,05 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650805590' },
+  { slug:'fruits-des-bois', nom:'Forest Fruit', arome:'Framboise et sureau', c1:'#7A1F3D', c2:'#3F0F1F', accroche:'Fruits des bois, framboise et sureau.', ingredients:"Eau, acidifiant (acide citrique), édulcorants (acésulfame K, cyclamate, saccharine), arôme, aliment colorant (concentré de carotte noire), sel, fructose, 0,5 % jus de framboise à base de concentré, 0,5 % jus de sureau à base de concentré, épaississant (gomme xanthane), niacine, conservateur (sorbate de potassium), vitamine B6, mononitrate de thiamine.", allergenes:[], kcal:'0,5', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'8', kcal:'2,0', sucres:'0,05 g', sel:'0,05 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650813069' },
+  { slug:'pasteque', nom:'Watermelon', arome:'Pastèque', c1:'#D62B4C', c2:'#7A0F26', accroche:'Pastèque fraîche, désaltérante.', ingredients:"Eau, acidifiant (acide citrique), arôme, édulcorants (cyclamate, acésulfame K, saccharine), 1 % jus de pastèque à base de concentré, colorants (anthocyanes, riboflavine), sel, fructose, épaississant (gomme xanthane), antimoussant (mono- et diglycérides d'acides gras alimentaires), nicotinamide, conservateur (sorbate de potassium), chlorhydrate de pyridoxine, mononitrate de thiamine.", allergenes:[], kcal:'0,9', sucres:'0,01 g', sel:'0,01 g', portion:{ kj:'15', kcal:'3,6', sucres:'0,04 g', sel:'0,05 g' }, vit:[['Thiamine (vitamine B1)','0,33 mg','30 %'],['Niacine (vitamine B3)','4,8 mg','30 %'],['Vitamine B6','0,42 mg','30 %']], ean:'4251650805903' }
+];
+class Component extends DCLogic {
+  state = { w: 1280, scrolled: false, menu: false, subj: 0, sent: false };
 
-<script src="volt.js"></script>
-<script>
-function sendMsg(e) {
-  e.preventDefault();
-  var prenom  = document.getElementById('f-prenom').value.trim();
-  var nom     = document.getElementById('f-nom').value.trim();
-  var email   = document.getElementById('f-email').value.trim();
-  var sujet   = document.getElementById('f-sujet').value;
-  var message = document.getElementById('f-message').value.trim();
-  if (!prenom || !nom || !email || !sujet || !message) return;
-  var labels = {
-    support:'Support VOLT.', borne:'Problème borne VOLT.',
-    partenariat:'Demande de partenariat', saveurs:'Question sur les saveurs',
-    presse:'Presse & médias', autre:'Contact général'
-  };
-  var body = 'De : ' + prenom + ' ' + nom + '\nEmail : ' + email + '\n\n' + message;
-  window.location.href = 'mailto:info@volt-energy.ch'
-    + '?subject=' + encodeURIComponent('[VOLT.] ' + (labels[sujet]||sujet))
-    + '&body=' + encodeURIComponent(body);
-  document.getElementById('contact-form').style.opacity = '.5';
-  document.getElementById('contact-form').style.pointerEvents = 'none';
-  document.getElementById('form-success').style.display = 'block';
+  els = {};
+  get reduce() { return this._rm || this.props.motion === false; }
+  baseMount() {
+    this._rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.onResize(); window.addEventListener('resize', this.onResize);
+    this.onScroll = () => { const s = window.scrollY > 30; if (s !== this.state.scrolled) this.setState({ scrolled: s }); };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    if (!this.reduce) document.querySelectorAll('[data-in]').forEach(el => el.animate([{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { duration: 900, delay: +el.dataset.in || 0, easing: 'cubic-bezier(.215,.61,.355,1)', fill: 'backwards' }));
+    setTimeout(() => this.setupReveal(), 60);
+  }
+  baseUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('scroll', this.onScroll); this.io && this.io.disconnect(); }
+  setupReveal() {
+    if (this.reduce || !('IntersectionObserver' in window)) return;
+    const vh = window.innerHeight;
+    const els = [...document.querySelectorAll('[data-rv]')].filter(el => el.getBoundingClientRect().top > vh * .95);
+    els.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(48px)'; });
+    this.io = new IntersectionObserver(en => en.forEach(e => { if (!e.isIntersecting) return; const el = e.target, d = +el.dataset.rv || 0; this.io.unobserve(el);
+      el.style.transition = 'opacity .9s cubic-bezier(.2,.8,.2,1) ' + d + 'ms, transform 1s cubic-bezier(.2,.8,.2,1) ' + d + 'ms'; el.style.opacity = '1'; el.style.transform = 'none';
+      setTimeout(() => { el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''; }, 1100 + d); }), { threshold: .08, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(el => this.io.observe(el));
+  }
+  mag = e => { if (this.reduce) return; const el = e.currentTarget, r = el.getBoundingClientRect(); el.style.transform = 'translate(' + ((e.clientX - r.left - r.width / 2) * .3).toFixed(1) + 'px,' + ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px)'; };
+  magOut = e => { e.currentTarget.style.transform = ''; };
+  spot = e => { const el = e.currentTarget, r = el.getBoundingClientRect(); el.style.setProperty('--x', (e.clientX - r.left) + 'px'); el.style.setProperty('--y', (e.clientY - r.top) + 'px'); };
+  baseVals() {
+    const { w, scrolled, menu } = this.state; const navMobile = w <= 1024, mobile = w <= 768;
+    return { navMobile, navDesktop: !navMobile, menu, menuOpen: navMobile && menu,
+      navPad: w <= 768 ? '20px' : w <= 1024 ? '22px' : w <= 1200 ? '26px' : '40px', linkGap: w <= 1200 ? '17px' : '28px',
+      navShadow: scrolled ? '0 2px 24px rgba(0,0,0,.2)' : 'none',
+      toggleMenu: () => this.setState(s => ({ menu: !s.menu })), closeMenu: () => this.setState({ menu: false }),
+      mag: this.mag, magOut: this.magOut, spot: this.spot, edge: w <= 760 ? '20px' : 'clamp(24px,4vw,56px)',
+      footCols: mobile ? '1fr' : '1.6fr 1fr 1fr 1fr', footDir: mobile ? 'column' : 'row', footAlign: mobile ? 'center' : 'left' };
+  }
+  rStage = el => { this.els.stage = el; }; rFallback = el => { this.els.fallback = el; };
+  get mobile() { return this.state.w <= 768; }
+  sm = { x: 0, y: 0 };
+  stageMove = e => { const r = e.currentTarget.getBoundingClientRect(); this.sm.x = (e.clientX - r.left) / r.width - .5; this.sm.y = (e.clientY - r.top) / r.height - .5; };
+  stageLeave = () => { this.sm.x = 0; this.sm.y = 0; };
+  componentDidMount() { if (location.hash === '#salle') this.setState({ subj: 2 }); this.baseMount(); this.init3D().catch(err => console.warn('3D fallback', err));
+    this.onR3 = () => this.resize3D && this.resize3D(); window.addEventListener('resize', this.onR3);
+    const loop = t => { this.raf = requestAnimationFrame(loop); this.frame3D(t); }; this.raf = requestAnimationFrame(loop); }
+  componentWillUnmount() { this.baseUnmount(); cancelAnimationFrame(this.raf); window.removeEventListener('resize', this.onR3); if (this.three) this.three.renderer.dispose(); }
+  frame3D(t) {
+    const T = this.three, st = this.els.stage; if (!T || !st) return;
+    const r = st.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight) return;
+    if (Math.round(r.width) !== this.lastW || Math.round(r.height) !== this.lastH) { if (r.width < 2 || r.height < 2) return; this.lastW = Math.round(r.width); this.lastH = Math.round(r.height); this.resize3D(); }
+    const c = T.cur, time = t / 1000;
+    const scrollP = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+    const ry = this.reduce ? -.45 : -.9 + scrollP * 1.4 + Math.sin(time * .5) * .08 + this.sm.x * .6;
+    c.ry += (ry - c.ry) * .06; c.y += ((this.reduce ? 0 : Math.sin(time * 1.1) * .025 - this.sm.y * .05) - c.y) * .08;
+    T.pivot.rotation.y = c.ry; T.pivot.position.y = c.y; T.pivot.rotation.x = this.sm.y * .08;
+    T.camera.position.set(0, .12, 4.1); T.camera.lookAt(0, .02, 0);
+    if (this.drawScreen && (!this.lastDraw || t - this.lastDraw > 60)) { this.lastDraw = t; this.drawScreen(time); }
+    T.renderer.render(T.scene, T.camera);
+  }
+  async init3D() {
+    const stage = this.els.stage; if (!stage) return;
+    const test = document.createElement('canvas');
+    if (!(test.getContext('webgl2') || test.getContext('webgl'))) return;
+    const THREE = await import('https://esm.sh/three@0.160.0');
+    const { RoomEnvironment } = await import('https://esm.sh/three@0.160.0/examples/jsm/environments/RoomEnvironment.js');
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = '/assets/img/machine-volt-pro.webp'; });
+    const crop = (x, y, w, hh, fill) => { const c = document.createElement('canvas'); c.width = w; c.height = hh; const g = c.getContext('2d'); if (fill) { g.fillStyle = fill; g.fillRect(0, 0, w, hh); } g.drawImage(img, x, y, w, hh, 0, 0, w, hh); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
+    const sideTex = (() => { const c = document.createElement('canvas'); c.width = 512; c.height = 1010; const g = c.getContext('2d');
+      const steel = g.createLinearGradient(0, 0, 512, 0); steel.addColorStop(0, '#9da3ab'); steel.addColorStop(.5, '#e6e9ed'); steel.addColorStop(1, '#a9aeb5');
+      g.fillStyle = steel; g.fillRect(0, 0, 512, 1010);
+      const nv = g.createLinearGradient(0, 40, 0, 895); nv.addColorStop(0, '#0A2758'); nv.addColorStop(1, '#03132E');
+      g.fillStyle = nv; g.fillRect(6, 44, 500, 851);
+      g.fillStyle = '#F02C38'; g.fillRect(6, 44, 10, 851);
+      g.globalAlpha = .08; g.fillStyle = '#fff'; for (let y = 60; y < 890; y += 6) g.fillRect(24, y, 470, 1); g.globalAlpha = 1;
+      const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+
+    const W = 0.722, H = 1.01, D = 0.6;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, this.mobile ? 1.5 : 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+    renderer.domElement.style.cssText = 'width:100%;height:100%;display:block;';
+    stage.appendChild(renderer.domElement);
+    const scene = new THREE.Scene();
+    const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+    const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(2, 3, 3); scene.add(key);
+    const rim = new THREE.DirectionalLight(0xf02c38, 2.2); rim.position.set(-3, 1.5, -2); scene.add(rim);
+    const rim2 = new THREE.DirectionalLight(0x4d8dff, 1.2); rim2.position.set(3, 1, -2.5); scene.add(rim2);
+    scene.add(new THREE.AmbientLight(0xffffff, .25));
+
+    const steel = new THREE.MeshStandardMaterial({ color: 0xd9dde2, metalness: 1, roughness: .28 });
+    const dark = new THREE.MeshStandardMaterial({ color: 0x0b0e14, metalness: .4, roughness: .5 });
+    const front = new THREE.MeshStandardMaterial({ map: crop(62, 705, 722, 1010), roughness: .38, metalness: .05 });
+    const side = new THREE.MeshStandardMaterial({ map: sideTex, roughness: .42, metalness: .2 });
+    const sc = document.createElement('canvas'); sc.width = 1024; sc.height = 590;
+    const sg = sc.getContext('2d');
+    const icons = await Promise.all(SAV.map(f => new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = '/icons/' + f.slug + '.svg'; })));
+    const rr = (x, y, w, hh, r) => { sg.beginPath(); sg.moveTo(x + r, y); sg.arcTo(x + w, y, x + w, y + hh, r); sg.arcTo(x + w, y + hh, x, y + hh, r); sg.arcTo(x, y + hh, x, y, r); sg.arcTo(x, y, x + w, y, r); sg.closePath(); };
+    const drawScreen = (t) => {
+      const act = Math.floor(t / 1800) % SAV.length, f = SAV[act], ph = (t % 1800) / 1800;
+      const bg = sg.createLinearGradient(0, 0, 1024, 590); bg.addColorStop(0, '#0A2758'); bg.addColorStop(1, '#020B1E');
+      sg.fillStyle = bg; sg.fillRect(0, 0, 1024, 590);
+      const gl = sg.createRadialGradient(780, 120, 0, 780, 120, 520); gl.addColorStop(0, f.c1 + 'aa'); gl.addColorStop(1, f.c1 + '00');
+      sg.fillStyle = gl; sg.fillRect(0, 0, 1024, 590);
+      sg.fillStyle = '#FFFFFF'; sg.font = '800 44px "Plus Jakarta Sans", sans-serif'; sg.textBaseline = 'alphabetic';
+      sg.fillText('VOLT', 48, 84); const vw = sg.measureText('VOLT').width; sg.fillStyle = '#F02C38'; sg.fillText('.', 48 + vw, 84);
+      sg.fillStyle = 'rgba(255,255,255,.6)'; sg.font = '700 22px "Plus Jakarta Sans", sans-serif'; sg.textAlign = 'right'; sg.fillText('CHOISIS TA SAVEUR', 976, 80); sg.textAlign = 'left';
+      const cw = 292, ch = 200, gx = 48, gy = 124, gap = 18;
+      SAV.forEach((fl, i) => {
+        const cx = gx + (i % 3) * (cw + gap), cy = gy + Math.floor(i / 3) * (ch + gap), on = i === act;
+        rr(cx, cy, cw, ch, 26);
+        if (on) { const g2 = sg.createLinearGradient(cx, cy, cx + cw, cy + ch); g2.addColorStop(0, fl.c1); g2.addColorStop(1, fl.c2); sg.fillStyle = g2; } else sg.fillStyle = 'rgba(255,255,255,.07)';
+        sg.fill();
+        if (on) { sg.lineWidth = 4; sg.strokeStyle = 'rgba(255,255,255,' + (0.5 + 0.5 * Math.sin(ph * Math.PI)).toFixed(2) + ')'; sg.stroke(); }
+        const ic = icons[i], s = on ? 96 + 8 * Math.sin(ph * Math.PI) : 84;
+        if (ic) sg.drawImage(ic, cx + cw / 2 - s / 2, cy + 24 + (96 - s) / 2, s, s);
+        sg.fillStyle = on ? '#FFFFFF' : 'rgba(255,255,255,.85)'; sg.font = '800 24px "Plus Jakarta Sans", sans-serif'; sg.textAlign = 'center';
+        sg.fillText(fl.nom.toUpperCase(), cx + cw / 2, cy + ch - 30); sg.textAlign = 'left';
+      });
+    };
+    drawScreen(0);
+    const scTex = new THREE.CanvasTexture(sc); scTex.colorSpace = THREE.SRGBColorSpace; scTex.anisotropy = 8;
+    const screenMat = new THREE.MeshStandardMaterial({ map: scTex, emissiveMap: scTex, emissive: 0xffffff, emissiveIntensity: .75, roughness: .12, metalness: 0 });
+    this.drawScreen = t => { drawScreen(t); scTex.needsUpdate = true; };
+
+    const machine = new THREE.Group();
+    const cab = new THREE.Mesh(new THREE.BoxGeometry(W, H, D), [front, front, steel, steel, front, front]);
+    cab.position.y = H / 2; machine.add(cab);
+    const topSlab = new THREE.Mesh(new THREE.BoxGeometry(W + .012, .02, D + .012), steel); topSlab.position.y = H + .01; machine.add(topSlab);
+    const tray = new THREE.Mesh(new THREE.BoxGeometry(.29, .02, .16), steel); tray.position.set(0, H + .03, .12); machine.add(tray);
+    const grill = new THREE.Mesh(new THREE.BoxGeometry(.26, .004, .13), dark); grill.position.set(0, H + .042, .12); machine.add(grill);
+    const col = new THREE.Mesh(new THREE.BoxGeometry(.105, .27, .08), steel); col.position.set(0, H + .155, -.02); machine.add(col);
+    const nozzle = new THREE.Mesh(new THREE.BoxGeometry(.05, .03, .09), steel); nozzle.position.set(0, H + .27, .05); machine.add(nozzle);
+    const head = new THREE.Mesh(new THREE.BoxGeometry(.4, .23, .035), [dark, dark, dark, dark, screenMat, dark]);
+    head.position.set(0, H + .29 + .115, 0); head.rotation.x = -.08; machine.add(head);
+    machine.position.y = -0.72;
+    const pivot = new THREE.Group(); pivot.add(machine); scene.add(pivot);
+    const shadow = new THREE.Mesh(new THREE.CircleGeometry(.7, 48), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: .35 }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.719; shadow.scale.set(1, .6, 1); pivot.add(shadow);
+
+    this.three = { THREE, renderer, scene, camera, pivot, cur: { ry: -0.55, x: 0, y: 0, cz: 4.3, cy: .1 } };
+    this.resize3D = () => { const r = stage.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / Math.max(1, r.height); camera.updateProjectionMatrix(); };
+    this.resize3D();
+    stage.style.opacity = '1';
+    if (this.els.fallback) this.els.fallback.style.opacity = '0';
+  }
+
+
+  renderVals() {
+    const w = this.state.w;
+    const SUBJ = ['Support station', 'Mon accès', 'Je gère une salle', 'Saveurs', 'Presse', 'Autre'];
+    return { ...this.baseVals(), isGym: this.state.subj === 2, sent: this.state.sent, formOp: this.state.sent ? .6 : 1, formCols: w <= 900 ? '1fr' : 'minmax(0,1.5fr) minmax(0,1fr)', nameCols: w <= 600 ? '1fr' : '1fr 1fr',
+      subjects: SUBJ.map((l, i) => { const on = this.state.subj === i; return { label: l, on, bg: on ? '#041C42' : '#FFFFFF', fg: on ? '#FFFFFF' : '#041C42', bd: on ? '#041C42' : 'rgba(4,28,66,.15)', pick: () => this.setState({ subj: i }) }; }),
+      send: e => { e.preventDefault(); const f = e.currentTarget.elements; const gym = f.salle ? '\nSalle : ' + f.salle.value + ' — ' + f.ville.value + '\nMembres actifs : ' + (f.membres.value || '—') + '\nContrôle d\'accès : ' + (f.acces.value || '—') + '\n' : ''; const body = gym + 'De : ' + f.prenom.value + ' ' + f.nom.value + '\nEmail : ' + f.email.value + '\n\n' + f.message.value;
+        window.location.href = 'mailto:info@volt-energy.ch?subject=' + encodeURIComponent('[VOLT.] ' + SUBJ[this.state.subj]) + '&body=' + encodeURIComponent(body); this.setState({ sent: true }); },
+      rStage: this.rStage, rFallback: this.rFallback, stageMove: this.stageMove, stageLeave: this.stageLeave, threeCols: w <= 900 ? '1fr' : 'repeat(3, minmax(0,1fr))', fourCols: w <= 600 ? '1fr' : w <= 1100 ? 'repeat(2, minmax(0,1fr))' : 'repeat(4, minmax(0,1fr))', splitCols: w <= 900 ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)' };
+  }
 }
 </script>
 </body>
