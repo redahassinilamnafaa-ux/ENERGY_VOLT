@@ -376,6 +376,7 @@ class Component extends DCLogic {
     let res = {};
     if (done) { const sc = [0,0,0,0,0,0]; st.ans.forEach((a, qi) => QZ[qi].o[a][3].forEach((v, k) => sc[k] += v)); const pr = [5,0,1,2,3,4];
       const best = pr.slice().sort((a, b) => sc[b] - sc[a] || pr.indexOf(a) - pr.indexOf(b))[0]; const f = SAV[best]; const tot = sc.reduce((a, b) => a + b, 0) || 1;
+      const qk = st.ans.join(','); if (this._quizSent !== qk) { this._quizSent = qk; if (window.voltTrack) window.voltTrack('quiz', f.nom); } // une fois par résultat
       res = { nom: f.nom, arome: f.arome, why: WHY[best], icon: '/icons/' + f.slug + '.svg', link: '/saveurs#' + f.slug, bg: 'linear-gradient(145deg, ' + f.c1 + ' 0%, ' + f.c2 + ' 100%)', match: Math.min(98, 60 + Math.round(sc[best] / tot * 80)) + ' %', c1: f.c1 }; }
     const cur = done ? null : QZ[st.step];
     const quiz = { inQuiz: !done, done, res, stepNum: '0' + Math.min(QZ.length, st.step + 1), prog: done ? 1 : (st.step + (st.pick >= 0 ? 1 : 0)) / QZ.length, question: cur ? cur.q : '',

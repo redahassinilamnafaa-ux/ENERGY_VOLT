@@ -154,6 +154,50 @@ a:hover{color:#F02C38}
           <sc-if value="{{ swEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore de visite sur la période.</span></sc-if>
         </div>
       </div>
+      <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.03em; font-size:20px; color:#041C42; margin-top:4px;">Contacts et conversions</span>
+      <div style="display:grid; grid-template-columns:{{ kpiCols }}; gap:16px;">
+        <sc-for list="{{ swActKpis }}" as="k" hint-placeholder-count="4"><div style="border-radius:22px; padding:22px; background:{{ k.bg }}; color:{{ k.fg }}; display:flex; flex-direction:column; gap:8px; border:1px solid rgba(4,28,66,.06);"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.75;">{{ k.label }}</span><span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(34px,3.2vw,48px); line-height:.95; font-variant-numeric:tabular-nums;">{{ k.val }}</span><span style="font-size:13px; font-weight:600; opacity:.7;">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ halfCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Sources qui amènent des contacts</span>
+          <sc-for list="{{ swLeadSrc }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#F02C38;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swLeadSrcEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore d'action sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Provenance de la visite au moment du contact (formulaire, appel, email, WhatsApp). « Visite de plusieurs pages » : la personne a d'abord navigué sur le site ; sans cookie, on ne peut pas savoir d'où elle venait au départ.</span>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Pages qui mènent au contact</span>
+          <sc-for list="{{ swLeadPages }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#041C42;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swLeadPagesEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore d'action sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Page où a eu lieu le clic sur le téléphone, l'email ou WhatsApp, ou page lue juste avant d'ouvrir le formulaire de contact.</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ halfCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Le test : saveurs obtenues</span>
+          <sc-for list="{{ swQuiz }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#F02C38;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swQuizEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun quiz terminé sur la période.</span></sc-if>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Demandes de contact par sujet</span>
+          <sc-for list="{{ swSubjects }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#041C42;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swSubjectsEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun formulaire envoyé sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Le formulaire ouvre l'application mail du visiteur : on compte les demandes préparées, pas les emails réellement envoyés.</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ halfCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Lecture des pages</span>
+          <sc-for list="{{ swReading }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#041C42;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swReadingEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore d'action sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Temps moyen passé avec la page à l'écran ; « lue à » = jusqu'où la page a été descendue en moyenne.</span>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Liens sortants cliqués</span>
+          <sc-for list="{{ swOutbound }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 64px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#F02C38;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swOutboundEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun lien sortant cliqué sur la période.</span></sc-if>
+        </div>
+      </div>
       <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Compté par VOLT. sans cookie ni adresse IP conservée ; robots et pages admin / espace salle exclus. Une visite = arrivée sur le site depuis l'extérieur. Le compteur démarre à sa mise en ligne : l'historique antérieur reste dans Google Analytics.</span>
       <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.03em; font-size:24px; color:#041C42; margin-top:8px;">Boissons et stations</span>
       <div style="display:grid; grid-template-columns:{{ kpiCols }}; gap:16px;">
@@ -520,8 +564,33 @@ const srcName = s => s === 'direct' ? 'Accès direct' : ((SOURCES.find(([re]) =>
 const pageName = p => { const k = p.replace(/\.html$/, ''); if (PAGE_NAMES[k]) return PAGE_NAMES[k]; let t = k.replace(/^\//, ''); try { t = decodeURIComponent(t); } catch (e) {} t = t.replace(/-/g, ' '); return t.charAt(0).toUpperCase() + t.slice(1); };
 const regionName = (() => { try { const dn = new Intl.DisplayNames(['fr'], { type:'region' }); return c => { try { return dn.of(c) || c; } catch (e) { return c; } }; } catch (e) { return c => c; } })();
 const bars = (rows, k) => { const max = Math.max(1, ...rows.map(r => r[k])); return rows.map(r => ({ ...r, n:r[k].toLocaleString('fr-CH'), w:Math.max(2, Math.round(r[k] / max * 100)) + '%' })); };
+const dur = s => s == null ? '—' : s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + String(s % 60).padStart(2, '0');
+function actView(si, T, days) {
+  const A = si.actions;
+  if (!A) return {};
+  const pl = n => n > 1 ? 's' : '', K = (label, val, sub, kind) => ({ label, val:String(val), sub, bg:kind === 2 ? '#F02C38' : kind ? '#041C42' : '#FFFFFF', fg:kind ? '#FFFFFF' : '#041C42' });
+  const leads = A.contact.n + A.tel.n + A.mail.n + A.whatsapp.n, prev = A.contact.prev + A.tel.prev + A.mail.prev + A.whatsapp.prev;
+  const evol = prev ? Math.round((leads - prev) / prev * 100) : null, ra = si.reading_avg || {};
+  const detail = [[A.contact.n, 'formulaire'], [A.tel.n, 'appel'], [A.mail.n, 'email'], [A.whatsapp.n, 'WhatsApp']].filter(x => x[0]).map(([n, l]) => n + ' ' + l + (l === 'WhatsApp' ? '' : pl(n))).join(' · ');
+  const src = {}; (si.lead_sources || []).forEach(r => { const k = r.source === '?' ? 'Visite de plusieurs pages' : srcName(r.source); src[k] = src[k] || { leads:0, quiz:0 }; src[k].leads += r.leads; src[k].quiz += r.quiz; });
+  const srcRows = Object.entries(src).map(([label, v]) => ({ label, sub:(v.quiz ? v.quiz + ' quiz terminé' + pl(v.quiz) : 'aucun quiz'), v:v.leads })).sort((a, b) => b.v - a.v || a.label.localeCompare(b.label)).slice(0, 8);
+  const rmax = Math.max(1, ...(si.reading || []).map(r => r.n));
+  const lst = (rows, sub) => bars(rows.map(r => ({ label:r.label, sub:sub ? sub(r) : '', v:r.n })), 'v');
+  return {
+    swActKpis:[K('Prises de contact', leads, (detail || 'Formulaire, appel, email ou WhatsApp') + (evol == null ? '' : ' · ' + (evol >= 0 ? '+' : '') + evol + ' % vs ' + days + ' j d\'avant'), 2),
+      K('Taux de contact', T.visits ? num1(leads / T.visits * 100) + ' %' : '—', 'des visites se terminent par une prise de contact', 1),
+      K('Quiz terminés', A.quiz.n, T.visits ? num1(A.quiz.n / T.visits * 100) + ' % des visites' : '—', 0),
+      K('Temps moyen par page', dur(ra.seconds), ra.depth == null ? 'Pas encore de mesure' : 'page lue à ' + ra.depth + ' % en moyenne', 0)],
+    swLeadSrc:bars(srcRows, 'v'), swLeadSrcEmpty:!srcRows.length,
+    swLeadPages:bars((si.lead_pages || []).map(p => ({ label:pageName(p.path), sub:p.path, v:p.leads })), 'v'), swLeadPagesEmpty:!(si.lead_pages || []).length,
+    swQuiz:lst(si.quiz || []), swQuizEmpty:!(si.quiz || []).length,
+    swSubjects:lst(si.contact_subjects || []), swSubjectsEmpty:!(si.contact_subjects || []).length,
+    swReading:(si.reading || []).map(r => ({ label:pageName(r.path), sub:r.n + ' lecture' + pl(r.n) + ' · lue à ' + r.depth + ' % · ' + Math.round(r.read_75 / r.n * 100) + ' % jusqu\'au bout', n:dur(r.seconds), w:Math.max(2, Math.round(r.n / rmax * 100)) + '%' })), swReadingEmpty:!(si.reading || []).length,
+    swOutbound:lst(si.outbound || []), swOutboundEmpty:!(si.outbound || []).length,
+  };
+}
 function siteView(si, days, fmtD, today) {
-  const none = { swKpis:[], swLive:'', swLiveDot:'#C9D1E0', swDaily:[], swDailyMax:'', swSources:[], swPages:[], swPlaces:[], swCountries:'', swHours:[], swDevices:[], swEmpty:true };
+  const none = { swActKpis:[], swLeadSrc:[], swLeadSrcEmpty:true, swLeadPages:[], swLeadPagesEmpty:true, swQuiz:[], swQuizEmpty:true, swSubjects:[], swSubjectsEmpty:true, swReading:[], swReadingEmpty:true, swOutbound:[], swOutboundEmpty:true, swKpis:[], swLive:'', swLiveDot:'#C9D1E0', swDaily:[], swDailyMax:'', swSources:[], swPages:[], swPlaces:[], swCountries:'', swHours:[], swDevices:[], swEmpty:true };
   if (!si) return none;
   const T = si.totals, K = (label, val, sub, kind) => ({ label, val:String(val), sub, bg:kind === 2 ? '#F02C38' : kind ? '#041C42' : '#FFFFFF', fg:kind ? '#FFFFFF' : '#041C42' });
   const evol = T.visits_prev ? Math.round((T.visits - T.visits_prev) / T.visits_prev * 100) : null, max = Math.max(1, ...si.daily.map(d => d.visits));
@@ -535,13 +604,14 @@ function siteView(si, days, fmtD, today) {
       K('Pages vues', T.views.toLocaleString('fr-CH'), T.visits ? num1(T.views / T.visits) + ' page' + pl(T.views / T.visits) + ' par visite' : '—', 1),
       K("Visites aujourd'hui", T.visits_today, 'moyenne ' + num1(T.visits / days) + ' / jour sur la période', 0),
       K('Sur mobile', pct(T.visits ? T.visits_mobile / T.visits : null), T.visits_mobile + ' visite' + pl(T.visits_mobile) + ' depuis un téléphone', 0)],
-    swDaily:si.daily.map(d => ({ h:(d.visits ? Math.max(3, Math.round(d.visits / max * 100)) : 0) + '%', bg:d.day === today ? '#F02C38' : '#041C42', title:fmtD(d.day) + ' : ' + d.visits + ' visite' + pl(d.visits) + ' · ' + d.views + ' page' + pl(d.views) + ' vue' + pl(d.views) })),
+    swDaily:si.daily.map(d => ({ h:(d.visits ? Math.max(3, Math.round(d.visits / max * 100)) : 0) + '%', bg:d.day === today ? '#F02C38' : '#041C42', title:fmtD(d.day) + ' : ' + d.visits + ' visite' + pl(d.visits) + ' · ' + d.views + ' page' + pl(d.views) + ' vue' + pl(d.views) + (d.leads ? ' · ' + d.leads + ' prise' + pl(d.leads) + ' de contact' : '') })),
     swDailyMax:'max ' + max + ' / jour',
     swSources:bars(Object.entries(src).map(([label, v]) => ({ label, sub:'', v })).sort((a, b) => b.v - a.v).slice(0, 8), 'v'),
     swPages:bars(si.pages.map(p => ({ label:pageName(p.path), sub:p.path + (p.entrees ? ' · ' + p.entrees + ' arrivée' + pl(p.entrees) + ' sur le site' : ''), v:p.views })), 'v'),
     swPlaces:bars(si.places.map(p => ({ label:p.city || regionName(p.country), sub:p.city ? [p.region, p.country === 'CH' ? 'Suisse' : regionName(p.country)].filter(Boolean).join(' · ') : 'ville inconnue', v:p.visits })), 'v'),
     swCountries:countries.length ? 'Par pays : ' + countries.map(c => regionName(c.country) + ' ' + c.visits).join(' · ') : '',
     swHours:Array.from({ length:24 }, (_, h) => ({ h:(hours[h] ? Math.max(4, Math.round(hours[h] / hmax * 100)) : 0) + '%', title:h + ' h – ' + (h + 1) + ' h : ' + (hours[h] || 0) + ' visite' + pl(hours[h] || 0) })),
+...actView(si, T, days),
     swDevices:bars(si.devices.map(d => ({ label:DEV[d.device] || d.device, sub:Math.round(d.visits / tot * 100) + ' % des visites', v:d.visits })), 'v') };
 }
 function statsView(st, nav, setGym) {
@@ -676,7 +746,7 @@ class Component extends DCLogic {
       stPeriods:[[7, '7 jours'], [30, '30 jours'], [90, '90 jours']].map(([d, l]) => ({ label:l, bg:s.statsDays === d ? '#041C42' : 'transparent', fg:s.statsDays === d ? '#FFFFFF' : 'rgba(4,28,66,.7)', go:() => this.setState({ statsDays:d }) })),
       stGyms:[{ id:'all', name:'Tout le réseau' }].concat(G).map(g => ({ label:g.name, ...chip((s.statsGym || 'all') === g.id), go:() => this.setState({ statsGym:g.id }) })),
       sgCols:'minmax(170px,1.5fr) 110px 90px 80px 120px 70px minmax(170px,1.1fr) 130px 100px', stListCols:mobile ? '1fr' : 'repeat(2, minmax(0,1fr))',
-      kpiCols:mobile ? '1fr 1fr' : 'repeat(4, minmax(0,1fr))', dashCols:w <= 1200 ? '1fr' : 'minmax(0,1.5fr) minmax(0,1fr)',
+      kpiCols:mobile ? '1fr 1fr' : 'repeat(4, minmax(0,1fr))', halfCols:w <= 1000 ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)', dashCols:w <= 1200 ? '1fr' : 'minmax(0,1.5fr) minmax(0,1fr)',
       gymBars:G.map(g => { const ms = s.members.filter(m => m.gym === g.id); return { name:g.name, active:String(ms.filter(m => m.statut === 'actif' && m.fin >= iso(now)).length), total:String(ms.length), n:String(perGym[g.id] || 0), w:Math.round((perGym[g.id] || 0) / maxG * 100) + '%', go:() => this.setState({ page:'members', gymFilter:g.id }) }; }),
       todo:[{ label:'Stations hors ligne ou relais muet', n:String(stDown.length), bg:'#FFF0F2', fg:'#D61F2C', go:() => this.setState({ page:'stations' }) }, { label:'Stations avec incidents (24 h)', n:String(s.stations.filter(x => x.errors24 > 0).length), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'stations' }) }, { label:'Livraisons à faire sous 7 jours', n:String(lowGyms.length), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'deliv' }) }, { label:'Entretiens à planifier (≤ 30 j ou en retard)', n:String(mtAlert), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'maint' }) }, { label:'Contrats en attente de signature', n:String(pending.length), bg:'#EDF1FB', fg:'#041C42', go:() => this.setState({ page:'gyms' }) }],
       openNew:() => this.setState({ drawer:true, editId:null, fContract:'attente', creds:null, err:'' }),

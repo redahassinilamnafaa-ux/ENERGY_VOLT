@@ -372,6 +372,7 @@ class Component extends DCLogic {
     return { ...this.baseVals(), isGym: this.state.subj === 2, sent: this.state.sent, formOp: this.state.sent ? .6 : 1, formCols: w <= 900 ? '1fr' : 'minmax(0,1.5fr) minmax(0,1fr)', nameCols: w <= 600 ? '1fr' : '1fr 1fr',
       subjects: SUBJ.map((l, i) => { const on = this.state.subj === i; return { label: l, on, bg: on ? '#041C42' : '#FFFFFF', fg: on ? '#FFFFFF' : '#041C42', bd: on ? '#041C42' : 'rgba(4,28,66,.15)', pick: () => this.setState({ subj: i }) }; }),
       send: e => { e.preventDefault(); const f = e.currentTarget.elements; const gym = f.salle ? '\nSalle : ' + f.salle.value + ' — ' + f.ville.value + '\nMembres actifs : ' + (f.membres.value || '—') + '\nContrôle d\'accès : ' + (f.acces.value || '—') + '\n' : ''; const body = gym + 'De : ' + f.prenom.value + ' ' + f.nom.value + '\nEmail : ' + f.email.value + '\n\n' + f.message.value;
+        if (window.voltTrack) window.voltTrack('contact', SUBJ[this.state.subj]);
         window.location.href = 'mailto:info@volt-energy.ch?subject=' + encodeURIComponent('[VOLT.] ' + SUBJ[this.state.subj]) + '&body=' + encodeURIComponent(body); this.setState({ sent: true }); },
       rStage: this.rStage, rFallback: this.rFallback, stageMove: this.stageMove, stageLeave: this.stageLeave, threeCols: w <= 900 ? '1fr' : 'repeat(3, minmax(0,1fr))', fourCols: w <= 600 ? '1fr' : w <= 1100 ? 'repeat(2, minmax(0,1fr))' : 'repeat(4, minmax(0,1fr))', splitCols: w <= 900 ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)' };
   }
