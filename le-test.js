@@ -1,3 +1,6 @@
+/* OBSOLÈTE (octobre 2026) — ancienne logique du quiz basée sur la gamme fictive (PERFORMANCE au guarana, ANTIOXIDANT, IMMUNE, RELOAD).
+   Plus chargé par le-test.html, qui embarque son propre quiz avec les 6 vraies saveurs.
+   Fichier conservé pour référence : ne plus le modifier ni le charger. */
 /* ============================================================
    VOLT. — "Le test" : quiz 4 questions → 1 produit recommandé
    Produits : performance · antioxidant · immune · reload
