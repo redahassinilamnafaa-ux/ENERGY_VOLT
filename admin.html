@@ -101,6 +101,102 @@ a:hover{color:#F02C38}
       </div>
     </sc-if>
 
+    <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;">
+        <div style="display:flex; gap:4px; padding:4px; border-radius:999px; background:#FFFFFF; border:1px solid rgba(4,28,66,.06);"><sc-for list="{{ stPeriods }}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{ p.go }}" style="height:36px; padding:0 16px; border-radius:999px; border:none; cursor:pointer; font-family:inherit; font-size:13px; font-weight:800; background:{{ p.bg }}; color:{{ p.fg }};">{{ p.label }}</button></sc-for></div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;"><sc-for list="{{ stGyms }}" as="g" hint-placeholder-count="3"><button type="button" onClick="{{ g.go }}" style="height:36px; padding:0 14px; border-radius:999px; border:1.5px solid {{ g.bd }}; background:{{ g.bg }}; color:{{ g.fg }}; cursor:pointer; font-family:inherit; font-size:13px; font-weight:700;">{{ g.label }}</button></sc-for></div>
+      </div>
+      <sc-if value="{{ stLoading }}" hint-placeholder-val="{{ false }}"><div style="padding:40px; text-align:center; font-size:14px; font-weight:700; color:rgba(4,28,66,.6);">Calcul des statistiques…</div></sc-if>
+      <sc-if value="{{ stEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px; text-align:center; font-size:14px; font-weight:700; color:rgba(4,28,66,.6);">Aucune donnée pour l'instant.</div></sc-if>
+      <sc-if value="{{ stReady }}" hint-placeholder-val="{{ true }}">
+      <span style="font-size:13px; font-weight:700; color:rgba(4,28,66,.55);">{{ stPeriodLbl }}</span>
+      <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-top:4px;">
+        <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.03em; font-size:24px; color:#041C42;">Site web <span style="font-size:14px; font-weight:700; color:rgba(4,28,66,.5); letter-spacing:0;">volt-energy.ch · toutes salles</span></span>
+        <span title="Pages vues ces 30 dernières minutes" style="display:inline-flex; align-items:center; gap:8px; height:32px; padding:0 14px; border-radius:999px; background:#FFFFFF; border:1px solid rgba(4,28,66,.08); font-size:13px; font-weight:800; color:#041C42;"><span style="width:8px; height:8px; border-radius:50%; background:{{ swLiveDot }};"></span>{{ swLive }}</span>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ kpiCols }}; gap:16px;">
+        <sc-for list="{{ swKpis }}" as="k" hint-placeholder-count="4"><div style="border-radius:22px; padding:22px; background:{{ k.bg }}; color:{{ k.fg }}; display:flex; flex-direction:column; gap:8px; border:1px solid rgba(4,28,66,.06);"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.75;">{{ k.label }}</span><span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(34px,3.2vw,48px); line-height:.95; font-variant-numeric:tabular-nums;">{{ k.val }}</span><span style="font-size:13px; font-weight:600; opacity:.7;">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ dashCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Visites par jour</span><span style="font-size:12px; font-weight:700; color:rgba(4,28,66,.55);">{{ swDailyMax }}</span></div>
+          <div style="height:170px; display:flex; align-items:flex-end; gap:2px; border-bottom:1px solid rgba(4,28,66,.12);"><sc-for list="{{ swDaily }}" as="d" hint-placeholder-count="30"><div title="{{ d.title }}" style="flex:1; min-width:0; height:{{ d.h }}; background:{{ d.bg }}; border-radius:4px 4px 0 0;"></div></sc-for></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:rgba(4,28,66,.55);"><sc-for list="{{ stAxis }}" as="a" hint-placeholder-count="3"><span>{{ a.l }}</span></sc-for></div>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">D'où viennent les visiteurs</span>
+          <sc-for list="{{ swSources }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 48px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#F02C38;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore de visite sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Site d'où arrive le visiteur, ou la campagne (lien avec ?utm_source=…). « Accès direct » = adresse tapée, favori, QR code ou appli qui ne transmet pas sa provenance.</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ dashCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Pages les plus vues</span>
+          <sc-for list="{{ swPages }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 48px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#041C42;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore de visite sur la période.</span></sc-if>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Villes</span>
+          <sc-for list="{{ swPlaces }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 48px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#041C42;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore de visite sur la période.</span></sc-if>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">{{ swCountries }}</span>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Lieu estimé d'après le réseau du visiteur : fiable pour le pays et la région, approximatif pour la ville (surtout sur mobile).</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ dashCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Heures des visites</span>
+          <div style="height:110px; display:flex; align-items:flex-end; gap:3px; border-bottom:1px solid rgba(4,28,66,.12);"><sc-for list="{{ swHours }}" as="h" hint-placeholder-count="24"><div title="{{ h.title }}" style="flex:1; min-width:0; height:{{ h.h }}; background:#F02C38; opacity:.85; border-radius:3px 3px 0 0;"></div></sc-for></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:rgba(4,28,66,.55);"><span>0 h</span><span>6 h</span><span>12 h</span><span>18 h</span><span>23 h</span></div>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Appareils</span>
+          <sc-for list="{{ swDevices }}" as="r" hint-placeholder-count="4"><div style="display:grid; grid-template-columns:minmax(120px,1fr) minmax(70px,1.2fr) 48px; gap:12px; align-items:center;"><span style="display:flex; flex-direction:column; min-width:0;"><span style="font-size:13px; font-weight:700; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.label }}</span><span style="font-size:11px; font-weight:600; color:rgba(4,28,66,.5); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ r.sub }}</span></span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:#F02C38;"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ swEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Pas encore de visite sur la période.</span></sc-if>
+        </div>
+      </div>
+      <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Compté par VOLT. sans cookie ni adresse IP conservée ; robots et pages admin / espace salle exclus. Une visite = arrivée sur le site depuis l'extérieur. Le compteur démarre à sa mise en ligne : l'historique antérieur reste dans Google Analytics.</span>
+      <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.03em; font-size:24px; color:#041C42; margin-top:8px;">Boissons et stations</span>
+      <div style="display:grid; grid-template-columns:{{ kpiCols }}; gap:16px;">
+        <sc-for list="{{ statKpis }}" as="k" hint-placeholder-count="4"><div style="border-radius:22px; padding:22px; background:{{ k.bg }}; color:{{ k.fg }}; display:flex; flex-direction:column; gap:8px; border:1px solid rgba(4,28,66,.06);"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.75;">{{ k.label }}</span><span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(34px,3.2vw,48px); line-height:.95; font-variant-numeric:tabular-nums;">{{ k.val }}</span><span style="font-size:13px; font-weight:600; opacity:.7;">{{ k.sub }}</span></div></sc-for>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ dashCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:10px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Boissons servies par jour</span><span style="font-size:12px; font-weight:700; color:rgba(4,28,66,.55);">{{ stDailyMax }}</span></div>
+          <div style="height:170px; display:flex; align-items:flex-end; gap:2px; border-bottom:1px solid rgba(4,28,66,.12);"><sc-for list="{{ stDaily }}" as="d" hint-placeholder-count="30"><div title="{{ d.title }}" style="flex:1; min-width:0; height:{{ d.h }}; background:{{ d.bg }}; border-radius:4px 4px 0 0;"></div></sc-for></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:700; color:rgba(4,28,66,.55);"><sc-for list="{{ stAxis }}" as="a" hint-placeholder-count="3"><span>{{ a.l }}</span></sc-for></div>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:10px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Heures de pointe</span>
+          <div style="overflow-x:auto;"><div style="display:flex; flex-direction:column; gap:3px; min-width:440px;">
+            <div style="display:grid; grid-template-columns:34px repeat(24, minmax(0,1fr)); gap:3px; font-size:10px; font-weight:700; color:rgba(4,28,66,.5);"><span></span><sc-for list="{{ stHours }}" as="h" hint-placeholder-count="24"><span style="text-align:center;">{{ h.l }}</span></sc-for></div>
+            <sc-for list="{{ stHeat }}" as="r" hint-placeholder-count="7"><div style="display:grid; grid-template-columns:34px repeat(24, minmax(0,1fr)); gap:3px; align-items:center;"><span style="font-size:11px; font-weight:800; color:rgba(4,28,66,.6);">{{ r.day }}</span><sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="24"><div title="{{ c.title }}" style="height:18px; border-radius:4px; background:{{ c.bg }};"></div></sc-for></div></sc-for>
+          </div></div>
+          <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Boissons servies par jour de la semaine et par heure (heure suisse). Plus la case est rouge, plus il y a de monde.</span>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns:{{ dashCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:12px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">Refus par cause</span>
+          <sc-for list="{{ stRefus }}" as="r" hint-placeholder-count="3"><div style="display:grid; grid-template-columns:minmax(150px,1fr) minmax(80px,1.4fr) 44px; gap:12px; align-items:center;"><span style="font-size:13px; font-weight:700; color:#041C42;">{{ r.label }}</span><div style="height:10px; border-radius:10px; background:#EDF1FB; overflow:hidden;"><div style="height:100%; width:{{ r.w }}; border-radius:10px; background:{{ r.color }};"></div></div><span style="font-size:13px; font-weight:800; color:#041C42; text-align:right; font-variant-numeric:tabular-nums;">{{ r.n }}</span></div></sc-for>
+          <sc-if value="{{ stRefusEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun refus sur la période.</span></sc-if>
+        </div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:10px;">
+          <span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6);">À surveiller</span>
+          <sc-for list="{{ stWatch }}" as="a" hint-placeholder-count="6"><button type="button" onClick="{{ a.go }}" style="display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; border:none; background:{{ a.bg }}; cursor:pointer; font-family:inherit; font-size:13px; font-weight:700; color:#041C42; text-align:left;"><span>{{ a.label }}</span><span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:20px; color:{{ a.fg }};">{{ a.n }}</span></button></sc-for>
+        </div>
+      </div>
+      <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); overflow:hidden;"><div style="overflow-x:auto;">
+        <div style="display:grid; grid-template-columns:{{ sgCols }}; gap:12px; padding:11px 22px; min-width:1100px; box-sizing:border-box; font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6); background:#F7F9FF;"><span>Salle</span><span>Actifs / inscrits</span><span>Utilisation</span><span>Boissons</span><span>Par membre / mois</span><span>Refus</span><span>Stock estimé</span><span>Stations</span><span>Incidents 24 h</span></div>
+        <sc-for list="{{ sgRows }}" as="g" hint-placeholder-count="3"><button type="button" onClick="{{ g.go }}" title="Voir les statistiques de cette salle" style="width:100%; display:grid; grid-template-columns:{{ sgCols }}; gap:12px; align-items:center; padding:13px 22px; min-width:1100px; box-sizing:border-box; border:none; border-top:1px solid rgba(4,28,66,.05); background:#FFFFFF; cursor:pointer; font-family:inherit; text-align:left; font-size:13px; font-weight:700; color:#041C42; font-variant-numeric:tabular-nums;"><span style="font-size:14px; font-weight:800;">{{ g.name }}</span><span>{{ g.members }}</span><span>{{ g.util }}</span><span>{{ g.ok }}</span><span>{{ g.per }}</span><span>{{ g.refus }}</span><span style="color:{{ g.stockFg }};">{{ g.stock }}</span><span style="color:{{ g.stFg }};">{{ g.stations }}</span><span style="color:{{ g.incFg }};">{{ g.inc }}</span></button></sc-for>
+      </div></div>
+      <div style="display:grid; grid-template-columns:{{ stListCols }}; gap:16px;">
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:4px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6); margin-bottom:6px;">Abonnements qui expirent sous 14 jours</span><sc-for list="{{ stExp }}" as="m" hint-placeholder-count="3"><div style="display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto; gap:10px; align-items:center; padding:9px 0; border-top:1px solid rgba(4,28,66,.06); font-size:13px;"><span style="font-weight:800; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ m.name }}</span><span style="font-weight:600; color:rgba(4,28,66,.65); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ m.gym }}</span><span style="font-weight:700; color:#041C42; white-space:nowrap;">{{ m.date }}</span></div></sc-for><sc-if value="{{ stExpEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun abonnement ne se termine dans les 14 prochains jours.</span></sc-if></div>
+        <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); padding:22px; display:flex; flex-direction:column; min-width:0; gap:4px;"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6); margin-bottom:2px;">Membres actifs sans boisson sur la période</span><span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55); margin-bottom:6px;">À signaler à la salle : ils paient sans profiter du service.</span><sc-for list="{{ stIdle }}" as="m" hint-placeholder-count="3"><div style="display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto; gap:10px; align-items:center; padding:9px 0; border-top:1px solid rgba(4,28,66,.06); font-size:13px;"><span style="font-weight:800; color:#041C42; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ m.name }}</span><span style="font-weight:600; color:rgba(4,28,66,.65); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ m.gym }}</span><span style="font-weight:700; color:#041C42; white-space:nowrap;">{{ m.date }}</span></div></sc-for><sc-if value="{{ stIdleEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Tous les membres actifs ont bu au moins une fois.</span></sc-if></div>
+      </div>
+      </sc-if>
+    </sc-if>
     <sc-if value="{{ isGyms }}" hint-placeholder-val="{{ false }}">
       <div style="background:#FFFFFF; border-radius:22px; border:1px solid rgba(4,28,66,.06); overflow:hidden;"><div style="overflow-x:auto;">
         <div style="display:grid; grid-template-columns:minmax(200px,1.6fr) minmax(150px,1fr) 90px 100px 130px 120px; gap:14px; padding:11px 22px; min-width:880px; font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:rgba(4,28,66,.6); background:#F7F9FF;"><span>Salle</span><span>Gérant</span><span>Membres</span><span>Stations</span><span>Contrat</span><span>Accès</span></div>
@@ -377,10 +473,12 @@ const ROUTES = {
   delivery_delete:b => ['DELETE', '/admin/deliveries/' + b.id],
   maint_update:b => ['PATCH', '/admin/maintenances/' + b.id, { done_on:b.date, type:b.type, technician:b.tech || null, note:b.note || null }],
   maint_delete:b => ['DELETE', '/admin/maintenances/' + b.id],
+  stats:b => ['GET', '/admin/stats?days=' + (b.days || 30) + (b.gym && b.gym !== 'all' ? '&gym_id=' + encodeURIComponent(b.gym) : '')],
   passage_delete:b => ['DELETE', '/admin/passages/' + b.id]
 };
 const PAGES = [
   { id:'net', label:'Réseau', icon:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20' },
+  { id:'stats', label:'Statistiques', icon:'M3 3v18h18M7 15l4-4 3 3 5-6' },
   { id:'gyms', label:'Salles', icon:'M3 21h18M5 21V8l7-5 7 5v13M10 21v-5h4v5' },
   { id:'stations', label:'Stations', icon:'M13 2 3 14h9l-1 8 10-12h-9z' },
   { id:'deliv', label:'Livraisons', icon:'M1 3h15v13H1zM16 8h4l3 3v5h-7M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zM18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z' },
@@ -413,15 +511,88 @@ function demoData() {
   log.sort((a, b) => b.ts - a.ts);
   return { gyms, stations, members, log };
 }
+const REFUS = { delai:'Délai de 15 min', inconnu:'Badge inconnu', expire:'Abonnement expiré', pause:'Membre en pause', bloque:'Membre bloqué', avenir:'Abonnement pas encore commencé', relais:'Relais muet (non décompté)' };
+const DOW = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+const pct = v => v == null ? '—' : Math.round(v * 100) + ' %';
+const num1 = v => v == null ? '—' : v.toLocaleString('fr-CH', { maximumFractionDigits:1 });
+// Statistiques : tout vient de GET /admin/stats, la page ne fait que mettre en forme.
+const PAGE_NAMES = { '/':'Accueil', '/saveurs':'Saveurs', '/le-test':'Le test (quiz)', '/contact':'Contact', '/solutions-clubs':'Solutions clubs', '/comment-ca-marche':'Comment ça marche', '/a-propos':'À propos', '/ressources':'Ressources', '/confidentialite':'Confidentialité', '/cgv':'CGV', '/mentions-legales':'Mentions légales', '/cookies':'Cookies' };
+const SOURCES = [[/google\./, 'Google'], [/instagram/, 'Instagram'], [/facebook|fb\.me/, 'Facebook'], [/linkedin|lnkd\.in/, 'LinkedIn'], [/tiktok/, 'TikTok'], [/^t\.co$|twitter|^x\.com$/, 'X (Twitter)'], [/bing\./, 'Bing'], [/duckduckgo/, 'DuckDuckGo'], [/chatgpt|openai/, 'ChatGPT'], [/perplexity/, 'Perplexity'], [/whatsapp|wa\.me/, 'WhatsApp'], [/yahoo/, 'Yahoo'], [/ecosia/, 'Ecosia']];
+const srcName = s => s === 'direct' ? 'Accès direct' : ((SOURCES.find(([re]) => re.test(s)) || [])[1] || s.charAt(0).toUpperCase() + s.slice(1));
+const pageName = p => { const k = p.replace(/\.html$/, ''); if (PAGE_NAMES[k]) return PAGE_NAMES[k]; let t = k.replace(/^\//, ''); try { t = decodeURIComponent(t); } catch (e) {} t = t.replace(/-/g, ' '); return t.charAt(0).toUpperCase() + t.slice(1); };
+const regionName = (() => { try { const dn = new Intl.DisplayNames(['fr'], { type:'region' }); return c => { try { return dn.of(c) || c; } catch (e) { return c; } }; } catch (e) { return c => c; } })();
+const bars = (rows, k) => { const max = Math.max(1, ...rows.map(r => r[k])); return rows.map(r => ({ ...r, n:r[k].toLocaleString('fr-CH'), w:Math.max(2, Math.round(r[k] / max * 100)) + '%' })); };
+function siteView(si, days, fmtD, today) {
+  const none = { swKpis:[], swLive:'', swLiveDot:'#C9D1E0', swDaily:[], swDailyMax:'', swSources:[], swPages:[], swPlaces:[], swCountries:'', swHours:[], swDevices:[], swEmpty:true };
+  if (!si) return none;
+  const T = si.totals, K = (label, val, sub, kind) => ({ label, val:String(val), sub, bg:kind === 2 ? '#F02C38' : kind ? '#041C42' : '#FFFFFF', fg:kind ? '#FFFFFF' : '#041C42' });
+  const evol = T.visits_prev ? Math.round((T.visits - T.visits_prev) / T.visits_prev * 100) : null, max = Math.max(1, ...si.daily.map(d => d.visits));
+  const src = {}; si.sources.forEach(r => { const k = srcName(r.source); src[k] = (src[k] || 0) + r.visits; });
+  const hours = {}; si.hours.forEach(h => { hours[h.hour] = h.visits; }); const hmax = Math.max(1, ...Object.values(hours));
+  const DEV = { mobile:'Mobile', tablet:'Tablette', desktop:'Ordinateur' }, tot = si.devices.reduce((a, d) => a + d.visits, 0) || 1;
+  const pl = n => n > 1 ? 's' : '', countries = si.countries.filter(c => c.country !== '?');
+  return { ...none, swEmpty:!T.visits,
+    swLive:T.live ? T.live + ' page' + pl(T.live) + ' vue' + pl(T.live) + ' ces 30 dernières min' : 'Personne ces 30 dernières min', swLiveDot:T.live ? '#18A058' : '#C9D1E0',
+    swKpis:[K('Visites', T.visits.toLocaleString('fr-CH'), evol == null ? 'Pas de période précédente à comparer' : (evol >= 0 ? '+' : '') + evol + ' % par rapport aux ' + days + " jours d'avant", 2),
+      K('Pages vues', T.views.toLocaleString('fr-CH'), T.visits ? num1(T.views / T.visits) + ' page' + pl(T.views / T.visits) + ' par visite' : '—', 1),
+      K("Visites aujourd'hui", T.visits_today, 'moyenne ' + num1(T.visits / days) + ' / jour sur la période', 0),
+      K('Sur mobile', pct(T.visits ? T.visits_mobile / T.visits : null), T.visits_mobile + ' visite' + pl(T.visits_mobile) + ' depuis un téléphone', 0)],
+    swDaily:si.daily.map(d => ({ h:(d.visits ? Math.max(3, Math.round(d.visits / max * 100)) : 0) + '%', bg:d.day === today ? '#F02C38' : '#041C42', title:fmtD(d.day) + ' : ' + d.visits + ' visite' + pl(d.visits) + ' · ' + d.views + ' page' + pl(d.views) + ' vue' + pl(d.views) })),
+    swDailyMax:'max ' + max + ' / jour',
+    swSources:bars(Object.entries(src).map(([label, v]) => ({ label, sub:'', v })).sort((a, b) => b.v - a.v).slice(0, 8), 'v'),
+    swPages:bars(si.pages.map(p => ({ label:pageName(p.path), sub:p.path + (p.entrees ? ' · ' + p.entrees + ' arrivée' + pl(p.entrees) + ' sur le site' : ''), v:p.views })), 'v'),
+    swPlaces:bars(si.places.map(p => ({ label:p.city || regionName(p.country), sub:p.city ? [p.region, p.country === 'CH' ? 'Suisse' : regionName(p.country)].filter(Boolean).join(' · ') : 'ville inconnue', v:p.visits })), 'v'),
+    swCountries:countries.length ? 'Par pays : ' + countries.map(c => regionName(c.country) + ' ' + c.visits).join(' · ') : '',
+    swHours:Array.from({ length:24 }, (_, h) => ({ h:(hours[h] ? Math.max(4, Math.round(hours[h] / hmax * 100)) : 0) + '%', title:h + ' h – ' + (h + 1) + ' h : ' + (hours[h] || 0) + ' visite' + pl(hours[h] || 0) })),
+    swDevices:bars(si.devices.map(d => ({ label:DEV[d.device] || d.device, sub:Math.round(d.visits / tot * 100) + ' % des visites', v:d.visits })), 'v') };
+}
+function statsView(st, nav, setGym) {
+  if (!st) return { ...siteView(null), statKpis:[], stDaily:[], stDailyMax:'', stAxis:[], stHours:[], stHeat:[], stRefus:[], stRefusEmpty:true, stWatch:[], sgRows:[], stExp:[], stExpEmpty:true, stIdle:[], stIdleEmpty:true, stPeriodLbl:'' };
+  const T = st.totals, days = st.period.days, sumG = k => st.gyms.reduce((a, g) => a + (g[k] || 0), 0);
+  const evol = T.ok_prev ? Math.round((T.ok - T.ok_prev) / T.ok_prev * 100) : null, scans = T.ok + T.refused;
+  const K2 = (label, val, sub, kind) => ({ label, val:String(val), sub, bg:kind === 2 ? '#F02C38' : kind ? '#041C42' : '#FFFFFF', fg:kind ? '#FFFFFF' : '#041C42' });
+  const fmtD = d => new Date(d + 'T12:00').toLocaleDateString('fr-CH', { day:'numeric', month:'short' });
+  const max = Math.max(1, ...st.daily.map(d => d.ok)), hmax = Math.max(1, ...st.heatmap.map(c => c.n)), rmax = Math.max(1, ...st.refusals.map(r => r.n));
+  const cell = {}; st.heatmap.forEach(c => { cell[c.dow + ':' + c.hour] = c.n; });
+  return {
+    ...siteView(st.site, days, fmtD, st.period.to),
+    stPeriodLbl:'Du ' + fmtD(st.period.from) + ' au ' + fmtD(st.period.to),
+    statKpis:[K2('Boissons servies', T.ok.toLocaleString('fr-CH'), evol == null ? 'Pas de période précédente à comparer' : (evol >= 0 ? '+' : '') + evol + ' % par rapport aux ' + days + ' jours d\'avant', 2),
+      K2('Membres actifs', T.actifs, 'sur ' + T.inscrits + ' inscrits', 1),
+      K2("Taux d'utilisation", pct(T.actifs ? T.buveurs / T.actifs : null), T.buveurs + ' membre' + (T.buveurs > 1 ? 's ont' : ' a') + ' bu au moins une fois', 0),
+      K2('Boissons par membre / mois', num1(T.actifs ? T.ok / T.actifs * 30 / days : null), scans ? 'Refus : ' + pct(T.refused / scans) + ' des badges présentés' : 'Aucun badge présenté', 0)],
+    stDaily:st.daily.map(d => ({ h:(d.ok ? Math.max(3, Math.round(d.ok / max * 100)) : 0) + '%', bg:d.day === st.period.to ? '#F02C38' : '#041C42', title:fmtD(d.day) + ' : ' + d.ok + ' boisson' + (d.ok > 1 ? 's' : '') + (d.refused ? ' · ' + d.refused + ' refus' : '') })),
+    stDailyMax:'max ' + max + ' / jour',
+    stAxis:[st.daily[0], st.daily[Math.floor(st.daily.length / 2)], st.daily[st.daily.length - 1]].map(d => ({ l:fmtD(d.day) })),
+    stHours:Array.from({ length:24 }, (_, h) => ({ l:h % 3 === 0 ? String(h) : '' })),
+    stHeat:DOW.map((d, i) => ({ day:d, cells:Array.from({ length:24 }, (_, h) => { const n = cell[(i + 1) + ':' + h] || 0; return { bg:n ? 'rgba(240,44,56,' + (0.12 + 0.88 * n / hmax).toFixed(2) + ')' : '#F3F5FA', title:d + ' ' + h + ' h – ' + (h + 1) + ' h : ' + n + ' boisson' + (n > 1 ? 's' : '') }; }) })),
+    stRefus:st.refusals.map(r => ({ label:REFUS[r.result] || r.result, n:String(r.n), w:Math.round(r.n / rmax * 100) + '%', color:r.result === 'relais' ? '#A66300' : '#F02C38' })), stRefusEmpty:!st.refusals.length,
+    stWatch:[['Abonnements qui expirent sous 14 jours', T.expirent, '#FFF6E5', '#A66300', 'members'], ['Abonnements expirés ces 30 derniers jours', T.expires_30j, '#FFF0F2', '#D61F2C', 'members'],
+      ['Membres actifs sans boisson sur la période', T.jamais, '#EDF1FB', '#041C42', 'members'], ['Relais muet (boissons non servies)', T.relay_failed, '#FFF0F2', '#D61F2C', 'stations'],
+      ['Stations hors ligne depuis plus de 2 h', sumG('stations_offline'), '#FFF0F2', '#D61F2C', 'stations'], ['Incidents des tablettes (24 h)', sumG('incidents_24h'), '#FFF6E5', '#A66300', 'stations']]
+      .map(([label, n, bg, fg, page]) => ({ label, n:String(n), bg:n ? bg : '#F7F9FF', fg:n ? fg : 'rgba(4,28,66,.45)', go:() => nav(page) })),
+    sgRows:st.gyms.map(g => { const sk = g.stock, low = sk && (sk.restant === 0 || (sk.jours != null && sk.jours <= 7));
+      return { name:g.name, members:g.actifs + ' / ' + g.inscrits, util:pct(g.utilisation), ok:String(g.ok), per:num1(g.par_membre_mois), refus:pct(g.taux_refus),
+        stock:sk ? sk.restant.toLocaleString('fr-CH') + ' boissons' + (sk.jours != null ? ' · ~' + sk.jours + ' j' : '') : 'Aucune livraison', stockFg:low ? '#D61F2C' : '#041C42',
+        stations:g.stations ? (g.stations - g.stations_offline) + ' / ' + g.stations + ' en ligne' : 'Aucune', stFg:g.stations_offline ? '#D61F2C' : '#041C42',
+        inc:String(g.incidents_24h), incFg:g.incidents_24h ? '#A66300' : 'rgba(4,28,66,.45)', go:() => setGym(g.id) }; }),
+    stExp:st.expiring.map(m => ({ name:m.prenom + ' ' + m.nom, gym:m.gym, date:'fin le ' + fr(m.fin) })), stExpEmpty:!st.expiring.length,
+    stIdle:st.idle.map(m => ({ name:m.prenom + ' ' + m.nom, gym:m.gym, date:'depuis le ' + fr(m.debut) })), stIdleEmpty:!st.idle.length,
+  };
+}
 class Component extends DCLogic {
-  state = { mtForm:null, mtPlan:null, mtHist:null, delForm:null, delHist:null, gymFilter:'all', w:1280, logged:false, demo:false, page:'net', gyms:[], stations:[], members:[], log:[], search:'', logFilter:'all', drawer:false, editId:null, fContract:'attente', creds:null, err:'', toast:'', toastOk:true, msg:'' };
+  state = { statsDays:30, statsGym:'all', stats:null, statsLoading:false, mtForm:null, mtPlan:null, mtHist:null, delForm:null, delHist:null, gymFilter:'all', w:1280, logged:false, demo:false, page:'net', gyms:[], stations:[], members:[], log:[], search:'', logFilter:'all', drawer:false, editId:null, fContract:'attente', creds:null, err:'', toast:'', toastOk:true, msg:'' };
   get reduce() { return this._rm || this.props.motion === false; }
   componentDidMount() { this._rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; this.onResize = () => { const w = window.innerWidth || document.documentElement.clientWidth; if (w > 0) this.setState({ w }); }; this.onResize(); window.addEventListener('resize', this.onResize);
     const rt = new URLSearchParams(location.search).get('reset'); if (rt) return this.setState({ resetToken:rt });
     const tk = store.get(); if (tk) return this.setState({ token:tk, logged:true, demo:false }, () => this.load());
     if (this.props.startDemo === true) this.demo(); }
   componentWillUnmount() { window.removeEventListener('resize', this.onResize); clearTimeout(this.tt); }
-  componentDidUpdate() { const k = this.state.page + '|' + this.state.logged + '|' + this.state.drawer + '|' + this.state.mDrawer + '|' + this.state.sDrawer; if (k !== this._k) { this._k = k; if (!this.reduce) requestAnimationFrame(() => { document.querySelectorAll('[data-pg]').forEach(el => el.animate([{ opacity:0, transform:'translateY(16px)' }, { opacity:1, transform:'none' }], { duration:480, easing:'cubic-bezier(.2,.8,.2,1)' })); document.querySelectorAll('[data-drawer]').forEach(el => el.animate([{ opacity:0, transform:'translateX(40px)' }, { opacity:1, transform:'none' }], { duration:420, easing:'cubic-bezier(.2,.8,.2,1)' })); }); } }
+  loadStats = async () => { const s = this.state, key = s.statsDays + '|' + s.statsGym; this._sk = key; this.setState({ statsLoading:true });
+    const r = await this.api('stats', { days:s.statsDays, gym:s.statsGym }); if (this._sk !== key) return;
+    if (r && r.error) { this.showToast(r.error, false); return this.setState({ statsLoading:false }); }
+    this.setState({ stats:r && r.period ? r : null, statsLoading:false }); };
+  componentDidUpdate() { const sk = this.state.page === 'stats' && this.state.logged ? this.state.statsDays + '|' + this.state.statsGym : null; if (sk && sk !== this._sk) this.loadStats(); if (!sk) this._sk = null; const k = this.state.page + '|' + this.state.logged + '|' + this.state.drawer + '|' + this.state.mDrawer + '|' + this.state.sDrawer; if (k !== this._k) { this._k = k; if (!this.reduce) requestAnimationFrame(() => { document.querySelectorAll('[data-pg]').forEach(el => el.animate([{ opacity:0, transform:'translateY(16px)' }, { opacity:1, transform:'none' }], { duration:480, easing:'cubic-bezier(.2,.8,.2,1)' })); document.querySelectorAll('[data-drawer]').forEach(el => el.animate([{ opacity:0, transform:'translateX(40px)' }, { opacity:1, transform:'none' }], { duration:420, easing:'cubic-bezier(.2,.8,.2,1)' })); }); } }
   showToast(t, ok = true) { clearTimeout(this.tt); this.setState({ toast:t, toastOk:ok }); this.tt = setTimeout(() => this.setState({ toast:'' }), 3200); }
   async api(action, body) { if (this.state.demo) return {}; const route = ROUTES[action]; if (!route) return { error:'Disponible à l\'installation de la station.' };
     try { const [method, path, payload] = route(body || {}); const o = { method, headers:{} }; if (this.state.token) o.headers.Authorization = 'Bearer ' + this.state.token;
@@ -498,10 +669,15 @@ class Component extends DCLogic {
       shellDir:narrow ? 'column' : 'row', sideH:narrow ? 'auto' : '100vh', sideW:narrow ? '100%' : '240px', sideDir:narrow ? 'row' : 'column', sideAlign:narrow ? 'center' : 'stretch', sideGap:narrow ? '12px' : '24px', sidePad:narrow ? '12px 16px' : '26px 16px',
       pages:PAGES.map(p => { const b = p.id === 'maint' ? mtAlert : p.id === 'stations' ? stDown.length : p.id === 'deliv' ? lowGyms.length : p.id === 'gyms' ? pending.length : 0; return { label:p.label, icon:p.icon, bg:page === p.id ? 'rgba(240,44,56,.18)' : 'transparent', fg:page === p.id ? '#FFFFFF' : 'rgba(250,250,250,.65)', hasBadge:b > 0, badge:String(b), go:() => this.setState({ page:p.id }) }; }),
       logout:this.logout, isDemo:s.demo, mainPad:mobile ? '20px 14px 40px' : 'clamp(22px,3vw,40px)',
-      title:{ net:'Réseau', gyms:'Salles', stations:'Stations', deliv:'Livraisons', maint:'Entretien', members:'Membres', log:'Journal' }[page],
-      subtitle:{ net:G.length + ' salles · ' + s.stations.length + ' stations', gyms:'Partenaires, contrats et accès', stations:'État de toutes les machines', deliv:'Dates de livraison et stock prévu par salle', maint:'Entretien des stations tous les 6 mois', members:'Recherche support, toutes salles', log:'Tous les passages du réseau' }[page],
-      isNet:page === 'net', isGyms:page === 'gyms', isStations:page === 'stations', isDeliv:page === 'deliv', isMaint:page === 'maint', isMembers:page === 'members', isLog:page === 'log',
+      title:{ stats:'Statistiques', net:'Réseau', gyms:'Salles', stations:'Stations', deliv:'Livraisons', maint:'Entretien', members:'Membres', log:'Journal' }[page],
+      subtitle:{ stats:'Ce que disent tes passages, membres et stations', net:G.length + ' salles · ' + s.stations.length + ' stations', gyms:'Partenaires, contrats et accès', stations:'État de toutes les machines', deliv:'Dates de livraison et stock prévu par salle', maint:'Entretien des stations tous les 6 mois', members:'Recherche support, toutes salles', log:'Tous les passages du réseau' }[page],
+      isNet:page === 'net', isStats:page === 'stats', isGyms:page === 'gyms', isStations:page === 'stations', isDeliv:page === 'deliv', isMaint:page === 'maint', isMembers:page === 'members', isLog:page === 'log',
       kpis:[K('Salles actives', G.filter(g => g.contract === 'signe' && !g.suspended).length, pending.length + ' contrat(s) en attente', 1, () => this.setState({ page:'gyms' })), K("Passages aujourd'hui", okToday.length, okMonth.length + ' ce mois', 2, () => this.setState({ page:'log', logFilter:'ok' })), K('Membres actifs', active, s.members.length + ' inscrits', 0, () => this.setState({ page:'members' })), K('Stations en ligne', (s.stations.length - stDown.length) + '/' + s.stations.length, stDown.length ? stDown.length + ' à vérifier' : 'Tout fonctionne', 0, () => this.setState({ page:'stations' }))],
+      ...statsView(s.stats, p => this.setState({ page:p }), id => this.setState({ statsGym:id })),
+      stLoading:page === 'stats' && !!s.statsLoading && !s.stats, stReady:page === 'stats' && !!s.stats, stEmpty:page === 'stats' && !s.statsLoading && !s.stats,
+      stPeriods:[[7, '7 jours'], [30, '30 jours'], [90, '90 jours']].map(([d, l]) => ({ label:l, bg:s.statsDays === d ? '#041C42' : 'transparent', fg:s.statsDays === d ? '#FFFFFF' : 'rgba(4,28,66,.7)', go:() => this.setState({ statsDays:d }) })),
+      stGyms:[{ id:'all', name:'Tout le réseau' }].concat(G).map(g => ({ label:g.name, ...chip((s.statsGym || 'all') === g.id), go:() => this.setState({ statsGym:g.id }) })),
+      sgCols:'minmax(170px,1.5fr) 110px 90px 80px 120px 70px minmax(170px,1.1fr) 130px 100px', stListCols:mobile ? '1fr' : 'repeat(2, minmax(0,1fr))',
       kpiCols:mobile ? '1fr 1fr' : 'repeat(4, minmax(0,1fr))', dashCols:w <= 1200 ? '1fr' : 'minmax(0,1.5fr) minmax(0,1fr)',
       gymBars:G.map(g => { const ms = s.members.filter(m => m.gym === g.id); return { name:g.name, active:String(ms.filter(m => m.statut === 'actif' && m.fin >= iso(now)).length), total:String(ms.length), n:String(perGym[g.id] || 0), w:Math.round((perGym[g.id] || 0) / maxG * 100) + '%', go:() => this.setState({ page:'members', gymFilter:g.id }) }; }),
       todo:[{ label:'Stations hors ligne ou relais muet', n:String(stDown.length), bg:'#FFF0F2', fg:'#D61F2C', go:() => this.setState({ page:'stations' }) }, { label:'Stations avec incidents (24 h)', n:String(s.stations.filter(x => x.errors24 > 0).length), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'stations' }) }, { label:'Livraisons à faire sous 7 jours', n:String(lowGyms.length), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'deliv' }) }, { label:'Entretiens à planifier (≤ 30 j ou en retard)', n:String(mtAlert), bg:'#FFF6E5', fg:'#A66300', go:() => this.setState({ page:'maint' }) }, { label:'Contrats en attente de signature', n:String(pending.length), bg:'#EDF1FB', fg:'#041C42', go:() => this.setState({ page:'gyms' }) }],
