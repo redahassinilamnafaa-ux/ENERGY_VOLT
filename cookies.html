@@ -4,14 +4,6 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:(function(){try{return localStorage.getItem('volt-consent')==='granted'?'granted':'denied'}catch(e){return 'denied'}})(),wait_for_update:500});</script>
 <script src="/cookie-consent.js" defer></script>
 <script src="/volt-track.js" defer></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZBHD9KVG4C"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-ZBHD9KVG4C');
-</script>
 
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -21,8 +13,6 @@ gtag('config', 'G-ZBHD9KVG4C');
 <title>Politique de cookies - VOLT.</title>
 <meta name="description" content="Politique de cookies de VOLT. — Nous utilisons uniquement un token de session local (localStorage). Aucun cookie tiers ni tracking publicitaire."/>
 <link rel="canonical" href="https://www.volt-energy.ch/cookies"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 
 <noscript></noscript>
 <style>
@@ -56,7 +46,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;padding:0 40px;d
 .footer-logo em{color:#fff;font-style:normal}
 .footer-copy{font-size:13px;color:rgba(255,255,255,.3)}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"/>
+<link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/fonts/fonts.css">
 <link rel="stylesheet" href="/volt.css"/>
 <style>
 .page{max-width:860px!important;padding:150px 24px 96px!important}
@@ -104,8 +94,18 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;padding:0 40px;d
   </div>
 
   <div class="section">
-    <div class="section-title">Cookies utilisés par VOLT.</div>
-    <ul><li><strong>Mesure d'audience — Google Analytics</strong> (_ga, _ga_*) : statistiques anonymisées de fréquentation du site. Durée : jusqu'à 13 mois.</li><li><strong>Stockage local technique</strong> : session de l'espace fitness et préférences d'affichage. Nécessaire au fonctionnement, sans finalité publicitaire.</li></ul>
+    <div class="section-title">Ce que le site enregistre sur votre appareil</div>
+    <ul><li><strong>Avec votre accord uniquement — Google Analytics</strong> (cookies <code>_ga</code> et <code>_ga_ZBHD9KVG4C</code>, Google LLC) : mesure d'audience détaillée (pages consultées, durée de visite, parcours sur le site, type d'appareil, pays approximatif). Durée : 13 mois. Tant que vous n'avez pas accepté, ou si vous refusez, le script de Google n'est pas chargé et rien ne lui est envoyé.</li><li><strong>Nécessaire — votre choix sur les cookies</strong> (stockage local <code>volt-consent</code>) : retient votre réponse au bandeau. Durée : 13 mois, puis la question vous est reposée.</li><li><strong>Nécessaire — connexion à l'espace salle ou à l'administration</strong> (stockage local <code>volt-fitness-token</code> ou <code>volt-admin-token</code>, cookie de session <code>volt_session</code>) : uniquement pour les personnes qui se connectent, afin de les garder connectées. Durée : 7 jours au plus, ou jusqu'à la déconnexion.</li></ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Mesure d'audience sans cookie</div>
+    <p>Pour connaître la fréquentation du site, VOLT. utilise aussi son propre compteur, pour tous les visiteurs. Il ne dépose aucun cookie, n'enregistre rien sur votre appareil et ne conserve pas votre adresse IP. Pour chaque page consultée, il enregistre : la page, le site de provenance, le type d'appareil, la langue et une localisation approximative (pays, région, ville) déduite du réseau. Ces données servent uniquement à des statistiques globales, ne sont jamais partagées et sont supprimées après 13 mois.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Services externes</div>
+    <p>Les polices de caractères sont hébergées sur volt-energy.ch : aucune requête n'est envoyée à Google Fonts. Certaines animations utilisent des bibliothèques servies par des réseaux de diffusion (jsDelivr, esm.sh) ; comme pour tout fichier téléchargé, ils reçoivent l'adresse IP technique nécessaire à l'envoi, sans cookie. Le site est diffusé par Vercel Inc.</p>
   </div>
 
   <div class="section">
@@ -115,7 +115,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;height:66px;padding:0 40px;d
 
   <div class="section">
     <div class="section-title">Gestion des cookies</div>
-    <p>Vous pouvez supprimer ou bloquer les cookies à tout moment depuis les réglages de votre navigateur. Vous pouvez aussi désactiver Google Analytics avec le module officiel de désactivation proposé par Google.</p>
+    <p>Vous pouvez changer d'avis à tout moment avec le bouton « Gérer mes cookies » ci-dessus ou le lien « Gérer les cookies » en bas de chaque page. Un refus efface les cookies Google Analytics déjà déposés. Vous pouvez aussi supprimer ou bloquer les cookies depuis les réglages de votre navigateur.</p>
   </div>
 
   <div class="section">
