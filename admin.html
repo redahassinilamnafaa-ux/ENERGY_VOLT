@@ -198,7 +198,7 @@ a:hover{color:#F02C38}
           <sc-if value="{{ swOutboundEmpty }}" hint-placeholder-val="{{ false }}"><span style="font-size:13px; font-weight:600; color:rgba(4,28,66,.6);">Aucun lien sortant cliqué sur la période.</span></sc-if>
         </div>
       </div>
-      <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Compté par VOLT. sans cookie ni adresse IP conservée ; robots et pages admin / espace salle exclus. Une visite = arrivée sur le site depuis l'extérieur. Le compteur démarre à sa mise en ligne : l'historique antérieur reste dans Google Analytics.</span>
+      <span style="font-size:12px; font-weight:600; color:rgba(4,28,66,.55);">Compté par VOLT. sans cookie ni adresse IP conservée ; robots, pages admin / espace salle et appareils de l'équipe exclus (tout appareil où l'admin a été ouvert ; pour un autre téléphone ou ordinateur, ouvrir une fois volt-energy.ch/?volt-equipe=1). Une visite = arrivée sur le site depuis l'extérieur. Le compteur démarre à sa mise en ligne : l'historique antérieur reste dans Google Analytics.</span>
       <span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.03em; font-size:24px; color:#041C42; margin-top:8px;">Boissons et stations</span>
       <div style="display:grid; grid-template-columns:{{ kpiCols }}; gap:16px;">
         <sc-for list="{{ statKpis }}" as="k" hint-placeholder-count="4"><div style="border-radius:22px; padding:22px; background:{{ k.bg }}; color:{{ k.fg }}; display:flex; flex-direction:column; gap:8px; border:1px solid rgba(4,28,66,.06);"><span style="font-size:11px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; opacity:.75;">{{ k.label }}</span><span style="font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; letter-spacing:-.04em; font-size:clamp(34px,3.2vw,48px); line-height:.95; font-variant-numeric:tabular-nums;">{{ k.val }}</span><span style="font-size:13px; font-weight:600; opacity:.7;">{{ k.sub }}</span></div></sc-for>
@@ -651,7 +651,8 @@ function statsView(st, nav, setGym) {
 class Component extends DCLogic {
   state = { statsDays:30, statsGym:'all', stats:null, statsLoading:false, mtForm:null, mtPlan:null, mtHist:null, delForm:null, delHist:null, gymFilter:'all', w:1280, logged:false, demo:false, page:'net', gyms:[], stations:[], members:[], log:[], search:'', logFilter:'all', drawer:false, editId:null, fContract:'attente', creds:null, err:'', toast:'', toastOk:true, msg:'' };
   get reduce() { return this._rm || this.props.motion === false; }
-  componentDidMount() { this._rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; this.onResize = () => { const w = window.innerWidth || document.documentElement.clientWidth; if (w > 0) this.setState({ w }); }; this.onResize(); window.addEventListener('resize', this.onResize);
+  componentDidMount() { try { localStorage.setItem('volt-equipe', '1'); } catch (e) {} // appareil de l'équipe : exclu des statistiques du site
+    this._rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches; this.onResize = () => { const w = window.innerWidth || document.documentElement.clientWidth; if (w > 0) this.setState({ w }); }; this.onResize(); window.addEventListener('resize', this.onResize);
     const rt = new URLSearchParams(location.search).get('reset'); if (rt) return this.setState({ resetToken:rt });
     const tk = store.get(); if (tk) return this.setState({ token:tk, logged:true, demo:false }, () => this.load());
     if (this.props.startDemo === true) this.demo(); }

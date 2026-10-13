@@ -1,5 +1,6 @@
 /* VOLT. — compteur de fréquentation du site, affiché dans l'admin (Statistiques → Site web).
-   Sans cookie, sans stockage sur l'appareil et sans identifiant de visiteur ; l'adresse IP n'est pas conservée.
+   Sans cookie et sans identifiant de visiteur ; l'adresse IP n'est pas conservée. Seule exception : l'appareil d'un membre
+   de l'équipe peut être marqué « volt-equipe » (stockage local, à sa demande) pour ne pas fausser les chiffres.
    Page vue : la page, le site d'où l'on vient, le type d'appareil et la langue (la ville est déduite côté serveur).
    « Nouvelle visite » = page ouverte depuis l'extérieur du site (ni rechargement, ni retour arrière).
    Actions : formulaire de contact et quiz (window.voltTrack), clics téléphone / email / WhatsApp, liens sortants,
@@ -7,11 +8,23 @@
 (function () {
   window.voltTrack = function () {};
   try {
-    var el = document.currentScript;
+    var el = document.currentScript, q = new URLSearchParams(location.search);
+    // Appareils de l'équipe VOLT. exclus des statistiques : lien « ?volt-equipe=1 » (annuler : « ?volt-equipe=0 »),
+    // posé aussi automatiquement à la connexion à l'admin.
+    var team = q.get('volt-equipe');
+    try {
+      if (team === '1') localStorage.setItem('volt-equipe', '1');
+      if (team === '0') localStorage.removeItem('volt-equipe');
+    } catch (e) {}
+    if (team === '1' || team === '0') {
+      var msg = team === '1' ? 'Cet appareil n’est plus compté dans les statistiques du site.' : 'Cet appareil est de nouveau compté dans les statistiques du site.';
+      document.addEventListener('DOMContentLoaded', function () { alert(msg); });
+    }
+    try { if (localStorage.getItem('volt-equipe') === '1') return; } catch (e) {}
     var api = (el && el.getAttribute('data-api')) || 'https://volt-backend-final.vercel.app/api/v1';
     if (!(el && el.getAttribute('data-api')) && !/(^|\.)volt-energy\.ch$/.test(location.hostname)) return;
     if (navigator.webdriver) return;
-    var url = api + '/track', q = new URLSearchParams(location.search);
+    var url = api + '/p';
     var ref = document.referrer ? document.referrer.split('?')[0] : '', src = q.get('utm_source') || q.get('ref') || '';
 
     function beacon(o) {
