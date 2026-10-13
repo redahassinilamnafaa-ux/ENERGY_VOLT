@@ -1,3 +1,6 @@
+/* OBSOLÈTE (octobre 2026) — données de l'ancienne gamme fictive (PERFORMANCE au guarana, ANTIOXIDANT, IMMUNE, RELOAD).
+   Plus chargé par aucune page. Les vraies saveurs sont dans data/saveurs.js (site) et data/v1/produits.json (backend).
+   Fichier conservé pour référence : ne plus le modifier ni le charger. */
 /* ============================================================
    VOLT. — Données produits "Saveurs" + rendu
    4 eaux vitaminées : PERFORMANCE · ANTIOXIDANT · IMMUNE · RELOAD
